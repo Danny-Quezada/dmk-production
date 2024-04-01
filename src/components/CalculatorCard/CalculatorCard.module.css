@@ -1,0 +1,31 @@
+.article {
+  border-width: 1.7px;
+  border-color: #c7c8cc60;
+  border-style: solid;
+  border-right: none;
+  border-left: none;
+  border-bottom: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.latex {
+  color: var(--primary-color);
+  padding-top: 5px;
+}
+.title {
+  font-weight: bolder;
+}
+.description {
+  color: rgb(105, 105, 105);
+  font-weight: 600;
+}
+@media (prefers-color-scheme: dark) {
+  .description {
+    color: #fffffff5;
+    font-weight: 300;
+  }
+}
+
+

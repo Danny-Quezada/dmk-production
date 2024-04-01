@@ -1,0 +1,10 @@
+
+.LatexDiv{
+  
+    color: var(--primary-color);
+
+  }
+.title{
+    padding-bottom: 10px;
+    columns: var(--primary-color);
+}

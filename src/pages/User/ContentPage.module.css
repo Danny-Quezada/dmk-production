@@ -1,0 +1,39 @@
+.main {
+  padding-top: 50px;
+  padding-left: 95px;
+  margin: 10px;
+}
+
+.titlePage {
+  color: var(--title-page);
+  font-weight: bold;
+  margin-bottom: 15px;
+  margin-top: 10px;
+}
+ 
+.contentForm {
+  background-color: white;
+  width: 400px;
+  height: max-content;
+  display: block !important;
+}
+/* Media queries*/
+@media (prefers-color-scheme: dark) {
+  .contentForm {
+    background-color: #121212;
+  }
+  .titlePage{
+    color: white;
+  }
+ 
+}
+@media (width < 520px) {
+  .main {
+    padding-top: 0px;
+    padding-left: 0px;
+  }
+  .contentForm {
+    width: 90%;
+  }
+}
+

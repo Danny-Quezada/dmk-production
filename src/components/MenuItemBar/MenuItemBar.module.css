@@ -1,0 +1,23 @@
+.navLink {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  height: 53px;
+  transition: all 0.3s;
+}
+.navLink:hover {
+  fill: var(--hover-color);
+  border-right-width: 1px;
+  border-right-color: var(--hover-color);
+  border-right-style: solid;
+  
+}
+.navLink:hover svg {
+ color: var(--hover-color);
+  
+}
+.navLink svg{
+  transition: all 0.2s;
+}

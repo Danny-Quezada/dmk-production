@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Onest:wght@100..900&display=swap');
+:root {
+  font-family:"Onest", Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  
+  --primary-color: blue;
+  --button-color: blue;
+  --hover-color: #525ceb;
+  --title-page: #696969;
+  
+
+}
+
+*{
+  box-sizing: border-box;
+  margin: 0px;
+  padding: 0px;
+}
+form::-webkit-scrollbar {
+  overflow-y: scroll;
+  display: block;
+  width: 5px;
+  height: 8px;
+  background-color: #aaa;
+}
+form::-webkit-scrollbar-thumb {
+  background: grey;
+}

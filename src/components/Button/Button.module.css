@@ -1,0 +1,18 @@
+.buttonSend {
+  background-color: var(--button-color);
+  border-radius: 30px;
+  border-color: var(--button-color);
+  border-width: 1px;
+  border-style: solid;
+  color: white;
+  font-size: larger;
+  font-weight: bold;
+  margin-bottom: 20px;
+  cursor: pointer;
+  height: 45px;
+  margin-top: 5px;
+  width: 100%;
+}
+.buttonSend:hover{
+background-color: var(--hover-color);
+}

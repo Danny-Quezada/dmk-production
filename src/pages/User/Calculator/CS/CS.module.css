@@ -1,0 +1,14 @@
+#Select {
+  border-radius: 30px;
+  padding: 8px 4px;
+  color: grey;
+  align-items: center;
+  background-color: transparent;
+}
+#Select:focus,
+#Select:hover {
+  border-color: var(--hover-color);
+}
+#select:required:invalid {
+  border-color: red;
+}

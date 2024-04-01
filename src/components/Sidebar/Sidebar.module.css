@@ -1,0 +1,10 @@
+
+#aside {
+  background-color: white;
+}
+
+@media (prefers-color-scheme: dark) {
+  #aside {
+    background-color: #121212;
+  }
+}
