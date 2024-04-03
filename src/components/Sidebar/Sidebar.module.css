@@ -1,10 +1,27 @@
 
 #aside {
   background-color: white;
+  border-right-width: 2px;
+  border-right-color: #DDDDDD50;
+  border-right-style: solid;
+  display: flex;
+  width: 60px;
+  flex-direction: column;
+  gap: 20px;
+  height: 100vh;
+  z-index: 3;
+  position: fixed;
+  transition: all 0.4s;
+  transform-style: initial;
 }
 
 @media (prefers-color-scheme: dark) {
   #aside {
     background-color: #121212;
+  }
+}
+@media (width < 580px) {
+  #aside{
+    left: -60px;
   }
 }

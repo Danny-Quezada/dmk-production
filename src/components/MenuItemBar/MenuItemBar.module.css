@@ -8,16 +8,20 @@
   transition: all 0.3s;
 }
 .navLink:hover {
-  fill: var(--hover-color);
+
   border-right-width: 1px;
   border-right-color: var(--hover-color);
   border-right-style: solid;
-  
+  background-color: var(--hover-smooth-color);
 }
+
 .navLink:hover svg {
  color: var(--hover-color);
   
 }
 .navLink svg{
   transition: all 0.2s;
+}
+ .active svg{
+  color: var(--hover-color);
 }

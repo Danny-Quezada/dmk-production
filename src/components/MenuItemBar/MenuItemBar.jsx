@@ -7,6 +7,7 @@ function MenuItemBar(props) {
     <NavLink
       aria-label={"Show" + props.link}
       style={{
+      
         backgroundColor: props.active ? "#BFCFE750" : "",
         borderRightWidth: props.active ? 1 : 0,
         borderRightStyle: "solid",
@@ -17,7 +18,9 @@ function MenuItemBar(props) {
       to={props.link}
       onClick={props.click}
     >
-      {props.icon}
+      <div className= {props.active ? MIB.active : ""}>
+        {props.icon}
+      </div>
     </NavLink>
   );
 }

@@ -16,6 +16,7 @@ const UserLayout = () => {
         title="ShowMenu"
         aria-label="Show menu"
         style={{
+          cursor: "pointer",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
