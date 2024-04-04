@@ -13,14 +13,14 @@
 .latex {
   color: var(--primary-color);
   padding-top: 5px;
-  font-family: "Onest";
+  
 }
 .title {
-  font-weight: bolder;
+  font-weight: 600;
 }
 .description {
   color: rgb(105, 105, 105);
-  font-weight: 600;
+  font-weight: 300;
 }
 @media (prefers-color-scheme: dark) {
   .description {
