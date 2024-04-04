@@ -31,7 +31,7 @@ const CS = () => {
     changeResult(Number(CS.D) / CS.ValorPromedio);
   };
   return (
-   <>
+    <>
       <form
         style={{
           margin: "10px",
@@ -41,6 +41,7 @@ const CS = () => {
         }}
         onSubmit={submit}
       >
+        <h3>Control de inventario</h3>
         <TextField
           autoFocus={true}
           id={"D"}

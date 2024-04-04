@@ -23,16 +23,13 @@ const CMC = () => {
     CFVU: "",
   });
   const onChange = (e) => {
-  
     setCMC({ ...CMC, [e.target.name]: e.target.value });
   };
 
   const submit = async (event) => {
-
-   
     event.preventDefault();
     NF = CMC.HORA / CMC.MTBF;
-    console.log(NF);
+
     CT =
       Number(CMC.DT) * Number(CMC.CHT) +
       Number(CMC.CTO) +
@@ -60,6 +57,7 @@ const CMC = () => {
         }}
         onSubmit={submit}
       >
+        <h3>Mantenimiento correctivo</h3>
         <TextField
           autoFocus={true}
           title={"Horas"}
@@ -149,7 +147,7 @@ const CMC = () => {
           block={"10px"}
         />
       )}
-   </>
+    </>
   );
 };
 export default CMC;

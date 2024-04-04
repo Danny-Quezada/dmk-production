@@ -4,6 +4,7 @@ import { CalculatorCard } from "../../../components/CalculatorCard/CalculatorCar
 import CMC from "./CMC";
 import EOQ from "./EOQ";
 import CS from "./CS/CS";
+import { IoCloseSharp } from "react-icons/io5";
 const CalculatorPage = () => {
   const [menu, changeMenu] = useState("/");
   return (
@@ -59,6 +60,27 @@ const CalculatorPage = () => {
             event.stopPropagation();
           }}
         >
+          <button
+          
+            onClick={() => changeMenu("/")}
+            style={{
+              cursor: "pointer",
+              borderRadius: "50%",
+              width: "30px",
+              height: "30px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "transparent",
+              borderColor: "red",
+              borderStyle: "solid",
+              position: "absolute",
+              right: "10px",
+              top: "10px",
+            }}
+          >
+            <IoCloseSharp color="red" />
+          </button>
           {Menu(menu)}
         </div>
       </div>

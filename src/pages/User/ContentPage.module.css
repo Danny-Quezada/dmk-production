@@ -12,6 +12,7 @@
 }
  
 .contentForm {
+  position: relative;
   background-color: white;
   width: 400px;
   height: max-content;

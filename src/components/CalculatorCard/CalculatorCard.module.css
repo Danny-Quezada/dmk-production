@@ -13,6 +13,7 @@
 .latex {
   color: var(--primary-color);
   padding-top: 5px;
+  font-family: "Onest";
 }
 .title {
   font-weight: bolder;

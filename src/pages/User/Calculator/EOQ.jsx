@@ -21,6 +21,7 @@ export default function EOQ() {
   };
   return (
     <>
+      
       <form
         style={{
           margin: "10px",
@@ -30,6 +31,7 @@ export default function EOQ() {
         }}
         onSubmit={submit}
       >
+            <h3>EOQ</h3>
         <TextField
           autoFocus={true}
           value={eoq.D}
