@@ -31,16 +31,7 @@ const CS = () => {
     changeResult(Number(CS.D) / CS.ValorPromedio);
   };
   return (
-    <div
-      className={ContentPageCSS.contentForm}
-      onClick={(event) => {
-        event.stopPropagation();
-      }}
-      style={{
-        zIndex: "1000",
-        position: "absolute",
-      }}
-    >
+   <>
       <form
         style={{
           margin: "10px",
@@ -107,7 +98,7 @@ const CS = () => {
           block={"10px"}
         />
       )}
-    </div>
+    </>
   );
 };
 export default CS;

@@ -20,16 +20,7 @@ export default function EOQ() {
     changeResult(Math.sqrt((2 * eoq.D * eoq.S) / eoq.H));
   };
   return (
-    <div
-      className={ContentPageCSS.contentForm}
-      onClick={(event) => {
-        event.stopPropagation();
-      }}
-      style={{
-        zIndex: "200",
-        position: "absolute",
-      }}
-    >
+    <>
       <form
         style={{
           margin: "10px",
@@ -78,6 +69,6 @@ export default function EOQ() {
           block={"10px"}
         />
       )}
-    </div>
+    </>
   );
 }

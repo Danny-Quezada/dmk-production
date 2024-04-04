@@ -10,7 +10,7 @@ const CalculatorPage = () => {
     <>
       <main className={ContentPageCSS.main}>
         <h2 className={ContentPageCSS.titlePage}>Ecuaciones</h2>
-       
+
         <section
           style={{ gap: "20px", display: "flex", flexDirection: "column" }}
         >
@@ -53,7 +53,14 @@ const CalculatorPage = () => {
           justifyContent: "center",
         }}
       >
-        {Menu(menu)}
+        <div
+          className={ContentPageCSS.contentForm}
+          onClick={(event) => {
+            event.stopPropagation();
+          }}
+        >
+          {Menu(menu)}
+        </div>
       </div>
     </>
   );

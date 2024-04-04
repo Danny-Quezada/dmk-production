@@ -23,10 +23,13 @@ const CMC = () => {
     CFVU: "",
   });
   const onChange = (e) => {
+  
     setCMC({ ...CMC, [e.target.name]: e.target.value });
   };
 
   const submit = async (event) => {
+
+   
     event.preventDefault();
     NF = CMC.HORA / CMC.MTBF;
     console.log(NF);
@@ -41,16 +44,7 @@ const CMC = () => {
     console.log(result);
   };
   return (
-    <div
-      className={ContentPageCSS.contentForm}
-      onClick={(event) => {
-        event.stopPropagation();
-      }}
-      style={{
-        zIndex: "1000",
-        position: "absolute",
-      }}
-    >
+    <>
       <form
         onClick={(event) => {
           event.stopPropagation();
@@ -84,7 +78,7 @@ const CMC = () => {
           value={CMC.MTBF}
         />
         <TextField
-          title={"Duración de la tareas"}
+          title={"Duración de la tarea"}
           onChangeInputValue={onChange}
           id={"DT"}
           isRequired={true}
@@ -155,7 +149,7 @@ const CMC = () => {
           block={"10px"}
         />
       )}
-    </div>
+   </>
   );
 };
 export default CMC;
