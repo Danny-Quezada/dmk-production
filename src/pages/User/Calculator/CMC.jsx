@@ -50,7 +50,7 @@ const CMC = () => {
           height: "80vh",
           overflowAnchor: "auto",
           overflowY: "auto",
-          margin: "10px",
+          margin: "8px",
           display: "flex",
           gap: "12px",
           flexDirection: "column",

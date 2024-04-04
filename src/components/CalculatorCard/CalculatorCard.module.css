@@ -21,6 +21,7 @@
 .description {
   color: rgb(105, 105, 105);
   font-weight: 300;
+  font-size: 1.1em;
 }
 @media (prefers-color-scheme: dark) {
   .description {

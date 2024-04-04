@@ -71,15 +71,16 @@ const CalculatorPage = () => {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              backgroundColor: "transparent",
+              backgroundColor: "red",
               borderColor: "red",
               borderStyle: "solid",
               position: "absolute",
               right: "10px",
               top: "10px",
+              zIndex: "300"
             }}
           >
-            <IoCloseSharp color="red" />
+            <IoCloseSharp color="white"  />
           </button>
           {Menu(menu)}
         </div>
