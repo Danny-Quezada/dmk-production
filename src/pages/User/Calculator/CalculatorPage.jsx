@@ -75,7 +75,7 @@ const CalculatorPage = () => {
               borderColor: "red",
               borderStyle: "solid",
               position: "absolute",
-              right: "10px",
+              right: menu==="CMC" ? "20px" : "10px",
               top: "10px",
               zIndex: "300"
             }}
@@ -90,14 +90,14 @@ const CalculatorPage = () => {
 };
 
 function Menu(menu) {
-  if (menu == "/") {
+  if (menu === "/") {
     return <div></div>;
   }
-  if (menu == "EOQ") {
+  if (menu === "EOQ") {
     return <EOQ />;
-  } else if (menu == "CMC") {
+  } else if (menu === "CMC") {
     return <CMC />;
-  } else if (menu == "CS") {
+  } else if (menu === "CS") {
     return <CS />;
   }
 }
