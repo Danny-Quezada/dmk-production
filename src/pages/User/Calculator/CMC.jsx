@@ -101,7 +101,7 @@ const CMC = () => {
           value={CMC.CHT}
         />
         <TextField
-          title={"Respuestos"}
+          title={"Repuestos"}
           onChangeInputValue={onChange}
           id={"R"}
           isRequired={true}
@@ -126,7 +126,7 @@ const CMC = () => {
           value={CMC.RL}
         />
         <TextField
-          title={"Costes unitarioss"}
+          title={"Costes unitarios"}
           onChangeInputValue={onChange}
           id={"CUP"}
           isRequired={true}
