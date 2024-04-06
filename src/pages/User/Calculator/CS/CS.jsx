@@ -6,7 +6,7 @@ import TextField from "../../../../components/Textfield/TextField";
 import Button from "../../../../components/Button/Button";
 import LatexComponent from "../../../../components/LatexComponent/LatexComponent";
 import CSService from '../../../../services/CSServices';
-import DropDown from '../../../../components/Dropdown/DropDown';
+import Options from '../../../../components/Options/Options';
 
 
 const CS = () => {
@@ -30,6 +30,9 @@ const CS = () => {
     }
     CS.ValorPromedio = result;
     const rotation = csService.calculateInventoryRotation(CS.D, result, CS.F);
+    setCS(prevState => ({ 
+      ...prevState, 
+      DS: csService.getDemand(CS.D, CS.F)}));
     changeResult(rotation);
   }
 
@@ -39,7 +42,8 @@ const CS = () => {
     T: "",
     Q: "",
     ValorPromedio: "",
-    F: "Diaria"
+    F: "Diaria",
+    DS: "",
   });
   const onChange = (e) => {
     setCS({ ...CS, [e.target.name]: e.target.value });
@@ -71,12 +75,12 @@ const CS = () => {
           value={CS.D}
         />
 
-        <DropDown 
-          name="F" 
-          value={CS.F}
-          onChange={onChange}
-          options={frequencyOptions}
-        /> 
+        <Options
+        name="F"
+        value={CS.F}
+        onChange={onChange}
+        options={frequencyOptions}
+        />
 
         <TextField
           id={"SS"}
@@ -118,7 +122,7 @@ const CS = () => {
       {result != null && (
         <LatexComponent
           title={"Cálculo:"}
-          equation={`$ RI = \\frac{${CS.D} }{${
+          equation={`$ RI = \\frac{${CS.DS} }{${
             CS.ValorPromedio
           } }  = ${Math.round(result)} $`}
           inline={"20px"}

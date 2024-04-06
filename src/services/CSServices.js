@@ -25,6 +25,12 @@ class CSService {
         const calculator = new CalculateCS(cs);
         return calculator.calculateInventoryRotation(demand, averageInventory, frequency);
     }
+
+    getDemand(demand, frequency){
+        const cs = new CS();
+        const calculator = new CalculateCS(cs);
+        return calculator.convertToAnnualDemand(demand, frequency);
+    }
 }
 
 export default CSService;

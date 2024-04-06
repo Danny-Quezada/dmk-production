@@ -5,7 +5,7 @@ import LatexComponent from "../../../components/LatexComponent/LatexComponent";
 import TextField from "../../../components/Textfield/TextField";
 import Button from "../../../components/Button/Button";
 import EOQService from '../../../services/EOQServices';
-import DropDown from '../../../components/Dropdown/DropDown';
+import Options from '../../../components/Options/Options';
 
 export default function EOQ() {
 
@@ -20,6 +20,9 @@ export default function EOQ() {
     eoqService.setCosts(eoq.S, eoq.H);
     
     const result = eoqService.calculateEOQ(eoq.D, eoq.F);
+    setEOQ(prevState => ({ 
+      ...prevState, 
+      DS: eoqService.getDemand(eoq.D, eoq.F)}));
     changeResult(result);
   }
 
@@ -28,7 +31,8 @@ export default function EOQ() {
     D: "",
     S: "",
     H: "",
-    F: "Diaria"
+    F: "Diaria",
+    DS: "",
   });
 
   const onChange = (e) => {
@@ -63,12 +67,14 @@ export default function EOQ() {
           isRequired={true}
         />
 
-        <DropDown 
-        name="F" 
+        <Options
+        name="F"
         value={eoq.F}
         onChange={onChange}
         options={frequencyOptions}
-        /> 
+        />
+
+
 
         <TextField
           onChangeInputValue={onChange}
@@ -92,7 +98,7 @@ export default function EOQ() {
       {result != null && (
         <LatexComponent
           title={"Cálculo:"}
-          equation={`$\\sqrt{\\frac{2\\cdot  ${eoq.D} \\cdot ${eoq.S} }{ ${
+          equation={`$\\sqrt{\\frac{2\\cdot  ${eoq.DS} \\cdot ${eoq.S} }{ ${
             eoq.H
           } }} = ${Math.round(result)} $`}
           inline={"20px"}

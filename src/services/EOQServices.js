@@ -12,6 +12,12 @@ class EOQService {
         const calculator = new CalculateEOQ(eoq);
         return calculator.calculate(demand, frequency);
     }
+
+    getDemand(demand, frequency){
+        const eoq = new EOQ();
+        const calculator = new CalculateEOQ(eoq);
+        return calculator.convertToAnnualDemand(demand, frequency);
+    }
 }   
 
 export default EOQService;

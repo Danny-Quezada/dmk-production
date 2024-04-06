@@ -1,0 +1,71 @@
+.paymentOptions {
+    display: flex;
+    flex-direction: column  ;
+  }
+
+  .optionsContainer {
+    display: flex; 
+    flex-wrap: wrap; 
+  }
+  
+.option {
+    border: 2px solid #dfe1e5;
+    background-color: white;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    outline: none;
+    font-size: 16px;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+  
+@media (prefers-color-scheme: dark) {
+  .option {
+    background-color: #121212;
+  }
+  .option{
+    color: white;
+  }
+}
+  
+.option:hover {
+    border-color: #c6c6c6;
+}
+  
+.selected {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+  
+.radio {
+    height: 24px;
+    width: 24px;
+    border-radius: 50%;
+    border: 1px solid currentColor;
+    display: inline-block;
+    margin-right: 10px;
+    position: relative;
+}
+  
+.innerCircle {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 14px;
+    width: 14px;
+    border-radius: 50%;
+    background-color: currentColor;
+    transform: translate(-50%, -50%);
+}
+  
+
+  .label {
+    display: block;
+    margin-top: 20px;
+    margin-bottom: 8px;
+    color: rgb(155, 153, 153); 
+  }
+  
