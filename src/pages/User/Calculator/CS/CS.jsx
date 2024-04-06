@@ -1,13 +1,37 @@
 import React from "react";
+import ContentPageCSS from "../../ContentPage.module.css";
 import cs from "./CS.module.css";
 import { useState } from "react";
 import TextField from "../../../../components/Textfield/TextField";
 import Button from "../../../../components/Button/Button";
-import ContentPageCSS from "../../ContentPage.module.css";
 import LatexComponent from "../../../../components/LatexComponent/LatexComponent";
+import CSService from '../../../../services/CSServices';
+import DropDown from '../../../../components/Dropdown/DropDown';
+
+
 const CS = () => {
   const [result, changeResult] = useState(null);
   const [Cost, setCost] = useState("CFP");
+
+  const frequencyOptions = [
+    { label: 'Diaria', value: 'Diaria' },
+    { label: 'Semanal', value: 'Semanal' },
+    { label: 'Anual', value: 'Anual' }
+  ];
+
+  const HandleCalculateCS = () => {
+    const csService = new CSService();
+    csService.setValues(CS.SS, CS.Q, CS.T);
+    let result = 0;
+    if( Cost === "CFP"){
+      result = csService.calculateFixedCost(CS.Q, CS.SS);
+    } else {
+      result = csService.calculateAverageCost(CS.D, CS.T, CS.SS)
+    }
+    CS.ValorPromedio = result;
+    const rotation = csService.calculateInventoryRotation(CS.D, result, CS.F);
+    changeResult(rotation);
+  }
 
   const [CS, setCS] = useState({
     D: "",
@@ -15,6 +39,7 @@ const CS = () => {
     T: "",
     Q: "",
     ValorPromedio: "",
+    F: "Diaria"
   });
   const onChange = (e) => {
     setCS({ ...CS, [e.target.name]: e.target.value });
@@ -22,13 +47,7 @@ const CS = () => {
 
   const submit = async (event) => {
     event.preventDefault();
-    if (Cost === "CFP") {
-      console.log(Cost);
-      CS.ValorPromedio = Number(CS.Q) / 2 + Number(CS.SS);
-    } else {
-      CS.ValorPromedio = (Number(CS.D) * Number(CS.T)) / 2 + Number(CS.SS);
-    }
-    changeResult(Number(CS.D) / CS.ValorPromedio);
+    HandleCalculateCS();
   };
   return (
     <>
@@ -51,6 +70,13 @@ const CS = () => {
           type={"number"}
           value={CS.D}
         />
+
+        <DropDown 
+          name="F" 
+          value={CS.F}
+          onChange={onChange}
+          options={frequencyOptions}
+        /> 
 
         <TextField
           id={"SS"}

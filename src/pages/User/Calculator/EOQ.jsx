@@ -5,7 +5,7 @@ import LatexComponent from "../../../components/LatexComponent/LatexComponent";
 import TextField from "../../../components/Textfield/TextField";
 import Button from "../../../components/Button/Button";
 import EOQService from '../../../services/EOQServices';
-import DropDown from '../../../components/Dropdown/DropDown'
+import DropDown from '../../../components/Dropdown/DropDown';
 
 export default function EOQ() {
 
