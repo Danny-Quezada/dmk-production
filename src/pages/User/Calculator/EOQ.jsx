@@ -1,23 +1,44 @@
 import React from "react";
+import ContentPageCSS from "../ContentPage.module.css";
 import { useState } from "react";
 import LatexComponent from "../../../components/LatexComponent/LatexComponent";
 import TextField from "../../../components/Textfield/TextField";
 import Button from "../../../components/Button/Button";
-import ContentPageCSS from "../ContentPage.module.css";
+import EOQService from '../../../services/EOQServices';
+import DropDown from '../../../components/Dropdown/DropDown'
+
 export default function EOQ() {
+
+  const frequencyOptions = [
+    { label: 'Diaria', value: 'Diaria' },
+    { label: 'Semanal', value: 'Semanal' },
+    { label: 'Anual', value: 'Anual' }
+  ];
+  
+  const HandleCalculateEOQ = () => {
+    const eoqService = new EOQService();
+    eoqService.setCosts(eoq.S, eoq.H);
+    
+    const result = eoqService.calculateEOQ(eoq.D, eoq.F);
+    changeResult(result);
+  }
+
   const [result, changeResult] = useState(null);
   const [eoq, setEOQ] = useState({
     D: "",
     S: "",
     H: "",
+    F: "Diaria"
   });
+
   const onChange = (e) => {
     setEOQ({ ...eoq, [e.target.name]: e.target.value });
   };
 
   const submit = (event) => {
     event.preventDefault();
-    changeResult(Math.sqrt((2 * eoq.D * eoq.S) / eoq.H));
+    HandleCalculateEOQ();
+    // changeResult(Math.sqrt((2 * eoq.D * eoq.S) / eoq.H));
   };
   return (
     <>
@@ -41,6 +62,13 @@ export default function EOQ() {
           type={"number"}
           isRequired={true}
         />
+
+        <DropDown 
+        name="F" 
+        value={eoq.F}
+        onChange={onChange}
+        options={frequencyOptions}
+        /> 
 
         <TextField
           onChangeInputValue={onChange}
