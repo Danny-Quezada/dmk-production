@@ -7,7 +7,7 @@ class EOQ{
     }
 
     calculateEOQ(){
-        return Math.sqrt((2 * this.demand * this.setupCost) / this.holdingCost)
+        return Math.round(Math.sqrt((2 * this.demand * this.setupCost) / this.holdingCost));
     }
 }
 

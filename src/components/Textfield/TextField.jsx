@@ -8,6 +8,7 @@ function TextField({
   autoFocus,
   onChangeInputValue,
   isRequired,
+  readOnly,  
 }) {
   return (
     <div className={`${TextFieldCSS.form__group}`}>
@@ -38,6 +39,7 @@ function TextField({
         name={id}
         id={id}
         required={isRequired}
+        readOnly={readOnly}
       />
       <label htmlFor={id} className={TextFieldCSS.form__label}>
         {title}

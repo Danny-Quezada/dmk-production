@@ -6,7 +6,7 @@ class CalculateCS{
 
     calculateInventoryRotation(demand, averageInventory, frequency){
         const annualDemand = this.convertToAnnualDemand(demand, frequency);
-        return annualDemand / Number(averageInventory);
+        return Math.round(annualDemand / Number(averageInventory));
     }
 
     calculateFixedCost(quantityOrdered, safetyStock){

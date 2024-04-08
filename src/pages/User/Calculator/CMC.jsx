@@ -5,11 +5,52 @@ import TextField from "../../../components/Textfield/TextField";
 import Button from "../../../components/Button/Button";
 import ContentPageCSS from "../ContentPage.module.css";
 import LatexComponent from "../../../components/LatexComponent/LatexComponent";
+import ButtonPercentage from '../../../components/ButtonPercentage/ButtonPercentage'
+import CMCService from '../../../services/CMCServices'
+import { FaPercentage } from 'react-icons/fa';
+
 var NF = 0,
   CT = 0,
   CF = 0;
 const CMC = () => {
+
+
+  const HandleCalculateCMC = () => {
+    const cmcService = new CMCService();
+    if(CMC.MTBF === '' && valueMTBF === ''){
+      return;
+    }
+    let result;
+    if(independentButtonActive){
+      let MTBFCalculation;
+      if(activeGroupButton === "H"){
+        MTBFCalculation = cmcService.calculateMTBF(valueMTBF, CMC.HORA)
+      }
+      if(activeGroupButton === "R"){
+        MTBFCalculation = cmcService.calculateMTBF(valueMTBF, CMC.R)
+      }
+      if(activeGroupButton === "C"){
+        MTBFCalculation = cmcService.calculateMTBF(valueMTBF, CMC.CTO)
+      }
+      // cmcService.setvalues(CMC.HORA, MTBFCalculation, CMC.DT, CMC.CHT, CMC.R, CMC.CTO, CMC.RL, CMC.CUP, CMC.CFVU);
+      result = cmcService.calculateCMC(CMC.HORA, MTBFCalculation, CMC.DT, CMC.CHT, CMC.R, CMC.CTO, CMC.RL, CMC.CUP, CMC.CFVU);
+      NF = cmcService.calculateNF(CMC.HORA, MTBFCalculation);
+    } else {
+      // cmcService.setvalues(CMC.HORA, CMC.MTBF, CMC.DT, CMC.CHT, CMC.R, CMC.CTO, CMC.RL, CMC.CUP, CMC.CFVU);
+      result = cmcService.calculateCMC(CMC.HORA, CMC.MTBF, CMC.DT, CMC.CHT, CMC.R, CMC.CTO, CMC.RL, CMC.CUP, CMC.CFVU);
+      NF = cmcService.calculateNF(CMC.HORA, CMC.MTBF);
+    }
+    CT = cmcService.calculateCT(CMC.DT, CMC.CHT, CMC.R, CMC.CTO, CMC.RL);
+    CF = cmcService.calculateCF(CMC.DT, CMC.CUP, CMC.CFVU);
+    changeResult(result);
+  }
+
   const [result, changeResult] = useState(null);
+
+  const [valueMTBF, setValueMTBF] = useState('');
+  const [readOnly, setReadOnly] = useState(true);
+  const [independentButtonActive, setIndependentButtonActive] = useState(false);
+  const [activeGroupButton, setActiveGroupButton] = useState(null);
 
   const [CMC, setCMC] = useState({
     HORA: "",
@@ -28,18 +69,35 @@ const CMC = () => {
 
   const submit = async (event) => {
     event.preventDefault();
-    NF = CMC.HORA / CMC.MTBF;
-
-    CT =
-      Number(CMC.DT) * Number(CMC.CHT) +
-      Number(CMC.CTO) +
-      Number(CMC.R) +
-      Number(CMC.RL);
-    CF = Number(CMC.DT) * Number(CMC.CUP) + Number(CMC.CFVU);
-
-    changeResult(Math.round(NF) * (CT + CF));
-    console.log(result);
+    HandleCalculateCMC();
   };
+
+  const handleIndependentClick = () => {
+    setIndependentButtonActive(!independentButtonActive); 
+    this.TextField.current.focus();
+    handleClick();
+  };
+
+  const handleGroupButtonClick = (buttonId) => () => {
+    if(independentButtonActive){
+      setActiveGroupButton(buttonId);
+    }
+  }
+  
+  const handleClick = () => {
+    setReadOnly(!readOnly);
+    
+    if(!readOnly)
+    {
+      setValueMTBF('');
+      setActiveGroupButton(null);
+    } else {
+      setCMC(prevState => ({ 
+        ...prevState, 
+        MTBF: ''}));
+    }
+  }
+
   return (
     <>
       <form
@@ -66,15 +124,40 @@ const CMC = () => {
           isRequired={true}
           type={"number"}
           value={CMC.HORA}
+          readOnly={false}
         />
-        <TextField
-          title={"MTBF"}
-          onChangeInputValue={onChange}
-          id={"MTBF"}
-          isRequired={true}
-          type={"number"}
-          value={CMC.MTBF}
-        />
+
+        <div style={{ display: 'flex', alignItems: 'baseline' }}>
+          <TextField
+            title={"MTBF"}
+            onChangeInputValue={onChange}
+            id={"MTBF"}
+            isRequired={false}
+            type={"number"}
+            value={CMC.MTBF}
+            readOnly={!readOnly}
+          />
+          
+          <ButtonPercentage onClick={handleIndependentClick} content={<FaPercentage size={15}/>} isActive={independentButtonActive} title={"Porcentaje para el MTBF"}/>
+        </div>
+
+        <div style={ { display: 'flex', alignItems: 'baseline' } }> 
+          <TextField
+              title={"Porcentaje para el MTBF (%)"}
+              onChangeInputValue={ (e) => setValueMTBF(e.target.value)}
+              id={"MTBFPercentage"}
+              isRequired={false}
+              type={"number"}
+              value={valueMTBF}
+              readOnly={readOnly}
+            />
+            
+        <ButtonPercentage onClick={handleGroupButtonClick("H")} content={"H"} isActive={activeGroupButton === "H"} title={"Horas"}/>
+        <ButtonPercentage onClick={handleGroupButtonClick("R")} content={"R"} isActive={activeGroupButton === "R"} title={"Repuestos"}/>
+        <ButtonPercentage onClick={handleGroupButtonClick("C")} content={"C"} isActive={activeGroupButton === "C"} title={"Costos operativos"}/>
+        </div>
+
+
         <TextField
           title={"Duración de la tarea"}
           onChangeInputValue={onChange}
@@ -82,6 +165,7 @@ const CMC = () => {
           isRequired={true}
           type={"number"}
           value={CMC.DT}
+          readOnly={false}
         />
 
         <TextField
@@ -91,6 +175,7 @@ const CMC = () => {
           isRequired={true}
           type={"number"}
           value={CMC.CHT}
+          readOnly={false}
         />
         <TextField
           title={"Repuestos"}
@@ -99,6 +184,7 @@ const CMC = () => {
           isRequired={true}
           type={"number"}
           value={CMC.R}
+          readOnly={false}
         />
         <TextField
           title={"Costes operativos"}
@@ -107,6 +193,7 @@ const CMC = () => {
           isRequired={true}
           type={"number"}
           value={CMC.CTO}
+          readOnly={false}
         />
 
         <TextField
@@ -116,6 +203,7 @@ const CMC = () => {
           isRequired={true}
           type={"number"}
           value={CMC.RL}
+          readOnly={false}
         />
         <TextField
           title={"Costes unitarios"}
@@ -124,6 +212,7 @@ const CMC = () => {
           isRequired={true}
           type={"number"}
           value={CMC.CUP}
+          readOnly={false}
         />
 
         <TextField
@@ -133,6 +222,7 @@ const CMC = () => {
           isRequired={true}
           type={"number"}
           value={CMC.CFVU}
+          readOnly={false}
         />
 
         <Button title={"Calcular"} onSubmit={submit} />

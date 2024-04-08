@@ -73,6 +73,7 @@ const CS = () => {
           onChangeInputValue={onChange}
           type={"number"}
           value={CS.D}
+          readOnly={false}
         />
 
         <Options
@@ -89,6 +90,7 @@ const CS = () => {
           onChangeInputValue={onChange}
           type={"number"}
           value={CS.SS}
+          readOnly={false}
         />
         {Cost != "" ? (
           <TextField
@@ -98,6 +100,7 @@ const CS = () => {
             onChangeInputValue={onChange}
             type={"number"}
             value={Cost == "CFP" ? CS.Q : CS.T}
+            readOnly={false}
           />
         ) : (
           <div></div>

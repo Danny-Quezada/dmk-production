@@ -11,7 +11,7 @@ class CS{
     }
 
     calculateAverageCost(){
-        return ((this.reviewCycle * this.demand) / 2) + Number(this.safetyStock);
+        return Math.round(((this.reviewCycle * this.demand) / 2) + Number(this.safetyStock));
     }
 }
 

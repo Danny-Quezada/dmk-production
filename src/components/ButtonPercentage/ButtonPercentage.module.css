@@ -1,0 +1,29 @@
+.buttonSend {
+    background-color: white;
+    border-radius: 30px;
+    border-color: grey;
+    border-width: 1px;
+    border-style: solid;
+    font-size: larger;
+    font-weight: bold;
+    cursor: pointer;
+    height: 20px;
+    width: 10%;
+    margin: 3px;
+}
+
+.buttonSend:hover{
+    background-color: #aaa;
+}
+
+ 
+@media (prefers-color-scheme: dark) {
+    .buttonSend {
+      background-color: var(--hover-smooth-color);
+    }
+    .buttonSend{
+      color: white;
+    }
+  }
+
+

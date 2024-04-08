@@ -65,6 +65,7 @@ export default function EOQ() {
           title={"Demanda"}
           type={"number"}
           isRequired={true}
+          readOnly={false}
         />
 
         <Options
@@ -83,6 +84,7 @@ export default function EOQ() {
           isRequired={true}
           title={"Coste de establecimiento"}
           value={eoq.S}
+          readOnly={false}
         />
 
         <TextField
@@ -92,6 +94,7 @@ export default function EOQ() {
           value={eoq.H}
           isRequired={true}
           title={"Coste de mantenimiento"}
+          readOnly={false}
         />
         <Button title={"Calcular"} onSubmit={submit} />
       </form>
