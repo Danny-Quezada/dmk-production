@@ -123,7 +123,7 @@ const CMC = () => {
           readOnly={false}
         />
 
-        <div style={{ display: 'flex', alignItems: 'baseline' }}>
+        <div style={{ display: 'flex', alignItems: 'end'}}>
           <TextField
             title={"MTBF"}
             onChangeInputValue={onChange}
@@ -137,7 +137,7 @@ const CMC = () => {
           <ButtonPercentage onClick={handleIndependentClick} content={<FaPercentage size={15}/>} isActive={independentButtonActive} title={"Porcentaje para el MTBF"}/>
         </div>
 
-        <div style={ { display: 'flex', alignItems: 'baseline' } }> 
+        <div style={ { display: 'flex', alignItems: 'end', gap: '5px'} }> 
           <TextField
               title={"Porcentaje para el MTBF (%)"}
               onChangeInputValue={ (e) => setValueMTBF(e.target.value)}
