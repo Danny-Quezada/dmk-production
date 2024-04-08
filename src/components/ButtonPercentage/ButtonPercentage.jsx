@@ -10,7 +10,7 @@ function ButtonPercentage({ onClick, content, isActive, title }) {
         className={ButtonStyle.buttonSend}
         title={title}
         style={buttonStyle}
-        type="submit"
+        type="button"
         onClick={onClick}>
         {content}
     </button>

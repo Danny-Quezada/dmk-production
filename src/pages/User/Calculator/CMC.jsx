@@ -17,19 +17,19 @@ const CMC = () => {
 
   const HandleCalculateCMC = () => {
     const cmcService = new CMCService();
-    if(CMC.MTBF === '' && valueMTBF === ''){
+    if (CMC.MTBF === '' && valueMTBF === '') {
       return;
     }
     let result;
-    if(independentButtonActive){
+    if (independentButtonActive) {
       let MTBFCalculation;
-      if(activeGroupButton === "H"){
+      if (activeGroupButton === "H") {
         MTBFCalculation = cmcService.calculateMTBF(valueMTBF, CMC.HORA)
       }
-      if(activeGroupButton === "R"){
+      if (activeGroupButton === "R") {
         MTBFCalculation = cmcService.calculateMTBF(valueMTBF, CMC.R)
       }
-      if(activeGroupButton === "C"){
+      if (activeGroupButton === "C") {
         MTBFCalculation = cmcService.calculateMTBF(valueMTBF, CMC.CTO)
       }
       // cmcService.setvalues(CMC.HORA, MTBFCalculation, CMC.DT, CMC.CHT, CMC.R, CMC.CTO, CMC.RL, CMC.CUP, CMC.CFVU);
@@ -73,23 +73,23 @@ const CMC = () => {
   };
 
   const handleIndependentClick = () => {
-    setIndependentButtonActive(!independentButtonActive); 
+    setIndependentButtonActive(!independentButtonActive);
 
     setReadOnly(!readOnly);
-    
-    if(!readOnly)
-    {
+
+    if (!readOnly) {
       setValueMTBF('');
       setActiveGroupButton(null);
     } else {
-      setCMC(prevState => ({ 
-        ...prevState, 
-        MTBF: ''}));
+      setCMC(prevState => ({
+        ...prevState,
+        MTBF: ''
+      }));
     }
   };
 
   const handleGroupButtonClick = (buttonId) => () => {
-    if(independentButtonActive){
+    if (independentButtonActive) {
       setActiveGroupButton(buttonId);
     }
   }
@@ -123,7 +123,7 @@ const CMC = () => {
           readOnly={false}
         />
 
-        <div style={{ display: 'flex', alignItems: 'end'}}>
+        <div style={{ display: 'flex', alignItems: 'end' }}>
           <TextField
             title={"MTBF"}
             onChangeInputValue={onChange}
@@ -133,25 +133,25 @@ const CMC = () => {
             value={CMC.MTBF}
             readOnly={!readOnly}
           />
-          
-          <ButtonPercentage onClick={handleIndependentClick} content={<FaPercentage size={15}/>} isActive={independentButtonActive} title={"Porcentaje para el MTBF"}/>
+
+          <ButtonPercentage onClick={handleIndependentClick} content={<FaPercentage size={15} />} isActive={independentButtonActive} title={"Porcentaje para el MTBF"} />
         </div>
 
-        <div style={ { display: 'flex', alignItems: 'end', gap: '5px'} }> 
+        {independentButtonActive == true && <div style={{ display: 'flex', alignItems: 'end', gap: '5px', transformStyle: "initial", transition: "all 0.2", }}>
           <TextField
-              title={"Porcentaje para el MTBF (%)"}
-              onChangeInputValue={ (e) => setValueMTBF(e.target.value)}
-              id={"MTBFPercentage"}
-              isRequired={false}
-              type={"number"}
-              value={valueMTBF}
-              readOnly={readOnly}
-            />
-            
-        <ButtonPercentage onClick={handleGroupButtonClick("H")} content={"H"} isActive={activeGroupButton === "H"} title={"Horas"}/>
-        <ButtonPercentage onClick={handleGroupButtonClick("R")} content={"R"} isActive={activeGroupButton === "R"} title={"Repuestos"}/>
-        <ButtonPercentage onClick={handleGroupButtonClick("C")} content={"C"} isActive={activeGroupButton === "C"} title={"Costos operativos"}/>
-        </div>
+            title={"Porcentaje para el MTBF (%)"}
+            onChangeInputValue={(e) => setValueMTBF(e.target.value)}
+            id={"MTBFPercentage"}
+            isRequired={false}
+            type={"number"}
+            value={valueMTBF}
+            readOnly={readOnly}
+          />
+
+          <ButtonPercentage onClick={handleGroupButtonClick("H")} content={"H"} isActive={activeGroupButton === "H"} title={"Horas"} />
+          <ButtonPercentage onClick={handleGroupButtonClick("R")} content={"R"} isActive={activeGroupButton === "R"} title={"Repuestos"} />
+          <ButtonPercentage onClick={handleGroupButtonClick("C")} content={"C"} isActive={activeGroupButton === "C"} title={"Costos operativos"} />
+        </div>}
 
 
         <TextField
