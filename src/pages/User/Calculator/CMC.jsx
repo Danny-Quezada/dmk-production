@@ -74,17 +74,7 @@ const CMC = () => {
 
   const handleIndependentClick = () => {
     setIndependentButtonActive(!independentButtonActive); 
-    this.TextField.current.focus();
-    handleClick();
-  };
 
-  const handleGroupButtonClick = (buttonId) => () => {
-    if(independentButtonActive){
-      setActiveGroupButton(buttonId);
-    }
-  }
-  
-  const handleClick = () => {
     setReadOnly(!readOnly);
     
     if(!readOnly)
@@ -95,6 +85,12 @@ const CMC = () => {
       setCMC(prevState => ({ 
         ...prevState, 
         MTBF: ''}));
+    }
+  };
+
+  const handleGroupButtonClick = (buttonId) => () => {
+    if(independentButtonActive){
+      setActiveGroupButton(buttonId);
     }
   }
 
