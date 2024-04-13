@@ -24,9 +24,9 @@ export default class ProductRepository implements IProductModel {
           values["Price"],
           values["Collection"],
           null,
-          null,
+        
           values["Tags"],
-          
+          values["Cost"]
         )
       );
     });
