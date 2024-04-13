@@ -1,0 +1,46 @@
+.table {
+  
+border-spacing: 0;
+border-collapse: collapse;
+width: 100%;
+margin: 0px auto;
+
+ 
+}
+.table thead tr {
+  color: rgb(205, 205, 205);
+  font-size: 1.2em;
+  text-align: left;
+}
+.table th,
+.table td {
+    margin-left: 100px;
+  padding: 12px 15px;
+}
+.table td {
+  border-top: 2px solid rgb(205, 205, 205, 50%);
+}
+.InventaryMain {
+    width: 100vw;
+  padding-right: 95px;
+}
+@media (width < 700px) {
+  
+  .InventaryMain {
+    padding-right: 0px;
+  }
+ 
+  .table tr th:nth-child(3),
+  .table tr td:nth-child(3) {
+      display: none;
+  }
+  .table tr th:nth-child(4),
+  .table tr td:nth-child(4) {
+      display: none;
+  }
+  .table tr th:nth-child(5),
+  .table tr td:nth-child(5) {
+      display: none;
+  }
+  
+}

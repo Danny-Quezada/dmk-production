@@ -1,8 +1,8 @@
-import CMC from '../domain/Models/Equations/CMC';
-import CalculateCMC from '../infrastructure/CalculateCMC';
+import CMC from '../../domain/Models/Equations/CMC';
+import CalculateCMC from '../../infrastructure/CalculateCMC';
 
 class CMCService {
-    setvalues(Hours, MTBF, DurationTask, CostHourWork, Spares, OperatingCosts, LogisticDelay, UnitCosts, CostFailure){
+    setvalues(Hours, MTBF, DurationTask, CostHourWork, Spares, OperatingCosts, LogisticDelay, UnitCosts, CostFailure) {
         this.cmc.Hours = Hours;
         this.cmc.MTBF = MTBF;
         this.cmc.DurationTask = DurationTask;
@@ -14,31 +14,31 @@ class CMCService {
         this.cmc.CostFailure = CostFailure;
     }
 
-    calculateCMC(Hours, MTBF, DurationTask, CostHourWork, Spares, OperatingCosts, LogisticDelay, UnitCosts, CostFailure){
+    calculateCMC(Hours, MTBF, DurationTask, CostHourWork, Spares, OperatingCosts, LogisticDelay, UnitCosts, CostFailure) {
         const cmc = new CMC(Hours, MTBF, DurationTask, CostHourWork, Spares, OperatingCosts, LogisticDelay, UnitCosts, CostFailure);
         const calculator = new CalculateCMC(cmc);
         return calculator.calculateCorrectiveMaintenance(Hours, MTBF, DurationTask, CostHourWork, Spares, OperatingCosts, LogisticDelay, UnitCosts, CostFailure);
     }
 
-    calculateMTBF(percentage, value){
+    calculateMTBF(percentage, value) {
         const cmc = new CMC(percentage, value);
         const calculator = new CalculateCMC(cmc);
         return calculator.calculateMTBF(percentage, value);
     }
 
-    calculateNF(Hours, MTBF){
+    calculateNF(Hours, MTBF) {
         const cmc = new CMC(Hours, MTBF);
         const calculator = new CalculateCMC(cmc);
         return calculator.calculateNF(Hours, MTBF);
     }
 
-    calculateCT(DurationTask, CostHourWork, Spares, OperatingCosts, LogisticDelay){
+    calculateCT(DurationTask, CostHourWork, Spares, OperatingCosts, LogisticDelay) {
         const cmc = new CMC(DurationTask, CostHourWork, Spares, OperatingCosts, LogisticDelay);
         const calculator = new CalculateCMC(cmc);
         return calculator.calculateCT(DurationTask, CostHourWork, Spares, OperatingCosts, LogisticDelay);
     }
 
-    calculateCF(DurationTask, UnitCosts, CostFailure){
+    calculateCF(DurationTask, UnitCosts, CostFailure) {
         const cmc = new CMC(DurationTask, UnitCosts, CostFailure);
         const calculator = new CalculateCMC(cmc);
         return calculator.calculateCF(DurationTask, UnitCosts, CostFailure);

@@ -1,5 +1,5 @@
-import EOQ from '../domain//Models/Equations/EOQ';
-import CalculateEOQ from '../infrastructure/CalculateEOQ';
+import EOQ from '../../domain/Models/Equations/EOQ';
+import CalculateEOQ from '../../infrastructure/CalculateEOQ';
 
 class EOQService {
     setCosts(setupCost, holdingCost) {
@@ -13,12 +13,12 @@ class EOQService {
         return calculator.calculate(demand, frequency);
     }
 
-    getDemand(demand, frequency){
+    getDemand(demand, frequency) {
         const eoq = new EOQ();
         const calculator = new CalculateEOQ(eoq);
         return calculator.convertToAnnualDemand(demand, frequency);
     }
-}   
+}
 
 export default EOQService;
 

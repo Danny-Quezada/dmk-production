@@ -1,0 +1,25 @@
+.ImageContainer {
+  width: 50px;
+  height: 50px;
+  background-color: blue;
+  border: 2px solid rgb(221, 221, 221);
+  border-radius: 15px;
+}
+.SelectGroup {
+  width: 60px;
+  border: 2px solid green;
+  border-radius: 50px;
+  color: green;
+  padding: 5px;
+  background-color: transparent;
+  font-size: 1.1em;
+}
+.SelectCollection {
+  width: 100px;
+
+  border-radius: 50px;
+
+  padding: 5px;
+  background-color: transparent;
+  font-size: 1em;
+}

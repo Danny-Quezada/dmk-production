@@ -4,27 +4,27 @@ import { useState } from "react";
 import LatexComponent from "../../../components/LatexComponent/LatexComponent";
 import TextField from "../../../components/Textfield/TextField";
 import Button from "../../../components/Button/Button";
-import EOQService from '../../../services/EOQServices';
-import Options from '../../../components/Options/Options';
+import EOQService from "../../../lib/AppCore/Services/EOQServices";
+import Options from "../../../components/Options/Options";
 
 export default function EOQ() {
-
   const frequencyOptions = [
-    { label: 'Diaria', value: 'Diaria' },
-    { label: 'Semanal', value: 'Semanal' },
-    { label: 'Anual', value: 'Anual' }
+    { label: "Diaria", value: "Diaria" },
+    { label: "Semanal", value: "Semanal" },
+    { label: "Anual", value: "Anual" },
   ];
-  
+
   const HandleCalculateEOQ = () => {
     const eoqService = new EOQService();
     eoqService.setCosts(eoq.S, eoq.H);
-    
+
     const result = eoqService.calculateEOQ(eoq.D, eoq.F);
-    setEOQ(prevState => ({ 
-      ...prevState, 
-      DS: eoqService.getDemand(eoq.D, eoq.F)}));
+    setEOQ((prevState) => ({
+      ...prevState,
+      DS: eoqService.getDemand(eoq.D, eoq.F),
+    }));
     changeResult(result);
-  }
+  };
 
   const [result, changeResult] = useState(null);
   const [eoq, setEOQ] = useState({
@@ -46,7 +46,6 @@ export default function EOQ() {
   };
   return (
     <>
-      
       <form
         style={{
           margin: "10px",
@@ -56,7 +55,7 @@ export default function EOQ() {
         }}
         onSubmit={submit}
       >
-            <h3>EOQ</h3>
+        <h3>EOQ</h3>
         <TextField
           autoFocus={true}
           value={eoq.D}
@@ -69,16 +68,14 @@ export default function EOQ() {
         />
 
         <Options
-        name="F"
-        value={eoq.F}
-        onChange={onChange}
-        options={frequencyOptions}
+          name="F"
+          value={eoq.F}
+          onChange={onChange}
+          options={frequencyOptions}
         />
 
-
-
         <TextField
-        autoFocus={false}
+          autoFocus={false}
           onChangeInputValue={onChange}
           type={"number"}
           id={"S"}
@@ -89,8 +86,7 @@ export default function EOQ() {
         />
 
         <TextField
-        
-        autoFocus={false}
+          autoFocus={false}
           onChangeInputValue={onChange}
           id={"H"}
           type={"number"}

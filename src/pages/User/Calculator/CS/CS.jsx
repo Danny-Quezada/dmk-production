@@ -5,36 +5,36 @@ import { useState } from "react";
 import TextField from "../../../../components/Textfield/TextField";
 import Button from "../../../../components/Button/Button";
 import LatexComponent from "../../../../components/LatexComponent/LatexComponent";
-import CSService from '../../../../services/CSServices';
-import Options from '../../../../components/Options/Options';
-
+import CSService from "../../../../lib/AppCore/Services/CSServices";
+import Options from "../../../../components/Options/Options";
 
 const CS = () => {
   const [result, changeResult] = useState(null);
   const [Cost, setCost] = useState("CFP");
 
   const frequencyOptions = [
-    { label: 'Diaria', value: 'Diaria' },
-    { label: 'Semanal', value: 'Semanal' },
-    { label: 'Anual', value: 'Anual' }
+    { label: "Diaria", value: "Diaria" },
+    { label: "Semanal", value: "Semanal" },
+    { label: "Anual", value: "Anual" },
   ];
 
   const HandleCalculateCS = () => {
     const csService = new CSService();
     csService.setValues(CS.SS, CS.Q, CS.T);
     let result = 0;
-    if( Cost === "CFP"){
+    if (Cost === "CFP") {
       result = csService.calculateFixedCost(CS.Q, CS.SS);
     } else {
-      result = csService.calculateAverageCost(CS.D, CS.T, CS.SS)
+      result = csService.calculateAverageCost(CS.D, CS.T, CS.SS);
     }
     CS.ValorPromedio = result;
     const rotation = csService.calculateInventoryRotation(CS.D, result, CS.F);
-    setCS(prevState => ({ 
-      ...prevState, 
-      DS: csService.getDemand(CS.D, CS.F)}));
+    setCS((prevState) => ({
+      ...prevState,
+      DS: csService.getDemand(CS.D, CS.F),
+    }));
     changeResult(rotation);
-  }
+  };
 
   const [CS, setCS] = useState({
     D: "",
@@ -77,10 +77,10 @@ const CS = () => {
         />
 
         <Options
-        name="F"
-        value={CS.F}
-        onChange={onChange}
-        options={frequencyOptions}
+          name="F"
+          value={CS.F}
+          onChange={onChange}
+          options={frequencyOptions}
         />
 
         <TextField
