@@ -1,4 +1,4 @@
-import EOQ from '../domain/EOQ';
+import EOQ from '../domain//Models/Equations/EOQ';
 import CalculateEOQ from '../infrastructure/CalculateEOQ';
 
 class EOQService {

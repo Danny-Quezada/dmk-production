@@ -125,6 +125,7 @@ const CMC = () => {
 
         <div style={{ display: 'flex', alignItems: 'end' }}>
           <TextField
+          autoFocus={false}
             title={"MTBF"}
             onChangeInputValue={onChange}
             id={"MTBF"}
@@ -139,6 +140,7 @@ const CMC = () => {
 
         {independentButtonActive == true && <div style={{ display: 'flex', alignItems: 'end', gap: '5px', transformStyle: "initial", transition: "all 0.2", }}>
           <TextField
+             autoFocus={false}
             title={"Porcentaje para el MTBF (%)"}
             onChangeInputValue={(e) => setValueMTBF(e.target.value)}
             id={"MTBFPercentage"}
@@ -155,6 +157,7 @@ const CMC = () => {
 
 
         <TextField
+           autoFocus={false}
           title={"Duración de la tarea"}
           onChangeInputValue={onChange}
           id={"DT"}
@@ -165,6 +168,7 @@ const CMC = () => {
         />
 
         <TextField
+           autoFocus={false}
           title={"Costo por hora de trabajo"}
           onChangeInputValue={onChange}
           id={"CHT"}
@@ -174,6 +178,7 @@ const CMC = () => {
           readOnly={false}
         />
         <TextField
+           autoFocus={false}
           title={"Repuestos"}
           onChangeInputValue={onChange}
           id={"R"}
@@ -183,6 +188,7 @@ const CMC = () => {
           readOnly={false}
         />
         <TextField
+           autoFocus={false}
           title={"Costes operativos"}
           onChangeInputValue={onChange}
           id={"CTO"}
@@ -193,6 +199,7 @@ const CMC = () => {
         />
 
         <TextField
+           autoFocus={false}
           title={"Retraso logístico"}
           onChangeInputValue={onChange}
           id={"RL"}
@@ -202,6 +209,7 @@ const CMC = () => {
           readOnly={false}
         />
         <TextField
+           autoFocus={false}
           title={"Costes unitarios"}
           onChangeInputValue={onChange}
           id={"CUP"}
@@ -212,6 +220,7 @@ const CMC = () => {
         />
 
         <TextField
+           autoFocus={false}
           title={"Coste de la falla"}
           onChangeInputValue={onChange}
           id={"CFVU"}

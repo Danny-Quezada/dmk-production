@@ -3,11 +3,12 @@ import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import UserLayout from "./Layouts/User/UserLayout.jsx";
 
-import ErrorPage from "./pages/error-page";
+import ErrorPage from "./pages/error-page.jsx";
 import Inventory from "./pages/User/Inventory/Inventory.jsx";
 import CalculatorPage from "./pages/User/Calculator/CalculatorPage.jsx";
 import AuthLayout from "./Layouts/Auth/AuthLayout.jsx";
 import Login from "./pages/Auth/Login.jsx";
+import React from "react";
 function App() {
   const [count, setCount] = useState(0);
 

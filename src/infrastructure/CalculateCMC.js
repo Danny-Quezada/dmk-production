@@ -1,4 +1,8 @@
 class CalculateCMC{
+
+    
+
+
     constructor(cmc){
         this.cmc = cmc;
     }

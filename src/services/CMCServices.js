@@ -1,4 +1,4 @@
-import CMC from '../domain/CMC';
+import CMC from '../domain/Models/Equations/CMC';
 import CalculateCMC from '../infrastructure/CalculateCMC';
 
 class CMCService {

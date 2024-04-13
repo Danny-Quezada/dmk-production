@@ -40,6 +40,7 @@ export default function Login() {
         <h1 style={{ color: "blue", fontSize: "3.2em" }}>DKM</h1>
        
         <TextField
+        readOnly={false}
           autoFocus={true}
           value={user.name}
           onChangeInputValue={changeValue}
@@ -49,6 +50,7 @@ export default function Login() {
           type={"text"}
         />
         <TextField
+        readOnly={false}
           autoFocus={false}
           value={user.password}
           onChangeInputValue={changeValue}

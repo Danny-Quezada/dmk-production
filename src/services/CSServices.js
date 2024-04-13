@@ -1,4 +1,4 @@
-import CS from '../domain/CS';
+import CS from '../domain/Models/Equations/CS';
 import CalculateCS from '../infrastructure/CalculateCS';
 
 class CSService { 

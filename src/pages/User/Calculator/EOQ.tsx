@@ -78,6 +78,7 @@ export default function EOQ() {
 
 
         <TextField
+        autoFocus={false}
           onChangeInputValue={onChange}
           type={"number"}
           id={"S"}
@@ -88,6 +89,8 @@ export default function EOQ() {
         />
 
         <TextField
+        
+        autoFocus={false}
           onChangeInputValue={onChange}
           id={"H"}
           type={"number"}

@@ -3,6 +3,7 @@ import { SideBar } from "../../components/Sidebar/SideBar";
 import { useState } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
 import { IoCloseSharp } from "react-icons/io5";
+import React from "react";
 
 const UserLayout = () => {
   const [showMenu, setMenu] = useState(true);
