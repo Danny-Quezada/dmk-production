@@ -4,7 +4,7 @@ import { RxEyeOpen } from "react-icons/rx";
 
 import TextField from "../Textfield/TextField";
 import { RiEyeCloseLine } from "react-icons/ri";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 // import TagsInput from "react-tagsinput";
 
 import "react-tagsinput/react-tagsinput.css";
@@ -12,18 +12,27 @@ import QRCode from "react-qr-code";
 import { collection } from "firebase/firestore";
 import Collection from "../../lib/domain/Models/Inventary/Collection";
 import Group from "../../lib/domain/Models/Inventary/Group";
-function ProductRow({ Product, OnTouch, Collections, Groups }: Props) {
-  const [expand, changeExpand] = useState(false);
-  const [ChangedProduct, useProduct] = useState(Product);
+import Button from "../Button/Button";
+import { UserContext } from "../../providers/UserContext";
+import { toast } from "sonner";
+function ProductRow({ product: Product }: Props) {
+  const UserContextAll = useContext(UserContext);
+  const {
+    Collections,
+    Groups,
+    productServices,
 
-  const OnSubmit = (event: React.MouseEvent<HTMLElement>) => {
-    event.preventDefault();
-  };
+    useProduct,
+    Products,
+  } = UserContextAll!;
+
+  const [expand, changeExpand] = useState(false);
+  const [ChangedProduct, useChangedProduct] = useState<Product>(Product);
 
   const onChange = (e: React.FormEvent<HTMLInputElement>) => {
     console.log(e.currentTarget.value);
     console.log(e.currentTarget.name);
-    useProduct({
+    useChangedProduct({
       ...Product,
       [e.currentTarget.name]:
         e.currentTarget.name == "Date"
@@ -31,7 +40,32 @@ function ProductRow({ Product, OnTouch, Collections, Groups }: Props) {
           : e.currentTarget.value,
     });
   };
+  const onSubmite =async (e: any) => {
+    e.preventDefault();
+    
+    if(ChangedProduct===Product){
+      console.log("hello")
+      return toast.error("Tienes que cambiar por lo menos un campo");
+    }
+    else{
+     const updated: boolean= await productServices.Update(ChangedProduct);
+     if(updated){
+      
+    
+      const newProducts: Product[] | null = Products!.map((Product) => {
+        if (Product.IdProduct !== Product.IdProduct) return Product;
 
+        return { ...ChangedProduct };
+      });
+      useProduct(newProducts);
+      changeExpand(false);
+      return toast.success("Producto actualizado");
+     }
+     else{
+      return toast.error("Hubo un error, intentalo más tarde.");
+     }
+    }
+  };
   const ChangeExpand = () => {
     console.log(Product.Select);
     if (!Product.Select) {
@@ -49,24 +83,30 @@ function ProductRow({ Product, OnTouch, Collections, Groups }: Props) {
               }
             }
 
-            OnTouch(Product.IdProduct, e.target.checked);
+            const newProducts: Product[] | null = Products!.map((Product) => {
+              if (Product.IdProduct !== Product.IdProduct) return Product;
+
+              return { ...Product, Select: e.target.checked };
+            });
+            useProduct(newProducts);
           }}
           checked={Product.Select}
           type="checkbox"
           name={Product.ProductName}
           id={Product.IdProduct + 1}
           aria-label="Mostrar detalles"
-          
         />
       </td>
       <td onClick={ChangeExpand}>
-        <div className={ProductStyle.ImageContainer} style={{backgroundImage:`url(${Product.Images[0]})`  }}></div>
+        <div
+          className={ProductStyle.ImageContainer}
+          style={{ backgroundImage: `url(${Product.Images[0]})` }}
+        ></div>
       </td>
       <td onClick={ChangeExpand}>{Product.ProductName}</td>
       <td onClick={ChangeExpand}>
         <select
-        aria-label="Grupos"
-        
+          aria-label="Grupos"
           name="Group"
           id={Product.IdProduct + 2}
           disabled={true}
@@ -88,7 +128,10 @@ function ProductRow({ Product, OnTouch, Collections, Groups }: Props) {
       <td onClick={ChangeExpand}>C${Product.Price}</td>
       <td onClick={ChangeExpand}>{Product.Quantity}</td>
       <td onClick={ChangeExpand}>
-        <button className={ProductStyle.Button} aria-label="Actualizar producto">
+        <button
+          className={ProductStyle.Button}
+          aria-label="Actualizar producto"
+        >
           {!expand ? (
             <RiEyeCloseLine size={15} />
           ) : (
@@ -100,42 +143,22 @@ function ProductRow({ Product, OnTouch, Collections, Groups }: Props) {
     expand && (
       <tr className={ProductStyle.Collapse} key={Product.IdProduct + 3333}>
         <td colSpan={8}>
-          <div
-            style={{
-              paddingTop: "10px",
-              borderTop: "1px solid grey",
-              display: "flex",
-              gap: "50px",
-              flexDirection: "row",
-              marginBottom: "15px",
-            }}
-          >
-            <div
-              className=""
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
+          <form className={ProductStyle.container} onSubmit={onSubmite}>
+            <div className={ProductStyle.Images}>
               <div
                 style={{
                   width: "100px",
                   height: "100px",
                   backgroundColor: "blue",
                   borderRadius: "13px",
-                  backgroundImage:`url(${Product.Images[0]})`,
-                  backgroundSize:"cover",
+                  backgroundImage: `url(${Product.Images[0]})`,
+                  backgroundSize: "cover",
                   backgroundRepeat: "no-repeat",
-                  backgroundPosition: "center"
+                  backgroundPosition: "center",
                 }}
               ></div>
             </div>
-            <div
-              className=""
-              style={{ display: "flex", flexDirection: "column", gap: "20px", width: "400px"}}
-            >
+            <div className={ProductStyle.Detail}>
               <TextField
                 autoFocus={true}
                 isRequired={true}
@@ -169,28 +192,8 @@ function ProductRow({ Product, OnTouch, Collections, Groups }: Props) {
                 </h5>
                 <QRCode value={Product.ProductName} size={80} />
               </div>
-              <button
-                type="submit"
-                style={{
-                  backgroundColor: "blue",
-                  color: "white",
-                  outline: "none",
-                  border: "none",
-                  height: "30px",
-                  wordSpacing: "1px",
-                  cursor: "pointer",
-                  width: "120px",
-                  borderRadius: "80px",
-                }}
-                onClick={OnSubmit}
-              >
-                Actualizar
-              </button>
             </div>
-            <div
-              className=""
-              style={{ display: "flex", flexDirection: "column", gap: "20px" }}
-            >
+            <div className={ProductStyle.MoreDetail}>
               <TextField
                 autoFocus={false}
                 isRequired={true}
@@ -232,9 +235,7 @@ function ProductRow({ Product, OnTouch, Collections, Groups }: Props) {
                 }
               />
             </div>
-            <div
-              style={{ display: "flex", flexDirection: "column", gap: "20px" }}
-            >
+            <div className={ProductStyle.Selection}>
               <label
                 htmlFor={"Collection"}
                 style={{
@@ -245,22 +246,24 @@ function ProductRow({ Product, OnTouch, Collections, Groups }: Props) {
                 }}
               >
                 Collection
-                <select 
-                key={"Collection"}
+                <select
+                  key={"Collection"}
                   className={ProductStyle.SelectCollection}
                   name="Collection"
                   id="Collection"
                   defaultValue={ChangedProduct.Collection}
                   onChange={(e) => {
-                   
-                    useProduct({
+                    useChangedProduct({
                       ...ChangedProduct,
                       Collection: e.currentTarget.value,
                     });
                   }}
                 >
-                  {Collections.map((value) => (
-                    <option value={value.CollectionName} key={value.CollectionName+2}>
+                  {Collections!.map((value) => (
+                    <option
+                      value={value.CollectionName}
+                      key={value.CollectionName + 2}
+                    >
                       {value.CollectionName}
                     </option>
                   ))}
@@ -277,36 +280,39 @@ function ProductRow({ Product, OnTouch, Collections, Groups }: Props) {
               >
                 Grupos
                 <select
-                style={{width: "100px"}}
+                  style={{ width: "100px" }}
                   className={ProductStyle.SelectGroup}
                   name="Group"
                   id="Group"
                   defaultValue={ChangedProduct.Group}
                   onChange={(e) => {
                     console.log(e.currentTarget.value);
-                    useProduct({
+                    useChangedProduct({
                       ...ChangedProduct,
                       Group: e.currentTarget.value,
                     });
                   }}
                 >
-                  {Groups.map((value) => (
-                    <option value={value.GroupName} key={value.GroupName+22}>{value.GroupName}</option>
+                  {Groups!.map((value) => (
+                    <option value={value.GroupName} key={value.GroupName + 22}>
+                      {value.GroupName}
+                    </option>
                   ))}
                 </select>
               </label>
-             
             </div>
-          </div>
+            <div className={ProductStyle.ButtonGrid}>
+              <button className={ProductStyle.ButtonUpdate} type="submit">
+                Actualizar
+              </button>
+            </div>
+          </form>
         </td>
       </tr>
     ),
   ];
 }
 interface Props {
-  Product: Product;
-  OnTouch: (productId: string, select: boolean) => void;
-  Collections: Collection[];
-  Groups: Group[];
+  product: Product;
 }
 export default ProductRow;

@@ -5,6 +5,7 @@ import { AiOutlineMenu } from "react-icons/ai";
 import { IoCloseSharp } from "react-icons/io5";
 import React from "react";
 import UserProvider from "../../providers/UserProvider";
+import { Toaster, toast } from 'sonner';
 
 const UserLayout = () => {
   const [showMenu, setMenu] = useState(true);

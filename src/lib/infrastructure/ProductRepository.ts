@@ -1,6 +1,6 @@
 import IProductModel from "../domain/Enum/IProductModel";
 import { Product } from "../domain/Models/Inventary/Product";
-import { collection, getDoc, getDocs, addDoc } from "firebase/firestore";
+import { collection, getDoc, getDocs, addDoc,updateDoc,doc } from "firebase/firestore";
 import { Timestamp } from "firebase/firestore";
 import { db, storage } from "../../../firebase";
 import { v4 as uuidv4 } from "uuid";
@@ -18,7 +18,7 @@ export default class ProductRepository implements IProductModel {
       );
       return getDownloadURL(upload.ref);
     }));
-    console.log(urls);
+   
     return urls;
   }
   async Create(t: Product): Promise<string> {
@@ -39,7 +39,28 @@ export default class ProductRepository implements IProductModel {
     }
   }
   async Update(t: Product): Promise<boolean> {
-    throw new Error("Method not implemented.");
+    const docRef = doc(db, "Product", t.IdProduct);
+  
+    try {
+      const productData = {
+        ProductName: t.ProductName,
+        Date: t.Date,
+        Quantity: t.Quantity,
+        Group: t.Group,
+        Price: t.Price,
+        Collection: t.Collection,
+        Select: t.Select,
+        Tags: t.Tags,
+        Cost: t.Cost,
+        Images: t.Images
+      };
+    
+      await updateDoc(docRef, productData);
+    return true;
+    } catch (error) {
+      console.error("Error updating document: ", error);
+      return false;
+    }
   }
   async Read(): Promise<Product[]> {
     let products: Product[] = [];

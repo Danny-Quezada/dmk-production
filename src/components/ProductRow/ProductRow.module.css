@@ -4,7 +4,7 @@
   background-color: blue;
   border: 2px solid rgb(221, 221, 221);
   border-radius: 15px;
-  background-size:cover 
+  background-size: cover;
 }
 .SelectGroup {
   width: 60px;
@@ -24,21 +24,78 @@
   background-color: transparent;
   font-size: 1em;
 }
-.Container:hover{
-    cursor: pointer;
-background-color: rgba(219, 219, 255, 0.045);
+.Container:hover {
+  cursor: pointer;
+  background-color: rgba(219, 219, 255, 0.045);
 }
-.Button{
-background-color: transparent;
-border: none;
-cursor: pointer;
+.Button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
 }
-.Collapse{
-    border: none !important;
+.Collapse {
+  border: none !important;
+}
+.Collapse td {
+  padding: 0px 0px !important;
+  border: none !important;
+}
 
+.container {
+  display: grid;
+  grid-auto-columns: 1fr;
+  grid-auto-rows: 1fr;
+  grid-template-columns: 0.5fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 0.2fr;
+  gap: 30px 50px;
+  grid-template-areas:
+    "Images Detail MoreDetail Selection"
+    "ButtonGrid ButtonGrid ButtonGrid ButtonGrid";
 }
-.Collapse td{
-   
-    padding: 0px 0px !important;
-    border: none !important;
+.ButtonUpdate {
+  background-color: var(--primary-color);
+  color: white;
+  outline: none;
+  border: none;
+  height: 30px;
+  word-spacing: 1px;
+  cursor: pointer;
+  width: 500px;
+  border-radius: 80px;
+}
+@media (width < 520px) {
+  .container {
+    display: flex;
+    flex-direction: column;
+  }
+}
+.Images {
+  grid-area: Images;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.Detail {
+  grid-area: Detail;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.MoreDetail {
+  grid-area: MoreDetail;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.ButtonGrid {
+  grid-area: ButtonGrid;
+  display: flex;
+  align-items: center;
+  justify-self: center;
+}
+.Selection {
+  grid-area: Selection;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }

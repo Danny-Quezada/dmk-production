@@ -79,7 +79,7 @@ const Inventory = () => {
       files.push (image["file"])
     })
     const urls=await productServices.UploadImages(files);
-    console.log(urls);
+
     CreateProduct.Images=urls;
     const id = await productServices.Create(CreateProduct);
     CreateProduct.IdProduct = id;
@@ -161,11 +161,10 @@ const Inventory = () => {
                 <tbody>
                   {Products!.map((product) => (
                     <ProductRow
-                      Groups={Groups!}
-                      Collections={Collections!}
-                      Product={product}
+                      
+                      product={product}
                       key={product.IdProduct + 44}
-                      OnTouch={onTouch}
+                    
                     />
                   ))}
                 </tbody>
@@ -437,13 +436,6 @@ const Inventory = () => {
       </button>
     </>
   );
-  function onTouch(productId: string, select: boolean) {
-    const newProducts: Product[] | null = Products!.map((Product) => {
-      if (Product.IdProduct !== productId) return Product;
-
-      return { ...Product, Select: select };
-    });
-    useProduct(newProducts);
-  }
+ 
 };
 export default Inventory;
