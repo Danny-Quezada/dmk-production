@@ -13,6 +13,7 @@ import { IoIosAddCircleOutline } from "react-icons/io";
 import { CgTapDouble } from "react-icons/cg";
 import { IoCloseSharp } from "react-icons/io5";
 import TextField from "../../../components/Textfield/TextField";
+import { IoAdd } from "react-icons/io5";
 const Inventory = () => {
   const [showModal, useModal] = useState<boolean>(false);
   const [CreateProduct, createProduct] = useState<Product>(
@@ -74,21 +75,7 @@ const Inventory = () => {
           </div>
           <button
             onClick={(e) => {
-              useModal(true);
-              // productServices.Create(
-              //   new Product(
-              //     "3",
-              //     "Prueba",
-              //     new Date(),
-              //     3,
-              //     "A",
-              //     33,
-              //     "Hogar",
-              //     false,
-              //     [],
-              //     3
-              //   )
-              // );
+             
             }}
             style={{
               border: "none",
@@ -101,7 +88,7 @@ const Inventory = () => {
             }}
           >
             <IoIosAddCircleOutline size={30} />
-            Agregar producto
+            Agregar componentes
           </button>
         </div>
 
@@ -212,9 +199,36 @@ const Inventory = () => {
               value={CreateProduct.Quantity.toString()}
               onChangeInputValue={onChange}
             />
+            <TextField
+              autoFocus={false}
+              isRequired={true}
+              id="Quantity"
+              readOnly={false}
+              title="Cantidad"
+              type="number"
+              value={CreateProduct.Cost.toString()}
+              onChangeInputValue={onChange}
+            />
           </form>
         </div>
       </div>
+      <button onClick={(e)=>{
+        useModal(true);
+      }}
+        style={{
+          cursor: "pointer",
+          position: "absolute",
+          right: "20px",
+          bottom: "90px",
+          width: "50px",
+          height: "50px",
+          backgroundColor: "transparent",
+          borderRadius: "50%",
+          borderColor: "green"
+        }}
+      >
+        <IoAdd color="green" size={20}/>
+      </button>
     </>
   );
   function onTouch(productId: string, select: boolean) {
