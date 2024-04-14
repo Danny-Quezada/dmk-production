@@ -23,3 +23,21 @@
   background-color: transparent;
   font-size: 1em;
 }
+.Container:hover{
+    cursor: pointer;
+background-color: rgba(219, 219, 255, 0.045);
+}
+.Button{
+background-color: transparent;
+border: none;
+cursor: pointer;
+}
+.Collapse{
+    border: none !important;
+
+}
+.Collapse td{
+   
+    padding: 0px 0px !important;
+    border: none !important;
+}

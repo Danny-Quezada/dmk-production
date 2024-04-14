@@ -1,3 +1,8 @@
-import { Product } from "../Models/Product";
+import { Product } from "../Models/Inventary/Product";
 import IModel from "./IModel";
-export default interface IProductModel extends IModel<Product> {}
+export default interface IProductModel extends IModel<Product> {
+
+
+
+    
+}

@@ -1,5 +1,5 @@
 import IProductModel from "../domain/Enum/IProductModel";
-import { Product } from "../domain/Models/Product";
+import { Product } from "../domain/Models/Inventary/Product";
 import { collection, getDoc, getDocs } from "firebase/firestore";
 import { Timestamp } from "firebase/firestore";
 import { db } from "../../../firebase";
@@ -23,8 +23,8 @@ export default class ProductRepository implements IProductModel {
           values["Group"],
           values["Price"],
           values["Collection"],
-          null,
-        
+          false,
+
           values["Tags"],
           values["Cost"]
         )
@@ -36,5 +36,5 @@ export default class ProductRepository implements IProductModel {
   async Delete(t: Product): Promise<boolean> {
     throw new Error("Method not implemented.");
   }
-  productsRef = collection(db, "Product");
+  GroupsRef = collection(db, "Group");
 }

@@ -6,7 +6,7 @@ export class Product {
   Group: string;
   Price: number;
   Collection: string;
-  Select: boolean | null;
+  Select: boolean;
   Tags: string[];
   Cost: number
   constructor(
@@ -17,8 +17,7 @@ export class Product {
     Group: string,
     Price: number,
     Collection: string,
-    Select: boolean | null,
-    
+    Select: boolean,
     Tags: string[],
     Cost: number
   ) {

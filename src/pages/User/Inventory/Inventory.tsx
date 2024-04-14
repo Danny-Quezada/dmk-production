@@ -3,12 +3,20 @@ import ContentPageCSS from "../ContentPage.module.css";
 import InventaryStyle from "./Inventary.module.css";
 import ProductServices from "../../../lib/AppCore/Services/ProductServices";
 import ProductRepository from "../../../lib/infrastructure/ProductRepository";
-import { Product } from "../../../lib/domain/Models/Product";
+import { Product } from "../../../lib/domain/Models/Inventary/Product";
 import ProductRow from "../../../components/ProductRow/ProductRow";
+import CollectionRepository from "../../../lib/infrastructure/CollectionRepository";
+import Collection from "../../../lib/domain/Models/Inventary/Collection";
+import GroupRepository from "../../../lib/infrastructure/GroupRepository";
+import Group from "../../../lib/domain/Models/Inventary/Group";
 const Inventory = () => {
   const [Products, useProduct] = useState<Product[] | null>(null);
+  const [Collections, useCollection] = useState<Collection[] | null>(null);
+  const [Groups, useGroup] = useState<Group[] | null>(null);
   const productServices: ProductServices = new ProductServices(
-    new ProductRepository()
+    new ProductRepository(),
+    new CollectionRepository(),
+    new GroupRepository()
   );
   const [isLoading, useLoading] = useState(false);
   useEffect(() => {
@@ -18,9 +26,14 @@ const Inventory = () => {
       useProduct(productServices.Products);
       useLoading(true);
     });
-    console.log(Products);
+    productServices.ReadCollection().then((resp) => {
+      useCollection(productServices.Collections);
+    });
+    productServices.ReadGroups().then((resp) => {
+      useGroup(productServices.Groups);
+    });
   }, []);
-  console.log(Products)
+
   return (
     <main
       className={`${ContentPageCSS.main} ${InventaryStyle.InventaryMain}`}
@@ -28,8 +41,10 @@ const Inventory = () => {
     >
       <h2 className={ContentPageCSS.titlePage}>Inventario</h2>
       <section style={{ overflowX: "auto", width: "100%", display: "block" }}>
-        {
-          !isLoading ? <div></div>: <div>
+        {!isLoading ? (
+          <div></div>
+        ) : (
+          <div>
             <table className={InventaryStyle.table}>
               <thead>
                 <tr>
@@ -44,14 +59,28 @@ const Inventory = () => {
               </thead>
               <tbody>
                 {Products!.map((product) => (
-                  <ProductRow Product={product} key={product.Price} />
+                  <ProductRow
+                  Groups={Groups!}
+                    Collections={Collections!}
+                    Product={product}
+                    key={product.IdProduct + 44}
+                    OnTouch={onTouch}
+                  />
                 ))}
               </tbody>
             </table>
           </div>
-        }
+        )}
       </section>
     </main>
   );
+  function onTouch(productId: string, select: boolean) {
+    const newProducts: Product[] | null = Products!.map((Product) => {
+      if (Product.IdProduct !== productId) return Product;
+
+      return { ...Product, Select: select };
+    });
+    useProduct(newProducts);
+  }
 };
 export default Inventory;

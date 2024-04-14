@@ -1,5 +1,16 @@
 import React from "react";
 import TextFieldCSS from "./TextField.module.css";
+
+interface Props{
+  title: string,
+  value: string,
+  id: string,
+  type: string,
+  autoFocus: boolean,
+  onChangeInputValue: (e: React.FormEvent<HTMLInputElement>)=>void,
+  isRequired: boolean,
+  readOnly: boolean
+}
 function TextField({
   title,
   value,
@@ -9,22 +20,26 @@ function TextField({
   onChangeInputValue,
   isRequired,
   readOnly,  
-}) {
+}:Props) {
   return (
     <div className={`${TextFieldCSS.form__group}`}>
       <input
         onInvalid={(e) => {
-          if (e.target.value === "") {
-            e.target.setCustomValidity("Campo requerido, coloca: " + title);
+
+          const event=(e.target as HTMLInputElement)
+
+          if (event.value === "") {
+            event.setCustomValidity("Campo requerido, coloca: " + title);
           }
           if (type === "number") {
-            if (e.target.value === "--") {
-              e.target.setCustomValidity("Solamente números");
+            if (event.value === "--") {
+              event.setCustomValidity("Solamente números");
             }
           }
         }}
         onInput={(e) => {
-          e.target.setCustomValidity("");
+          const event=(e.target as HTMLInputElement)
+          event.setCustomValidity("");
         }}
         max="1000000"
         min="0"
