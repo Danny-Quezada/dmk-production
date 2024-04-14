@@ -1,22 +1,42 @@
 import IProductModel from "../domain/Enum/IProductModel";
 import { Product } from "../domain/Models/Inventary/Product";
-import { collection, getDoc, getDocs,addDoc } from "firebase/firestore";
+import { collection, getDoc, getDocs, addDoc } from "firebase/firestore";
 import { Timestamp } from "firebase/firestore";
-import { db } from "../../../firebase";
+import { db, storage } from "../../../firebase";
+import { v4 as uuidv4 } from "uuid";
+import {
+  getDownloadURL,
+  ref as storageRef,
+  uploadBytes,
+} from "firebase/storage";
 export default class ProductRepository implements IProductModel {
+  async UploadImages(Images: File[]): Promise<string[]> {
+    const urls = await Promise.all(Images.map(async (image) => {
+      const upload = await uploadBytes(
+        storageRef(storage, `products/${uuidv4()}`),
+        image
+      );
+      return getDownloadURL(upload.ref);
+    }));
+    console.log(urls);
+    return urls;
+  }
   async Create(t: Product): Promise<string> {
-   try{
-    let dataWithoutExcludedKeys: Partial<Product> = { ...t };
+    try {
+      let dataWithoutExcludedKeys: Partial<Product> = { ...t };
 
-    // Excluir cada clave proporcionada
-    delete dataWithoutExcludedKeys["IdProduct"]
-    delete dataWithoutExcludedKeys["Select"]
-   
-    const newDocumentRef = await addDoc(collection(db, "Product"),dataWithoutExcludedKeys);
-    return newDocumentRef.id;
-   }catch(error:any){
-    throw error;
-   }
+      // Excluir cada clave proporcionada
+      delete dataWithoutExcludedKeys["IdProduct"];
+      delete dataWithoutExcludedKeys["Select"];
+
+      const newDocumentRef = await addDoc(
+        collection(db, "Product"),
+        dataWithoutExcludedKeys
+      );
+      return newDocumentRef.id;
+    } catch (error: any) {
+      throw error;
+    }
   }
   async Update(t: Product): Promise<boolean> {
     throw new Error("Method not implemented.");
@@ -37,7 +57,8 @@ export default class ProductRepository implements IProductModel {
           false,
 
           values["Tags"],
-          values["Cost"]
+          values["Cost"],
+          values["Images"]
         )
       );
     });

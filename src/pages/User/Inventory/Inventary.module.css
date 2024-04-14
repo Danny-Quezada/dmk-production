@@ -44,22 +44,24 @@ margin: 0px auto;
   }
   
 }
-.AddImage { grid-area: AddImage }
+.AddImage { grid-area: AddImage;}
 .Detail { grid-area: Detail; display: flex; flex-direction: column; gap: 30px;}
 .MoreDetail { grid-area: MoreDetail;  display: flex; flex-direction: column; gap: 30px;}
 .ButtonContainer { grid-area: ButtonContainer; display: flex; justify-content: center; align-items: center; }
+.Title{grid-area: Title; text-align: center;}
 .Form {
   display: grid; 
-  
+  overflow-y: auto;
   margin: 20px;
-  gap: 10px 80px; 
+  gap: 20px 80px; 
  
   display: grid; 
   grid-auto-rows: 1fr; 
   grid-template-columns: 1fr 1fr; 
-  grid-template-rows: 1fr 1fr 1fr 1fr; 
+  grid-template-rows: 0.1fr 0.6fr 0.6fr 0.6fr 0.2fr; 
 
   grid-template-areas: 
+    "Title Title"
     "AddImage AddImage"
     "Detail MoreDetail"
     "Detail MoreDetail"
@@ -84,15 +86,17 @@ margin: 0px auto;
 @media (width < 520px) {
   
   .ContentFormInventary {
+    height: 90%;
     width: 90%;
   }
   .Form {
+ 
     display: flex;
     flex-direction: column;
   }
 }
 .SelectGroup {
-  width: 60px;
+  width: max-content;
   border: 2px solid green;
   border-radius: 50px;
   color: green;
@@ -101,7 +105,7 @@ margin: 0px auto;
   font-size: 1.1em;
 }
 .SelectCollection {
-  width: 100px;
+  width: max-content;
 
   border-radius: 50px;
 

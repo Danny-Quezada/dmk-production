@@ -41,4 +41,7 @@ export default class ProductServices {
   async ReadGroups(): Promise<Group[]> {
     return await this.iGroupModel.Read();
   }
+  async UploadImages(images: File[]): Promise<string[]>{
+    return await this.iProductModel.UploadImages(images);
+  }
 }

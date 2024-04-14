@@ -8,7 +8,8 @@ export class Product {
   Collection: string;
   Select: boolean;
   Tags: string[];
-  Cost: number
+  Cost: number;
+  Images: string[];
   constructor(
     IdProduct: string,
     ProductName: string,
@@ -19,7 +20,8 @@ export class Product {
     Collection: string,
     Select: boolean,
     Tags: string[],
-    Cost: number
+    Cost: number,
+    Images: string[]
   ) {
     this.IdProduct = IdProduct;
     this.ProductName = ProductName;
@@ -32,5 +34,6 @@ export class Product {
 
     this.Cost=Cost;
     this.Tags=Tags;
+    this.Images=Images
   }
 }

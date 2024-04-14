@@ -17,6 +17,24 @@ import { IoAdd } from "react-icons/io5";
 import Button from "../../../components/Button/Button";
 import { UserContext } from "../../../providers/UserContext";
 import { collection } from "firebase/firestore";
+import ImageUploading from "react-images-uploading";
+import "react-slideshow-image/dist/styles.css";
+import { Slide } from "react-slideshow-image";
+import { RiImageAddLine } from "react-icons/ri";
+const spanStyle = {
+  padding: "20px",
+  background: "#efefef",
+  color: "#000000",
+};
+
+const divStyle = {
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  backgroundSize: "cover",
+  height: "200px",
+};
+
 const Inventory = () => {
   const UserContextAll = useContext(UserContext);
   const {
@@ -27,13 +45,22 @@ const Inventory = () => {
     useGroup,
     User,
     useProduct,
-    Products
+    Products,
   } = UserContextAll!;
+  const [images, setImages] = useState([]);
+  const maxNumber = 69;
+
+  const onChangeImage = (imageList: any, addUpdateIndex: any) => {
+    // data for submit
+    console.log(imageList["file"], addUpdateIndex);
+  setImages(imageList);
+ 
+  };
+
   const [showModal, useModal] = useState<boolean>(false);
   const [CreateProduct, createProduct] = useState<Product>(
-    new Product("cero", "", new Date(), 1, "A", 1, "Hogar", false, [], 1)
+    new Product("cero", "", new Date(), 1, "A", 1, "Hogar", false, [], 1,[])
   );
-
 
   const onChange = (e: React.FormEvent<HTMLInputElement>) => {
     createProduct({
@@ -47,17 +74,22 @@ const Inventory = () => {
 
   const OnSubmit = async (e: any) => {
     e.preventDefault();
+    let files:File[]=[];
+    images.map(image=>{
+      files.push (image["file"])
+    })
+    const urls=await productServices.UploadImages(files);
+    console.log(urls);
+    CreateProduct.Images=urls;
     const id = await productServices.Create(CreateProduct);
     CreateProduct.IdProduct = id;
-    useProduct([...Products!, CreateProduct])
+    useProduct([...Products!, CreateProduct]);
   };
-  const [isLoading, useLoading] = useState(true);
-  useEffect(() => {
 
+  useEffect(() => {
     if (Products == null) {
       productServices.Read().then((resp: Product[]) => {
         useProduct(resp);
-      useLoading(false);
       });
     }
     if (Groups == null) {
@@ -110,7 +142,7 @@ const Inventory = () => {
         </div>
 
         <section style={{ overflowX: "auto", width: "100%", display: "block" }}>
-          {Products==null ? (
+          {Products == null ? (
             <div></div>
           ) : (
             <div>
@@ -145,6 +177,7 @@ const Inventory = () => {
       <div
         onClick={(e) => {
           useModal(false);
+          setImages([]);
         }}
         style={{
           width: "100vw",
@@ -188,7 +221,61 @@ const Inventory = () => {
             <IoCloseSharp color="white" />
           </button>
           <form className={InventaryStyle.Form} onSubmit={OnSubmit}>
-            <div className={InventaryStyle.AddImage}></div>
+            <h2 className={InventaryStyle.Title}>Crear producto</h2>
+            <div className={InventaryStyle.AddImage}>
+              <ImageUploading
+                multiple
+                value={images}
+                onChange={onChangeImage}
+                maxNumber={maxNumber}
+                dataURLKey="data_url"
+              >
+                {({
+                  imageList,
+                  onImageUpload,
+                  onImageRemoveAll,
+                  onImageUpdate,
+                  onImageRemove,
+                  isDragging,
+                  dragProps,
+                }) => (
+                  // write your building UI
+                  <div>
+                    {imageList.length === 0 && (
+                      <button 
+                        style={{
+                          backgroundColor: "transparent",
+                          outline: "none",
+                          border: "none",
+                          alignContent: "center",
+                          cursor: "pointer"
+                        }}
+                        onClick={onImageUpload}
+                        {...dragProps}
+                      >
+                        <RiImageAddLine size={100} color="grey" />
+                       <h4 style={{color: "grey"}}>Agregar imagenes</h4>
+                      </button>
+                    )}
+                    
+                    {imageList.length != 0 && (
+                      <Slide>
+                        {imageList.map((image, index) => (
+                          <div
+                            key={index}
+                            style={{ ...divStyle }}
+                            onDoubleClick={() => onImageRemove(index)}
+                              
+                          >
+                            <img src={image["data_url"]} alt="" width="100" />
+                          </div>
+                        ))}
+                      </Slide>
+                    )}
+                  </div>
+                )}
+              </ImageUploading>
+            </div>
             <div className={InventaryStyle.Detail}>
               <TextField
                 autoFocus={true}
@@ -336,7 +423,7 @@ const Inventory = () => {
         }}
         style={{
           cursor: "pointer",
-          position: "absolute",
+          position: "fixed",
           right: "20px",
           bottom: "90px",
           width: "50px",

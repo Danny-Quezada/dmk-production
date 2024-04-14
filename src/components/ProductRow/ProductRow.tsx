@@ -60,7 +60,7 @@ function ProductRow({ Product, OnTouch, Collections, Groups }: Props) {
         />
       </td>
       <td onClick={ChangeExpand}>
-        <div className={ProductStyle.ImageContainer}></div>
+        <div className={ProductStyle.ImageContainer} style={{backgroundImage:`url(${Product.Images[0]})`  }}></div>
       </td>
       <td onClick={ChangeExpand}>{Product.ProductName}</td>
       <td onClick={ChangeExpand}>
