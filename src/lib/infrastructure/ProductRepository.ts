@@ -49,7 +49,6 @@ export default class ProductRepository implements IProductModel {
         Group: t.Group,
         Price: t.Price,
         Collection: t.Collection,
-        Select: t.Select,
         Tags: t.Tags,
         Cost: t.Cost,
         Images: t.Images
