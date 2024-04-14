@@ -1,37 +1,23 @@
 import { Product } from "../../lib/domain/Models/Inventary/Product";
 import ProductStyle from "./ProductRow.module.css";
 import { RxEyeOpen } from "react-icons/rx";
-
 import TextField from "../Textfield/TextField";
 import { RiEyeCloseLine } from "react-icons/ri";
 import React, { useContext, useState } from "react";
-// import TagsInput from "react-tagsinput";
-
 import "react-tagsinput/react-tagsinput.css";
 import QRCode from "react-qr-code";
-import { collection } from "firebase/firestore";
-import Collection from "../../lib/domain/Models/Inventary/Collection";
-import Group from "../../lib/domain/Models/Inventary/Group";
-import Button from "../Button/Button";
 import { UserContext } from "../../providers/UserContext";
+import { MdDelete } from "react-icons/md";
 import { toast } from "sonner";
 function ProductRow({ product: Product }: Props) {
   const UserContextAll = useContext(UserContext);
-  const {
-    Collections,
-    Groups,
-    productServices,
-
-    useProduct,
-    Products,
-  } = UserContextAll!;
+  const { Collections, Groups, productServices, useProduct, Products } =
+    UserContextAll!;
 
   const [expand, changeExpand] = useState(false);
   const [ChangedProduct, useChangedProduct] = useState<Product>(Product);
 
   const onChange = (e: React.FormEvent<HTMLInputElement>) => {
-    console.log(e.currentTarget.value);
-    console.log(e.currentTarget.name);
     useChangedProduct({
       ...Product,
       [e.currentTarget.name]:
@@ -40,30 +26,26 @@ function ProductRow({ product: Product }: Props) {
           : e.currentTarget.value,
     });
   };
-  const onSubmite =async (e: any) => {
+  const onSubmite = async (e: any) => {
     e.preventDefault();
-    
-    if(ChangedProduct===Product){
-      console.log("hello")
-      return toast.error("Tienes que cambiar por lo menos un campo");
-    }
-    else{
-     const updated: boolean= await productServices.Update(ChangedProduct);
-     if(updated){
-      
-    
-      const newProducts: Product[] | null = Products!.map((Product) => {
-        if (Product.IdProduct !== Product.IdProduct) return Product;
 
-        return { ...ChangedProduct };
-      });
-      useProduct(newProducts);
-      changeExpand(false);
-      return toast.success("Producto actualizado");
-     }
-     else{
-      return toast.error("Hubo un error, intentalo más tarde.");
-     }
+    if (ChangedProduct === Product) {
+      console.log("hello");
+      return toast.error("Tienes que cambiar por lo menos un campo");
+    } else {
+      const updated: boolean = await productServices.Update(ChangedProduct);
+      if (updated) {
+        const newProducts: Product[] | null = Products!.map((Product) => {
+          if (Product.IdProduct !== Product.IdProduct) return Product;
+
+          return { ...ChangedProduct };
+        });
+        useProduct(newProducts);
+        changeExpand(false);
+        return toast.success("Producto actualizado");
+      } else {
+        return toast.error("Hubo un error, intentalo más tarde.");
+      }
     }
   };
   const ChangeExpand = () => {
@@ -127,17 +109,36 @@ function ProductRow({ product: Product }: Props) {
       </td>
       <td onClick={ChangeExpand}>C${Product.Price}</td>
       <td onClick={ChangeExpand}>{Product.Quantity}</td>
-      <td onClick={ChangeExpand}>
-        <button
+      <td >
+        <div style={{display: "flex", gap: "10px"}}>
+        <button onClick={ChangeExpand}
           className={ProductStyle.Button}
           aria-label="Actualizar producto"
         >
           {!expand ? (
-            <RiEyeCloseLine size={15} />
+            <RiEyeCloseLine size={30} />
           ) : (
-            <RxEyeOpen color="blue" size={15} />
+            <RxEyeOpen color="blue" size={30} />
           )}
         </button>
+        <MdDelete
+        className={ProductStyle.Delete}
+          aria-label="Eliminar producto"
+          size={30}
+         
+          onClick={async(e) => {
+            const deleted: boolean=await productServices.Delete(Product);
+            if(!deleted){
+              return toast.error("Error, intenta eliminarlo más tarde.")
+            }
+            const newProducts: Product[] | undefined = Products?.filter((product)=>{
+              return product.IdProduct!=product.IdProduct;
+            })
+            useProduct(newProducts!);
+            return toast.success("Producto eliminado");
+          }}
+        />
+        </div>
       </td>
     </tr>,
     expand && (
