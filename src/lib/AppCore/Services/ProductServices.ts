@@ -9,33 +9,36 @@ export default class ProductServices {
   iCollectionModel: ICollectionModel;
   iProductModel: IProductModel;
   iGroupModel: IGroupModel;
-  Products: Product[] = [];
-  Collections: Collection[] = [];
-  Groups: Group[]=[];
-
-  constructor(IProductModel: IProductModel, ICollectionModel: ICollectionModel,IGroupModel: IGroupModel) {
+ 
+  constructor(
+    IProductModel: IProductModel,
+    ICollectionModel: ICollectionModel,
+    IGroupModel: IGroupModel
+  ) {
     this.iProductModel = IProductModel;
     this.iCollectionModel = ICollectionModel;
-    this.iGroupModel=IGroupModel;
+    this.iGroupModel = IGroupModel;
   }
 
   async Create(t: Product): Promise<string> {
-    return await this.iProductModel.Create(t);
+    const Id = await this.iProductModel.Create(t);
+    
+    return Id;
   }
   async Update(t: Product): Promise<boolean> {
     return await this.iProductModel.Update(t);
   }
-  async Read() {
-    console.log("si");
-    this.Products = await this.iProductModel.Read();
+  async Read(): Promise<Product[]> {
+   
+   return await this.iProductModel.Read();
   }
   async Delete(t: Product): Promise<boolean> {
     return await this.iProductModel.Delete(t);
   }
-  async ReadCollection() {
-    this.Collections = await this.iCollectionModel.Read();
+  async ReadCollection():  Promise<Collection[]>{
+    return await this.iCollectionModel.Read();
   }
-  async ReadGroups(){
-    this.Groups=await this.iGroupModel.Read();
+  async ReadGroups(): Promise<Group[]> {
+    return await this.iGroupModel.Read();
   }
 }

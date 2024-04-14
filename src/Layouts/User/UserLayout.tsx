@@ -4,10 +4,12 @@ import { useState } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
 import { IoCloseSharp } from "react-icons/io5";
 import React from "react";
+import UserProvider from "../../providers/UserProvider";
 
 const UserLayout = () => {
   const [showMenu, setMenu] = useState(true);
   return (
+    <UserProvider>
     <main style={{ display: "flex", flexDirection: "row" }}>
       <Outlet />
       <SideBar active={showMenu} />
@@ -39,6 +41,7 @@ const UserLayout = () => {
         {!showMenu ? <AiOutlineMenu /> : <IoCloseSharp />}
       </button>
     </main>
+    </UserProvider>
   );
 };
 

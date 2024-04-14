@@ -8,10 +8,10 @@ export default function Login() {
     name: "",
     password: "",
   });
-  const changeValue = (e) => {
+  const changeValue = (e:any) => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
-  const submit = async (event) => {
+  const submit = async (event:any) => {
     event.preventDefault();
     if (user.name == "" || user.password == "") {
       return toast.error("Campos obligatorios");

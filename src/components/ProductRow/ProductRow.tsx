@@ -222,9 +222,9 @@ function ProductRow({ Product, OnTouch, Collections, Groups }: Props) {
                     ? "0" + ChangedProduct.Date.getMonth().toString()
                     : ChangedProduct.Date.getMonth()) +
                   "-" +
-                  (ChangedProduct.Date.getDay() < 10
-                    ? "0" + ChangedProduct.Date.getDay().toString()
-                    : ChangedProduct.Date.getDay())
+                  (ChangedProduct.Date.getDate() < 10
+                    ? "0" + ChangedProduct.Date.getDate().toString()
+                    : ChangedProduct.Date.getDate())
                 }
               />
             </div>

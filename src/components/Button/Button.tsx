@@ -1,6 +1,6 @@
 import React from "react";
 import ButtonStyle from "./Button.module.css";
-function Button({ title, onSubmit }) {
+function Button({ title, onSubmit }: Props) {
   return (
     <button
       className={ButtonStyle.buttonSend}
@@ -11,5 +11,8 @@ function Button({ title, onSubmit }) {
     </button>
   );
 }
-
+interface Props{
+  title: string;
+  onSubmit: any
+}
 export default Button;

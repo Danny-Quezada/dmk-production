@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ContentPageCSS from "../ContentPage.module.css";
 import InventaryStyle from "./Inventary.module.css";
 import ProductServices from "../../../lib/AppCore/Services/ProductServices";
@@ -14,14 +14,27 @@ import { CgTapDouble } from "react-icons/cg";
 import { IoCloseSharp } from "react-icons/io5";
 import TextField from "../../../components/Textfield/TextField";
 import { IoAdd } from "react-icons/io5";
+import Button from "../../../components/Button/Button";
+import { UserContext } from "../../../providers/UserContext";
+import { collection } from "firebase/firestore";
 const Inventory = () => {
+  const UserContextAll = useContext(UserContext);
+  const {
+    Collections,
+    Groups,
+    productServices,
+    useCollection,
+    useGroup,
+    User,
+    useProduct,
+    Products
+  } = UserContextAll!;
   const [showModal, useModal] = useState<boolean>(false);
   const [CreateProduct, createProduct] = useState<Product>(
-    new Product("cero", "", new Date(), 0, "", 0, "", false, [], 0)
+    new Product("cero", "", new Date(), 1, "A", 1, "Hogar", false, [], 1)
   );
-  const [Products, useProduct] = useState<Product[] | null>(null);
-  const [Collections, useCollection] = useState<Collection[] | null>(null);
-  const [Groups, useGroup] = useState<Group[] | null>(null);
+
+
   const onChange = (e: React.FormEvent<HTMLInputElement>) => {
     createProduct({
       ...CreateProduct,
@@ -31,26 +44,32 @@ const Inventory = () => {
           : e.currentTarget.value,
     });
   };
-  const productServices: ProductServices = new ProductServices(
-    new ProductRepository(),
-    new CollectionRepository(),
-    new GroupRepository()
-  );
 
-  const [isLoading, useLoading] = useState(false);
+  const OnSubmit = async (e: any) => {
+    e.preventDefault();
+    const id = await productServices.Create(CreateProduct);
+    CreateProduct.IdProduct = id;
+    useProduct([...Products!, CreateProduct])
+  };
+  const [isLoading, useLoading] = useState(true);
   useEffect(() => {
-    // productServices.Read();
 
-    productServices.Read().then((resp) => {
-      useProduct(productServices.Products);
-      useLoading(true);
-    });
-    productServices.ReadCollection().then((resp) => {
-      useCollection(productServices.Collections);
-    });
-    productServices.ReadGroups().then((resp) => {
-      useGroup(productServices.Groups);
-    });
+    if (Products == null) {
+      productServices.Read().then((resp: Product[]) => {
+        useProduct(resp);
+      useLoading(false);
+      });
+    }
+    if (Groups == null) {
+      productServices.ReadCollection().then((resp: Collection[]) => {
+        useCollection(resp);
+      });
+    }
+    if (Collections == null) {
+      productServices.ReadGroups().then((resp: Group[]) => {
+        useGroup(resp);
+      });
+    }
   }, []);
 
   return (
@@ -74,9 +93,7 @@ const Inventory = () => {
             </div>
           </div>
           <button
-            onClick={(e) => {
-             
-            }}
+            onClick={(e) => {}}
             style={{
               border: "none",
               backgroundColor: "transparent",
@@ -93,7 +110,7 @@ const Inventory = () => {
         </div>
 
         <section style={{ overflowX: "auto", width: "100%", display: "block" }}>
-          {!isLoading ? (
+          {Products==null ? (
             <div></div>
           ) : (
             <div>
@@ -142,8 +159,7 @@ const Inventory = () => {
         }}
       >
         <div
-          className={ContentPageCSS.contentForm}
-          style={{ display: "flex", flexDirection: "column", gap: "20px" }}
+          className={InventaryStyle.ContentFormInventary}
           onClick={(event) => {
             event.stopPropagation();
           }}
@@ -171,50 +187,153 @@ const Inventory = () => {
           >
             <IoCloseSharp color="white" />
           </button>
-          <form
-            style={{
-              margin: "10px",
-              display: "flex",
-              gap: "30px",
-              flexDirection: "column",
-            }}
-          >
-            <TextField
-              autoFocus={true}
-              isRequired={true}
-              id="ProductName"
-              readOnly={false}
-              title="Nombre del producto"
-              type="text"
-              value={CreateProduct.ProductName}
-              onChangeInputValue={onChange}
-            />
-            <TextField
-              autoFocus={false}
-              isRequired={true}
-              id="Quantity"
-              readOnly={false}
-              title="Cantidad"
-              type="number"
-              value={CreateProduct.Quantity.toString()}
-              onChangeInputValue={onChange}
-            />
-            <TextField
-              autoFocus={false}
-              isRequired={true}
-              id="Quantity"
-              readOnly={false}
-              title="Cantidad"
-              type="number"
-              value={CreateProduct.Cost.toString()}
-              onChangeInputValue={onChange}
-            />
+          <form className={InventaryStyle.Form} onSubmit={OnSubmit}>
+            <div className={InventaryStyle.AddImage}></div>
+            <div className={InventaryStyle.Detail}>
+              <TextField
+                autoFocus={true}
+                isRequired={true}
+                id="ProductName"
+                readOnly={false}
+                title="Nombre del producto"
+                type="text"
+                value={CreateProduct.ProductName}
+                onChangeInputValue={onChange}
+              />
+              <TextField
+                autoFocus={false}
+                isRequired={true}
+                id="Quantity"
+                readOnly={false}
+                title="Cantidad"
+                type="number"
+                value={CreateProduct.Quantity.toString()}
+                onChangeInputValue={onChange}
+              />
+              <TextField
+                autoFocus={false}
+                isRequired={true}
+                id="Price"
+                readOnly={false}
+                title="Precio de venta"
+                type="number"
+                value={CreateProduct.Price.toString()}
+                onChangeInputValue={onChange}
+              />
+              <TextField
+                autoFocus={false}
+                isRequired={true}
+                id="Cost"
+                readOnly={false}
+                title="Costo"
+                type="number"
+                value={CreateProduct.Cost.toString()}
+                onChangeInputValue={onChange}
+              />
+            </div>
+            <div className={InventaryStyle.MoreDetail}>
+              <TextField
+                isRequired={true}
+                id={"Date"}
+                readOnly={false}
+                title={"Fecha de creación"}
+                autoFocus={false}
+                onChangeInputValue={onChange}
+                type="date"
+                value={
+                  CreateProduct.Date.getFullYear().toString() +
+                  "-" +
+                  (CreateProduct.Date.getMonth() < 10
+                    ? "0" + CreateProduct.Date.getMonth().toString()
+                    : CreateProduct.Date.getMonth()) +
+                  "-" +
+                  (CreateProduct.Date.getDate() < 10
+                    ? "0" + CreateProduct.Date.getDate().toString()
+                    : CreateProduct.Date.getDate())
+                }
+              />
+              {Collections != null && (
+                <label
+                  htmlFor={"Collection"}
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    color: "grey",
+                    gap: "10px",
+                  }}
+                >
+                  Collection
+                  <select
+                    key={"Collection"}
+                    className={InventaryStyle.SelectCollection}
+                    name="Collection"
+                    id="Collection"
+                    defaultValue={CreateProduct.Collection}
+                    onChange={(e) => {
+                      createProduct({
+                        ...CreateProduct,
+                        Collection: e.currentTarget.value,
+                      });
+                    }}
+                  >
+                    {Collections!.map((value: Collection) => (
+                      <option
+                        value={value.CollectionName}
+                        key={value.CollectionName + 2}
+                      >
+                        {value.CollectionName}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              )}
+              {Groups != null && (
+                <label
+                  htmlFor={"Group"}
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    color: "grey",
+                    gap: "10px",
+                  }}
+                >
+                  Grupos
+                  <select
+                    style={{ width: "100px" }}
+                    className={InventaryStyle.SelectGroup}
+                    name="Group"
+                    id="Group"
+                    defaultValue={CreateProduct.Group}
+                    onChange={(e) => {
+                      console.log(e.currentTarget.value);
+                      createProduct({
+                        ...CreateProduct,
+                        Group: e.currentTarget.value,
+                      });
+                    }}
+                  >
+                    {Groups!.map((value: Group) => (
+                      <option
+                        value={value.GroupName}
+                        key={value.GroupName + 22}
+                      >
+                        {value.GroupName}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              )}
+            </div>
+            <div className={InventaryStyle.ButtonContainer}>
+              <Button title="Crear Producto" onSubmit={OnSubmit} />
+            </div>
           </form>
         </div>
       </div>
-      <button onClick={(e)=>{
-        useModal(true);
-      }}
+      <button
+        onClick={(e) => {
+          useModal(true);
+        }}
         style={{
           cursor: "pointer",
           position: "absolute",
@@ -224,10 +343,10 @@ const Inventory = () => {
           height: "50px",
           backgroundColor: "transparent",
           borderRadius: "50%",
-          borderColor: "green"
+          borderColor: "green",
         }}
       >
-        <IoAdd color="green" size={20}/>
+        <IoAdd color="green" size={20} />
       </button>
     </>
   );
