@@ -6,7 +6,7 @@ import Group from "../domain/Models/Inventary/Group";
 import IGroupModel from "../domain/Enum/IGroupModel";
 
 export default class GroupRepository implements IGroupModel {
-  Create(t: Group): Promise<boolean> {
+  Create(t: Group): Promise<string> {
     throw new Error("Method not implemented.");
   }
   Update(t: Group): Promise<boolean> {

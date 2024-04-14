@@ -19,7 +19,7 @@ export default class ProductServices {
     this.iGroupModel=IGroupModel;
   }
 
-  async Create(t: Product): Promise<boolean> {
+  async Create(t: Product): Promise<string> {
     return await this.iProductModel.Create(t);
   }
   async Update(t: Product): Promise<boolean> {

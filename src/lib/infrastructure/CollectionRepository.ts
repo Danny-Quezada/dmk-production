@@ -4,7 +4,7 @@ import ICollectionModel from "../domain/Enum/ICollectionModel";
 import Collection from "../domain/Models/Inventary/Collection";
 
 export default class CollectionRepository implements ICollectionModel {
-  Create(t: Collection): Promise<boolean> {
+  Create(t: Collection): Promise<string> {
     throw new Error("Method not implemented.");
   }
   Update(t: Collection): Promise<boolean> {

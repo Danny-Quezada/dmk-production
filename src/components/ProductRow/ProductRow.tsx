@@ -130,7 +130,7 @@ function ProductRow({ Product, OnTouch, Collections, Groups }: Props) {
             </div>
             <div
               className=""
-              style={{ display: "flex", flexDirection: "column", gap: "20px" }}
+              style={{ display: "flex", flexDirection: "column", gap: "20px", width: "400px"}}
             >
               <TextField
                 autoFocus={true}
