@@ -90,9 +90,9 @@ function ProductRow({ Product, OnTouch, Collections, Groups }: Props) {
       <td onClick={ChangeExpand}>
         <button className={ProductStyle.Button} aria-label="Actualizar producto">
           {!expand ? (
-            <RiEyeCloseLine width="50px" height="50px" />
+            <RiEyeCloseLine size={15} />
           ) : (
-            <RxEyeOpen color="blue" width="50px" height={"50px"} />
+            <RxEyeOpen color="blue" size={15} />
           )}
         </button>
       </td>
@@ -125,6 +125,10 @@ function ProductRow({ Product, OnTouch, Collections, Groups }: Props) {
                   height: "100px",
                   backgroundColor: "blue",
                   borderRadius: "13px",
+                  backgroundImage:`url(${Product.Images[0]})`,
+                  backgroundSize:"cover",
+                  backgroundRepeat: "no-repeat",
+                  backgroundPosition: "center"
                 }}
               ></div>
             </div>
