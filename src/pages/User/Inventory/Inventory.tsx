@@ -1,13 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import ContentPageCSS from "../ContentPage.module.css";
 import InventaryStyle from "./Inventary.module.css";
-import ProductServices from "../../../lib/AppCore/Services/ProductServices";
-import ProductRepository from "../../../lib/infrastructure/ProductRepository";
+
 import { Product } from "../../../lib/domain/Models/Inventary/Product";
 import ProductRow from "../../../components/ProductRow/ProductRow";
-import CollectionRepository from "../../../lib/infrastructure/CollectionRepository";
 import Collection from "../../../lib/domain/Models/Inventary/Collection";
-import GroupRepository from "../../../lib/infrastructure/GroupRepository";
+import { VscEmptyWindow } from "react-icons/vsc";
 import Group from "../../../lib/domain/Models/Inventary/Group";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { CgTapDouble } from "react-icons/cg";
@@ -16,16 +14,11 @@ import TextField from "../../../components/Textfield/TextField";
 import { IoAdd } from "react-icons/io5";
 import Button from "../../../components/Button/Button";
 import { UserContext } from "../../../providers/UserContext";
-import { collection } from "firebase/firestore";
+
 import ImageUploading from "react-images-uploading";
 import "react-slideshow-image/dist/styles.css";
 import { Slide } from "react-slideshow-image";
 import { RiImageAddLine } from "react-icons/ri";
-const spanStyle = {
-  padding: "20px",
-  background: "#efefef",
-  color: "#000000",
-};
 
 const divStyle = {
   display: "flex",
@@ -49,17 +42,16 @@ const Inventory = () => {
   } = UserContextAll!;
   const [images, setImages] = useState([]);
   const maxNumber = 69;
-
+  console.log(Products?.length);
   const onChangeImage = (imageList: any, addUpdateIndex: any) => {
     // data for submit
     console.log(imageList["file"], addUpdateIndex);
-  setImages(imageList);
- 
+    setImages(imageList);
   };
 
   const [showModal, useModal] = useState<boolean>(false);
   const [CreateProduct, createProduct] = useState<Product>(
-    new Product("cero", "", new Date(), 1, "A", 1, "Hogar", false, [], 1,[])
+    new Product("cero", "", new Date(), 1, "A", 1, "Hogar", false, [], 1, [])
   );
 
   const onChange = (e: React.FormEvent<HTMLInputElement>) => {
@@ -74,13 +66,13 @@ const Inventory = () => {
 
   const OnSubmit = async (e: any) => {
     e.preventDefault();
-    let files:File[]=[];
-    images.map(image=>{
-      files.push (image["file"])
-    })
-    const urls=await productServices.UploadImages(files);
+    let files: File[] = [];
+    images.map((image) => {
+      files.push(image["file"]);
+    });
+    const urls = await productServices.UploadImages(files);
 
-    CreateProduct.Images=urls;
+    CreateProduct.Images = urls;
     const id = await productServices.Create(CreateProduct);
     CreateProduct.IdProduct = id;
     useProduct([...Products!, CreateProduct]);
@@ -144,6 +136,26 @@ const Inventory = () => {
         <section style={{ overflowX: "auto", width: "100%", display: "block" }}>
           {Products == null ? (
             <div></div>
+          ) : Products.length == 0 ? (
+            <div
+            
+              onClick={(e) => {
+                useModal(true);
+              
+              }}
+              style={{
+                cursor: "pointer",
+                display: "flex",
+                marginTop: "20px",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: "20px",
+              }}
+            >
+              <VscEmptyWindow size={100} color="grey" />
+              <h3>No hay productos por el momento 🥲</h3>
+            </div>
           ) : (
             <div>
               <table className={InventaryStyle.table}>
@@ -161,10 +173,8 @@ const Inventory = () => {
                 <tbody>
                   {Products!.map((product) => (
                     <ProductRow
-                      
                       product={product}
                       key={product.IdProduct + 44}
-                    
                     />
                   ))}
                 </tbody>
@@ -241,22 +251,22 @@ const Inventory = () => {
                   // write your building UI
                   <div>
                     {imageList.length === 0 && (
-                      <button 
+                      <button
                         style={{
                           backgroundColor: "transparent",
                           outline: "none",
                           border: "none",
                           alignContent: "center",
-                          cursor: "pointer"
+                          cursor: "pointer",
                         }}
                         onClick={onImageUpload}
                         {...dragProps}
                       >
                         <RiImageAddLine size={100} color="grey" />
-                       <h4 style={{color: "grey"}}>Agregar imagenes</h4>
+                        <h4 style={{ color: "grey" }}>Agregar imagenes</h4>
                       </button>
                     )}
-                    
+
                     {imageList.length != 0 && (
                       <Slide>
                         {imageList.map((image, index) => (
@@ -264,7 +274,6 @@ const Inventory = () => {
                             key={index}
                             style={{ ...divStyle }}
                             onDoubleClick={() => onImageRemove(index)}
-                              
                           >
                             <img src={image["data_url"]} alt="" width="100" />
                           </div>
@@ -436,6 +445,5 @@ const Inventory = () => {
       </button>
     </>
   );
- 
 };
 export default Inventory;
