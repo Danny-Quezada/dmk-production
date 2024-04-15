@@ -9,23 +9,24 @@ import CalculatorPage from "./pages/User/Calculator/CalculatorPage.jsx";
 import AuthLayout from "./Layouts/Auth/AuthLayout.jsx";
 import Login from "./pages/Auth/Login.jsx";
 import React from "react";
+import UserProvider from "./providers/UserProvider";
 
 function App() {
   const [count, setCount] = useState(0);
 
   return (
-    <Routes>
-
+    <UserProvider>
+      <Routes>
         <Route path="/" element={<UserLayout />}>
           <Route path="inventory" element={<Inventory />} />
           <Route path="equation" element={<CalculatorPage />} />
         </Route>
-    
-      <Route path="/auth" element={<AuthLayout />}>
-        <Route index element={<Login />}></Route>
-      </Route>
-      <Route path="*" element={<ErrorPage />}></Route>
-    </Routes>
+        <Route path="/auth" element={<AuthLayout />}>
+          <Route index element={<Login />}></Route>
+        </Route>
+        <Route path="*" element={<ErrorPage />}></Route>
+      </Routes>
+    </UserProvider>
   );
 }
 

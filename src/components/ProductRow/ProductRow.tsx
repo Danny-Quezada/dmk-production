@@ -6,11 +6,11 @@ import { RiEyeCloseLine } from "react-icons/ri";
 import React, { useContext, useState } from "react";
 import "react-tagsinput/react-tagsinput.css";
 import QRCode from "react-qr-code";
-import { UserContext } from "../../providers/UserContext";
+import { InventoryContext } from "../../providers/InventoryContext";
 import { MdDelete } from "react-icons/md";
 import { toast } from "sonner";
 function ProductRow({ product: Product }: Props) {
-  const UserContextAll = useContext(UserContext);
+  const UserContextAll = useContext(InventoryContext);
   const { Collections, Groups, productServices, useProduct, Products } =
     UserContextAll!;
 
