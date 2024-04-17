@@ -1,8 +1,55 @@
 .ImageContainer {
-    width: 80px;
-    height: 80px;
-    background-color: blue;
-    border: 2px solid rgb(221, 221, 221);
-    border-radius: 15px;
-    background-size: cover;
+  width: 80px;
+  height: 80px;
+  background-color: blue;
+  border: 2px solid rgb(221, 221, 221);
+  border-radius: 15px;
+  background-size: cover;
+}
+.main {
+  padding-block: 50px;
+  padding-inline: 80px;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column; 
+  overflow-y:auto ;
+}
+.section {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  
+}
+.ProductInformation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.table {
+  border-spacing: 0;
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0px auto;
+  
+}
+.table thead tr {
+  color: rgb(205, 205, 205);
+  font-size: 1.2em;
+  text-align: left;
+}
+.table th,
+.table td {
+    margin-left: 100px;
+  padding: 12px 15px;
+}
+.table td {
+  border-top: 2px solid rgb(205, 205, 205, 50%);
+}
+@media (width < 520px) {
+  .main {
+    margin-inline: 10px;
+  }
 }

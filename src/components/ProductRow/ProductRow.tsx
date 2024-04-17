@@ -305,7 +305,7 @@ function ProductRow({ product: Product }: Props) {
                   ))}
                 </select>
               </label>
-              <Link to={`/component/:${Product.IdProduct}`}>
+              <Link to={`component/${Product.IdProduct}`}>
                 <button
                   style={{
                     border: "none",

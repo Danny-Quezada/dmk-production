@@ -37,3 +37,6 @@ form::-webkit-scrollbar-thumb {
 a{
   text-decoration: none;
 }
+button{
+  cursor: pointer;
+}

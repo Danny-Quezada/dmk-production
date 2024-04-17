@@ -17,32 +17,34 @@ import {
   getDownloadURL,
   ref as storageRef,
   uploadBytes,
-} from "firebase/storage";  
+} from "firebase/storage";
 export default class ProductRepository implements IProductModel {
   async ProductById(productId: string): Promise<Product> {
     const ProductRef = doc(db, "Product", productId);
-    
-    try{
-    const values= (await getDoc(ProductRef)).data;
 
-    
-    return new Product(
-      productId,
-      values["ProductName"],
-      (values["Date"] as Timestamp).toDate(),
-      values["Quantity"],
-      values["Group"],
-      values["Price"],
-      values["Collection"],
-      false,
-      values["Tags"],
-      values["Cost"],
-      values["Images"]
-    )
-  }
-  catch(e){
-    throw e;
-  }
+    try {
+      const snapshot = await getDoc(ProductRef);
+      if (snapshot.exists()) {
+        const values = snapshot.data();
+       
+        return new Product(
+          productId,
+          values["ProductName"],
+          (values["Date"] as Timestamp).toDate(),
+          values["Quantity"],
+          values["Group"],
+          values["Price"],
+          values["Collection"],
+          false,
+          values["Tags"],
+          values["Cost"],
+          values["Images"]
+        );
+      }
+      throw Error("Error")
+    } catch (e) {
+      throw e;
+    }
   }
   async UploadImages(Images: File[]): Promise<string[]> {
     const urls = await Promise.all(
@@ -122,7 +124,7 @@ export default class ProductRepository implements IProductModel {
     return products;
   }
   async Delete(t: Product): Promise<boolean> {
-    console.log(t)
+    console.log(t);
     const deleteImages = async () => {
       const promises = t.Images.map((imagePath) => {
         const imageRef = ref(storage, imagePath);
@@ -131,7 +133,7 @@ export default class ProductRepository implements IProductModel {
 
       try {
         await Promise.all(promises);
-       return true;
+        return true;
       } catch (error) {
         console.error("Error deleting images:", error);
         return false;
@@ -145,18 +147,18 @@ export default class ProductRepository implements IProductModel {
         return true;
       } catch (error) {
         console.error("Error deleting product document:", error);
-      return false;
+        return false;
       }
     };
 
     try {
-      let deletedImages: boolean=true;
-      if(t.Images.length>0){
-       deletedImages=await deleteImages();
+      let deletedImages: boolean = true;
+      if (t.Images.length > 0) {
+        deletedImages = await deleteImages();
       }
-      const deleteProduct=await deleteProductDoc();
+      const deleteProduct = await deleteProductDoc();
 
-      if(!deletedImages || !deleteProduct){
+      if (!deletedImages || !deleteProduct) {
         return false;
       }
       return true;

@@ -11,6 +11,7 @@ export const SideBar = ({ active }) => {
   useEffect(() => {
     if (path == null) {
       if (window.location.pathname != "/") {
+        console.log(window.location.pathname.toLocaleUpperCase());
         setPath(window.location.pathname.toLocaleLowerCase());
       }
     }
@@ -25,16 +26,16 @@ export const SideBar = ({ active }) => {
     >
       <nav style={{ display: "flex", flexDirection: "column" }}>
         <MenuItemBar
-          click={() => setPath("/inventory")}
+          click={() => setPath("/production/inventory")}
           icon={<MdOutlineInventory2 />}
-          active={path == "/inventory" ? true : false}
-          link="/inventory"
+          active={path === "/production/inventory" ? true : false}
+          link="/production/inventory"
         />
         <MenuItemBar
-          click={() => setPath("/equation")}
+          click={() => setPath("/production/equation")}
           icon={<CgCalculator />}
-          active={path == "/equation" ? true : false}
-          link="/equation"
+          active={path ==="/produciton/equation" ? true : false}
+          link="/production/equation"
         />
       </nav>
     </aside>

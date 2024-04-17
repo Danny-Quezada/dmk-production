@@ -34,6 +34,8 @@ export default class ComponentDetailRepository implements IComponentDetailModel{
             const componentDetailData = {
                 IdComponent: t.IdComponent,
                 IdParent: t.IdParent,
+                Quantity: t.Quantity,
+                
             };
             await updateDoc(docRef, componentDetailData);
             return true;
@@ -51,6 +53,7 @@ export default class ComponentDetailRepository implements IComponentDetailModel{
                     componentDetail.id,
                     values["IdComponent"],
                     values["IdParent"],
+                    values["Quantity"]
                 )
             );
         });

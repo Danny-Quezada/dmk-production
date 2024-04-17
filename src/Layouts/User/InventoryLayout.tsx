@@ -4,13 +4,11 @@ import { useState } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
 import { IoCloseSharp } from "react-icons/io5";
 import React from "react";
-import { Toaster, toast } from "sonner";
-import InventoryProvider from "../../providers/InventoryProvider";
 
-const UserLayout = () => {
+const InventoryLayout = () => {
   const [showMenu, setMenu] = useState(true);
   return (
-    <InventoryProvider>
+   
       <main style={{ display: "flex", flexDirection: "row" }}>
         <Outlet />
         <SideBar active={showMenu} />
@@ -42,8 +40,8 @@ const UserLayout = () => {
           {!showMenu ? <AiOutlineMenu /> : <IoCloseSharp />}
         </button>
       </main>
-    </InventoryProvider>
+    
   );
 };
 
-export default UserLayout;
+export default InventoryLayout;
