@@ -18,6 +18,7 @@ import ComponentDetailServices from "../lib/AppCore/Services/ComponentDetailServ
 interface Props {
   children: any;
 }
+
 const InventoryProvider = ({ children }: Props) => {
   const [User, changeUser] = useState<string>("");
   const productServices: ProductServices = new ProductServices(

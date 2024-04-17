@@ -3,6 +3,7 @@ import { Product } from "../domain/Models/Inventary/Product";
 import {
   collection,
   getDocs,
+  getDoc,
   addDoc,
   updateDoc,
   doc,
@@ -16,8 +17,33 @@ import {
   getDownloadURL,
   ref as storageRef,
   uploadBytes,
-} from "firebase/storage";
+} from "firebase/storage";  
 export default class ProductRepository implements IProductModel {
+  async ProductById(productId: string): Promise<Product> {
+    const ProductRef = doc(db, "Product", productId);
+    
+    try{
+    const values= (await getDoc(ProductRef)).data;
+
+    
+    return new Product(
+      productId,
+      values["ProductName"],
+      (values["Date"] as Timestamp).toDate(),
+      values["Quantity"],
+      values["Group"],
+      values["Price"],
+      values["Collection"],
+      false,
+      values["Tags"],
+      values["Cost"],
+      values["Images"]
+    )
+  }
+  catch(e){
+    throw e;
+  }
+  }
   async UploadImages(Images: File[]): Promise<string[]> {
     const urls = await Promise.all(
       Images.map(async (image) => {

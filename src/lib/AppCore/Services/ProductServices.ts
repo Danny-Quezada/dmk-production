@@ -44,4 +44,7 @@ export default class ProductServices {
   async UploadImages(images: File[]): Promise<string[]>{
     return await this.iProductModel.UploadImages(images);
   }
+  async ProductById(product: string): Promise<Product>{
+    return await this.iProductModel.ProductById(product);
+  }
 }

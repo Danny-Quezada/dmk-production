@@ -21,6 +21,7 @@ import { Slide } from "react-slideshow-image";
 import { RiImageAddLine } from "react-icons/ri";
 import { InventoryContext } from "../../../providers/InventoryContext";
 import { toast } from "sonner";
+import { Link, useParams } from "react-router-dom";
 const divStyle = {
   display: "flex",
   alignItems: "center",
@@ -91,9 +92,15 @@ const Inventory = () => {
     const urls = await productServices.UploadImages(files);
 
     CreateProduct.Images = urls;
-    const id = await productServices.Create(CreateProduct);
-    CreateProduct.IdProduct = id;
-    useProduct([...Products!, CreateProduct]);
+    try {
+      const id = await productServices.Create(CreateProduct);
+      CreateProduct.IdProduct = id;
+      useProduct([...Products!, CreateProduct]);
+      useModal(false);
+      return toast.success("Producto creado exitosamente");
+    } catch (e) {
+      return toast.error("Error, intente más tarde");
+    }
   };
   const onSubmitComponent = async (e: any) => {
     e.preventDefault();
@@ -297,6 +304,7 @@ const Inventory = () => {
                           }}
                           onClick={onImageUpload}
                           {...dragProps}
+                          type="button"
                         >
                           <RiImageAddLine size={100} color="grey" />
                           <h4 style={{ color: "grey" }}>Agregar imagenes</h4>
@@ -480,9 +488,10 @@ const Inventory = () => {
                     </select>
                   </label>
                 )}
+               
               </div>
               <div className={InventaryStyle.ButtonContainer}>
-                <Button title="Crear Producto" onSubmit={OnSubmit} />
+                <Button title="Crear Producto" onSubmit={() => {}} />
               </div>
             </form>
           </div>

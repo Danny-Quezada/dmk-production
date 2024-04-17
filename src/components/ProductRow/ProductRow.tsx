@@ -9,6 +9,8 @@ import QRCode from "react-qr-code";
 import { InventoryContext } from "../../providers/InventoryContext";
 import { MdDelete } from "react-icons/md";
 import { toast } from "sonner";
+import { Link } from "react-router-dom";
+import { IoIosAddCircleOutline } from "react-icons/io";
 function ProductRow({ product: Product }: Props) {
   const UserContextAll = useContext(InventoryContext);
   const { Collections, Groups, productServices, useProduct, Products } =
@@ -109,35 +111,37 @@ function ProductRow({ product: Product }: Props) {
       </td>
       <td onClick={ChangeExpand}>C${Product.Price}</td>
       <td onClick={ChangeExpand}>{Product.Quantity}</td>
-      <td >
-        <div style={{display: "flex", gap: "10px"}}>
-        <button onClick={ChangeExpand}
-          className={ProductStyle.Button}
-          aria-label="Actualizar producto"
-        >
-          {!expand ? (
-            <RiEyeCloseLine size={30} />
-          ) : (
-            <RxEyeOpen color="blue" size={30} />
-          )}
-        </button>
-        <MdDelete
-        className={ProductStyle.Delete}
-          aria-label="Eliminar producto"
-          size={30}
-         
-          onClick={async(e) => {
-            const deleted: boolean=await productServices.Delete(Product);
-            if(!deleted){
-              return toast.error("Error, intenta eliminarlo más tarde.")
-            }
-            const newProducts: Product[] | undefined = Products?.filter((product)=>{
-              return product.IdProduct!=product.IdProduct;
-            })
-            useProduct(newProducts!);
-            return toast.success("Producto eliminado");
-          }}
-        />
+      <td>
+        <div style={{ display: "flex", gap: "10px" }}>
+          <button
+            onClick={ChangeExpand}
+            className={ProductStyle.Button}
+            aria-label="Actualizar producto"
+          >
+            {!expand ? (
+              <RiEyeCloseLine size={30} />
+            ) : (
+              <RxEyeOpen color="blue" size={30} />
+            )}
+          </button>
+          <MdDelete
+            className={ProductStyle.Delete}
+            aria-label="Eliminar producto"
+            size={30}
+            onClick={async (e) => {
+              const deleted: boolean = await productServices.Delete(Product);
+              if (!deleted) {
+                return toast.error("Error, intenta eliminarlo más tarde.");
+              }
+              const newProducts: Product[] | undefined = Products?.filter(
+                (product) => {
+                  return product.IdProduct != product.IdProduct;
+                }
+              );
+              useProduct(newProducts!);
+              return toast.success("Producto eliminado");
+            }}
+          />
         </div>
       </td>
     </tr>,
@@ -301,6 +305,22 @@ function ProductRow({ product: Product }: Props) {
                   ))}
                 </select>
               </label>
+              <Link to={`/component/:${Product.IdProduct}`}>
+                <button
+                  style={{
+                    border: "none",
+                    cursor: "pointer",
+                    display: "flex",
+                    gap: "10px",
+                    alignItems: "center",
+                    color: "rgb(205, 205, 205)",
+                    backgroundColor: "transparent",
+                  }}
+                >
+                  <IoIosAddCircleOutline size={30} />
+                  Agregar componentes
+                </button>
+              </Link>
             </div>
             <div className={ProductStyle.ButtonGrid}>
               <button className={ProductStyle.ButtonUpdate} type="submit">
