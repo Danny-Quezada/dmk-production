@@ -26,16 +26,17 @@ const Component = () => {
 
   useEffect(() => {
     isMounted.current = true;
+  
     const fetchProduct = productId
       ? productServices.ProductById(productId)
       : Promise.resolve(null);
     const fetchComponentDetails = ComponentsDetail===null
       ? componentDetailServices.Read()
       : Promise.resolve(null);
-    const fechtComponent = Component===null
+    const fetchComponents = Components===null
       ? componentServices.Read()
       : Promise.resolve(null);
-    Promise.all([fetchProduct, fetchComponentDetails, fechtComponent]).then(
+    Promise.all([fetchProduct, fetchComponentDetails, fetchComponents]).then(
       ([product, details, components]) => {
         if (isMounted.current) {
           if (product) {
@@ -46,6 +47,7 @@ const Component = () => {
             useComponentDetail(details);
           }
           if (components) {
+            console.log(components);
             useComponent(components);
             console.log(components)
           }

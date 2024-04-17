@@ -18,6 +18,7 @@ function App() {
   return (
     <UserProvider>
       <Routes>
+        
         <Route path="/production" element={<ProductionLayout />}>
           <Route path="" element={<InventoryLayout/>}>
             <Route path="inventory" element={<Inventory />} />
