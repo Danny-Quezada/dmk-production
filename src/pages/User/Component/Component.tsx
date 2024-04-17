@@ -5,6 +5,7 @@ import { Product } from "../../../lib/domain/Models/Inventary/Product";
 import { InventoryContext } from "../../../providers/InventoryContext";
 import ComponentStyle from "./Component.module.css";
 import { ComponentDetail } from "../../../lib/domain/Models/Inventary/ComponentDetail";
+import ReactLoading from "react-loading";
 const Component = () => {
   const isMounted = useRef(false);
   const { productId } = useParams();
@@ -62,7 +63,7 @@ console.log(Components);
   return (
     <main className={componentStyles.main}>
       {product === null ? (
-        <div></div>
+        <ReactLoading type={"spinningBubbles"} color={"blue"} height={'20%'} width={'20%'} />
       ) : (
         <section className={componentStyles.section}>
           <div className={componentStyles.ProductInformation}>
@@ -125,7 +126,7 @@ console.log(Components);
               </table>
             </div>
             <div>
-              <h4 style={{ color: "#B4B4B4" }}>Componentes</h4>
+              <h4 style={{ color: "#B4B4B4" }}>Arbol de componentes</h4>
               <table className={ComponentStyle.table}>
                 <thead>
                   <tr>
