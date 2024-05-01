@@ -11,6 +11,7 @@ import Login from "./pages/Auth/Login.jsx";
 import React from "react";
 import UserProvider from "./providers/UserProvider";
 import ProductionLayout from "./Layouts/User/ProductionLayout";
+import AboutUsLayout from "./Layouts/About Us/AboutUs";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -18,7 +19,9 @@ function App() {
   return (
     <UserProvider>
       <Routes>
-        
+        <Route path="/" element={<AboutUsLayout/>}>
+
+        </Route>
         <Route path="/production" element={<ProductionLayout />}>
           <Route path="" element={<InventoryLayout/>}>
             <Route path="inventory" element={<Inventory />} />

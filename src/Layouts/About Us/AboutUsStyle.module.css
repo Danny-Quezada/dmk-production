@@ -1,0 +1,153 @@
+html{
+    scroll-behavior: smooth;
+}
+
+
+.Nav{
+    position: fixed;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    padding-inline: 115px;
+    background-color: white;
+    z-index: 3;
+}
+.Nav>img{
+    width: 281px;
+    height: 133px;
+}
+.Nav>ul{
+    display: flex;
+    gap: 18px;
+}
+.Nav>ul>li>a{
+    color: var(--title-page);
+    font-weight: 500;
+}
+.Nav>ul>li>a:hover{
+   color: var(--primary-color);
+}
+
+section{
+   
+    padding-inline: 115px;
+    width: 100vw;
+    height: 100vh;
+    
+    
+}
+
+
+.Nosotros{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  
+}
+
+.Nosotros>h2{
+   
+    font-size: 6em;
+    -webkit-text-stroke: 2px var(--primary-color);
+    -webkit-text-fill-color: white;
+}
+
+.Nosotros p{
+font-size: 1.4em;
+}
+
+.Mision{    gap: 60px;
+    justify-content: space-around;justify-content: center;
+    align-items: center;
+    
+    display: flex;
+}
+.Mision h3{
+    font-size: 3.2em;
+    font-weight:bolder ;
+
+}
+
+.Mision p{
+    font-size: 1.3em;
+    font-weight:700 ;
+    color: #b4b4b4
+}
+.Mision div{
+display: flex;
+flex-direction: column;
+gap: 20px;
+}
+.Mision>img{
+height: 50%;
+width: 100%;
+border-radius: 6px;
+}
+.Vision{
+    gap: 60px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.Vision h3{
+    font-size: 3.2em;
+    font-weight:bolder ;
+
+}
+
+.Vision p{
+    font-size: 1.3em;
+    font-weight:700 ;
+    color: #b4b4b4
+}
+
+
+.Contact{
+ display: flex;
+ justify-content: center;
+ align-items: center;
+}
+
+.containerContact{
+   
+    margin: 50px;
+    border-top: 2px solid #000;
+    border-bottom: 2px solid #000;
+    display: flex; width: 100%;
+
+}
+
+.containerTitle{
+    width: 70%;
+    justify-content: center;
+    display: block;
+}
+
+.containerInfo{
+    width: 30%;  
+    background-color: #f1f1f1;
+    display: flex;
+    flex-direction: column;
+
+}
+
+.h4Tittle{
+    margin-top: 100px;
+}
+
+.containerInfo>img{
+    width: 32px;
+    height: 32px;
+}
+
+.containerInfo>h4{
+    margin: 0;
+}
+
+.h4Info{
+    color: blue;
+}
