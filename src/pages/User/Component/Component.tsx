@@ -55,9 +55,7 @@ const Component = () => {
         }
       }
     );
-    return () => {
-      isMounted.current = false;
-    };
+   
   }, []);
 console.log(Components);
   return (
