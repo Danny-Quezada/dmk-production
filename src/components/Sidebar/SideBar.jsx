@@ -34,7 +34,7 @@ export const SideBar = ({ active }) => {
         <MenuItemBar
           click={() => setPath("/production/equation")}
           icon={<CgCalculator />}
-          active={path ==="/produciton/equation" ? true : false}
+          active={path ==="/production/equation" ? true : false}
           link="/production/equation"
         />
       </nav>

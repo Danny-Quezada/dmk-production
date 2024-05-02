@@ -19,7 +19,7 @@
   display: block !important;
 }
 /* Media queries*/
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   .contentForm {
     background-color: #121212;
   }
@@ -27,7 +27,7 @@
     color: white;
   }
  
-}
+} */
 @media (width < 520px) {
   .main {
     padding-top: 0px;

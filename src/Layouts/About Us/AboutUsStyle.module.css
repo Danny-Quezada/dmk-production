@@ -28,12 +28,26 @@ html {
   color: var(--primary-color);
 }
 
-section {
+.Section {
   padding-inline: 115px;
   width: 100vw;
   height: 100vh;
+} 
+.Productos{
+  display: flex;
+  align-items: center;
+  justify-content: start;
 }
-
+.Productos .Title{
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 20px;
+}
+.Productos label{
+display: flex;
+flex-direction: column;
+}
 .Nosotros {
   display: flex;
   flex-direction: column;
@@ -149,7 +163,7 @@ section {
     width: 100%;
     height: 100vh;
 }
-@media (width < 520px) {
+@media (width < 800px) {
     .Nosotros h2{
         font-size: 4em;
         white-space: 0px;
@@ -171,7 +185,7 @@ section {
     .Nav>ul{
         display: none;
     }
-    section{
+    .Section{
         padding-block: 10px;
         padding-inline: 10px;
     }

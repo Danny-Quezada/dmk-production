@@ -14,12 +14,12 @@
   transition: all 0.4s;
   transform-style: initial;
 }
-
+/* 
 @media (prefers-color-scheme: dark) {
   #aside {
     background-color: #121212;
   }
-}
+} */
 @media (width < 580px) {
   #aside{
     left: -60px;

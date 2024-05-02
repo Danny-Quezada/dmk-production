@@ -37,7 +37,7 @@ const CalculatorPage = () => {
               "El control de inventario y la cadena de suministro son componentes esenciales para garantizar una operacin eficiente y efectiva en las empresas. "
             }
             link={"Control de inventario y cadena de suministros"}
-            equation={`$ RI = \\frac{\\text{costo de los bienes vendidos}}{\\text{valor promedio del inventario}}  $`}
+            equation={`$ RI = \\frac{\\text{costo de los bienes vendidos}}{\\text{valor promedio del inventario}}$`}
           />
         </section>
       </main>

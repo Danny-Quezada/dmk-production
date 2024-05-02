@@ -1,8 +1,9 @@
 import React from "react";
 import CalculadorCardCSS from "./CalculatorCard.module.css";
-import "katex/dist/katex.min.css";
-import Latex from "react-latex-next";
+import 'katex/dist/katex.min.css';
+import Latex from 'react-latex-next';
 export const CalculatorCard = ({ link, description, equation, click }) => {
+  console.log(equation)
   return (
     <article
       className={CalculadorCardCSS.article}
@@ -14,9 +15,9 @@ export const CalculatorCard = ({ link, description, equation, click }) => {
       <h3 className={CalculadorCardCSS.title}>{link}</h3>
 
       <p className={CalculadorCardCSS.description}>{description}</p>
-      {equation != null && (
+      {equation !== null && (
         <div className={CalculadorCardCSS.latex}>
-          <Latex strict={true} macros={{ "\\f": "#1f(#2)" }}>
+          <Latex  >
             {equation}
           </Latex>
         </div>

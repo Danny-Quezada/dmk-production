@@ -174,7 +174,7 @@ const CMC = () => {
             <TextField
               autoFocus={false}
               title={"Porcentaje para el MTBF (%)"}
-              onChangeInputValue={(e) => setValueMTBF(e.target.value)}
+              onChangeInputValue={(e) => setValueMTBF(e.target!.value)}
               id={"MTBFPercentage"}
               isRequired={false}
               type={"number"}

@@ -20,7 +20,8 @@
 }
 
 *{
-  overflow-x:hidden ;
+  overflow-x:hidden;
+  overflow-y: auto;
   box-sizing: border-box;
   margin: 0px;
   padding: 0px;

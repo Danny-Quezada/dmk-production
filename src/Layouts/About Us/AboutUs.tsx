@@ -41,11 +41,23 @@ const AboutUsLayout = () => {
             </a>
           </li>
         </ul>
-        <button className={AboutUsStyle.Menu}><IoMdMenu size={25}/></button>
+        <button className={AboutUsStyle.Menu}>
+          <IoMdMenu size={25} />
+        </button>
       </nav>
 
-      <section id="Productos"></section>
-      <section id="Nosotros" className={AboutUsStyle.Nosotros}>
+      <section id="Productos" className={`${AboutUsStyle.Productos} ${AboutUsStyle.Section}`}>
+        <div className={AboutUsStyle.Title}>
+          <h2>Productos</h2>
+          <label htmlFor="Category">
+            Categorias
+            <select name="Category" id="Category">
+              <option value="Vitrinas pequeñas">Vitrinas pequeñas</option>
+            </select>
+          </label>
+        </div>
+      </section>
+      <section id="Nosotros" className={`${AboutUsStyle.Nosotros} ${AboutUsStyle.Section}`}>
         <h2>Sobre nosotros</h2>
         <p>
           Somos CRISALUMM Vidrio y Aluminio, especializados en la fabricación y
@@ -59,7 +71,7 @@ const AboutUsLayout = () => {
           clientes.
         </p>
       </section>
-      <section id="Mision" className={AboutUsStyle.Mision}>
+      <section id="Mision" className={`${AboutUsStyle.Mision} ${AboutUsStyle.Section}`}>
         <div>
           <h3>Nuestra misión</h3>
           <p>
@@ -75,7 +87,7 @@ const AboutUsLayout = () => {
         </div>
         <img src={mision} alt="Imagen de vitrinas de CRISALUMM" />
       </section>
-      <section id="Vision" className={AboutUsStyle.Vision}>
+      <section id="Vision" className={`${AboutUsStyle.Vision} ${AboutUsStyle.Section}`}>
         <div>
           <h3>Visión</h3>
           <p>
@@ -89,7 +101,7 @@ const AboutUsLayout = () => {
         </div>
         <img src={vision} alt="Imagen de vitrina de 80*100*50 centimetro" />
       </section>
-      <section id="Contactanos" className={AboutUsStyle.Contact}>
+      <section id="Contactanos" className={`${AboutUsStyle.Contact} ${AboutUsStyle.Section}`}>
         <div className={AboutUsStyle.ContactContainer}>
           <div className={AboutUsStyle.NameContainer}>
             <h3>
@@ -136,8 +148,7 @@ const AboutUsLayout = () => {
           </div>
         </div>
       </section>
-      <section id="Carrito" className={AboutUsStyle.ShoppingModal}></section>
-
+      <section id="Carrito" className={`${AboutUsStyle.ShoppingModal} ${AboutUsStyle.Section}`}></section>
 
       <div className={AboutUsStyle.PhoneMenu}></div>
     </>
