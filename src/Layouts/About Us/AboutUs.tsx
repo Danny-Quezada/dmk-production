@@ -149,7 +149,6 @@ const AboutUsLayout = () => {
         </div>
       </section>
       <section id="Carrito" className={`${AboutUsStyle.ShoppingModal} ${AboutUsStyle.Section}`}></section>
-
       <div className={AboutUsStyle.PhoneMenu}></div>
     </>
   );
