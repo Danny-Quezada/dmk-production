@@ -12,9 +12,7 @@ import React from "react";
 import UserProvider from "./providers/UserProvider";
 import ProductionLayout from "./Layouts/User/ProductionLayout";
 import AboutUsLayout from "./Layouts/About Us/AboutUs";
-import CustomersLayout from "./Layouts/User/CustomersLayout";
-import ComponentsLayout from "./Layouts/User/ComponentsLayout";
-import AdminsLayout from "./Layouts/User/AdminsLayout";
+
 
 function App() {
   const [count, setCount] = useState(0);
@@ -22,8 +20,8 @@ function App() {
   return (
     <UserProvider>
       <Routes>
-        {/* <Route path="/" element={<AboutUsLayout/>}> */}
-        <Route path="/" element={<AdminsLayout/>}>
+        <Route path="/" element={<AboutUsLayout/>}>
+        {/* <Route path="/" element={<AdminsLayout/>}> */}
 
         </Route>
         <Route path="/production" element={<ProductionLayout />}>

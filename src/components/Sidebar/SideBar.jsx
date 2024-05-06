@@ -4,6 +4,9 @@ import MenuItemBar from "../MenuItemBar/MenuItemBar";
 import { MdOutlineInventory2 } from "react-icons/md";
 import { CgCalculator } from "react-icons/cg";
 import SideBarCSS from "./Sidebar.module.css";
+import { IoPeopleSharp } from "react-icons/io5";
+import { FaPeopleCarryBox } from "react-icons/fa6";
+import { FaChartBar } from "react-icons/fa";
 
 export const SideBar = ({ active }) => {
   const [path, setPath] = useState(null);
@@ -27,14 +30,33 @@ export const SideBar = ({ active }) => {
       <nav style={{ display: "flex", flexDirection: "column" }}>
         <MenuItemBar
           click={() => setPath("/production/inventory")}
+          icon={<IoPeopleSharp />}
+          active={path === "/production/inventory" ? true : false}
+          link="/production/inventory"
+        />
+        <MenuItemBar
+          click={() => setPath("/production/inventory")}
           icon={<MdOutlineInventory2 />}
           active={path === "/production/inventory" ? true : false}
           link="/production/inventory"
         />
         <MenuItemBar
+          click={() => setPath("/production/inventory")}
+          icon={<FaPeopleCarryBox />}
+          active={path === "/production/inventory" ? true : false}
+          link="/production/inventory"
+        />
+        <MenuItemBar
+          click={() => setPath("/production/inventory")}
+          icon={<FaChartBar />}
+          active={path === "/production/inventory" ? true : false}
+          link="/production/inventory"
+        />
+
+        <MenuItemBar
           click={() => setPath("/production/equation")}
           icon={<CgCalculator />}
-          active={path ==="/production/equation" ? true : false}
+          active={path === "/production/equation" ? true : false}
           link="/production/equation"
         />
       </nav>
