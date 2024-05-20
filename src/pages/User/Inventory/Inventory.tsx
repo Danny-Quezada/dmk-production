@@ -43,9 +43,9 @@ const Inventory = () => {
     Components,
     useComponent,
     componentServices,
-    ComponentsDetail,
-    useComponentDetail,
-    componentDetailServices,
+    TreesComponent: ComponentsDetail,
+    useTreeComponent: useComponentDetail,
+    treeComponentServices: componentDetailServices,
   } = InventoryContextAll!;
   const [images, setImages] = useState([]);
   const maxNumber = 69;

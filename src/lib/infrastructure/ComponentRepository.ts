@@ -57,7 +57,6 @@ export default class ComponentRepository implements IComponentModel{
                 )
             );
         });
-        console.log(components);
         return components;
     }
 

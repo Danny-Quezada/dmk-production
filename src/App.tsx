@@ -20,7 +20,8 @@ function App() {
   return (
     <UserProvider>
       <Routes>
-        <Route path="/" element={<AboutUsLayout/>}>
+        <Route path="/" element={<InventoryLayout/>}>
+        {/* <Route path="/" element={<CalculatorPage/>}> */}
         {/* <Route path="/" element={<AdminsLayout/>}> */}
 
         </Route>
