@@ -1,13 +1,14 @@
 import React from "react";
 import CalculadorCardCSS from "./CalculatorCard.module.css";
-import 'katex/dist/katex.min.css';
-import Latex from 'react-latex-next';
+import { BlockMath, InlineMath } from "react-katex";
+import "katex/dist/katex.min.css";
 export const CalculatorCard = ({ link, description, equation, click }) => {
-  console.log(equation)
+
   return (
     <article
       className={CalculadorCardCSS.article}
       aria-label={link}
+      style={{ overflow: "hidden" }}
       onClick={(event) => {
         click();
       }}
@@ -17,9 +18,7 @@ export const CalculatorCard = ({ link, description, equation, click }) => {
       <p className={CalculadorCardCSS.description}>{description}</p>
       {equation !== null && (
         <div className={CalculadorCardCSS.latex}>
-          <Latex  >
-            {equation}
-          </Latex>
+          <InlineMath math={"\\color{blue}"+ equation} />
         </div>
       )}
     </article>

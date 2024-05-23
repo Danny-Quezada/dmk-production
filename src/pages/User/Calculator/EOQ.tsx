@@ -100,9 +100,9 @@ export default function EOQ() {
       {result != null && (
         <LatexComponent
           title={"Cálculo:"}
-          equation={`$\\sqrt{\\frac{2\\cdot  ${eoq.DS} \\cdot ${eoq.S} }{ ${
+          equation={`\\sqrt{\\frac{2\\cdot  ${eoq.DS} \\cdot ${eoq.S} }{ ${
             eoq.H
-          } }} = ${Math.round(result)} $`}
+          } }} = ${Math.round(result)} `}
           inline={"20px"}
           block={"10px"}
         />

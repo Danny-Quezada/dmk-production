@@ -1,15 +1,16 @@
 import React from "react";
 import TextFieldCSS from "./TextField.module.css";
 
-interface Props{
-  title: string,
-  value: string,
-  id: string,
-  type: string,
-  autoFocus: boolean,
-  onChangeInputValue: (e: React.FormEvent<HTMLInputElement>)=>void,
-  isRequired: boolean,
-  readOnly: boolean
+interface Props {
+  title: string;
+  value: string;
+  id: string;
+  type: string;
+  autoFocus: boolean;
+  onChangeInputValue: (e: React.FormEvent<HTMLInputElement>) => void;
+  isRequired: boolean;
+  readOnly: boolean;
+  compareValue?: number | null;
 }
 function TextField({
   title,
@@ -19,27 +20,47 @@ function TextField({
   autoFocus,
   onChangeInputValue,
   isRequired,
-  readOnly,  
-}:Props) {
+  readOnly,
+  compareValue,
+}: Props) {
   return (
     <div className={`${TextFieldCSS.form__group}`}>
       <input
         onInvalid={(e) => {
-
-          const event=(e.target as HTMLInputElement)
+          const event = e.target as HTMLInputElement;
 
           if (event.value === "") {
             event.setCustomValidity("Campo requerido, coloca: " + title);
           }
           if (type === "number") {
-            if (event.value === "--") {
+            if (event.value === "--" || event.value === "e") {
               event.setCustomValidity("Solamente números");
+            }
+
+            if (
+              compareValue != null &&
+              compareValue >= Number.parseInt(event.value)
+            ) {
+             
+              event.setCustomValidity(
+                title + " no puede ser menor o igual que: " + compareValue
+              );
             }
           }
         }}
         onInput={(e) => {
-          const event=(e.target as HTMLInputElement)
-          event.setCustomValidity("");
+          const event = e.target as HTMLInputElement;
+
+          if (
+            compareValue != null &&
+            compareValue > Number.parseInt(event.value)
+          ) {
+            event.setCustomValidity(
+              title + " no puede ser menor o igual que: " + compareValue
+            );
+          } else {
+            event.setCustomValidity("");
+          }
         }}
         max="1000000"
         min="0"

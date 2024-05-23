@@ -1,6 +1,9 @@
 import React from "react";
+
+import { BlockMath, InlineMath } from "react-katex";
 import "katex/dist/katex.min.css";
-import Latex from "react-latex-next";
+ 
+
 import LatexStyle from "./LatexComponent.module.css";
 function LatexComponent({ equation, title, }) {
   return (
@@ -9,9 +12,7 @@ function LatexComponent({ equation, title, }) {
       
     >
       {title && <h6 className={LatexStyle.title}>{title} </h6>}
-      <Latex strict={true} macros={{ "\\f": "#1f(#2)" }}>
-        {equation}
-      </Latex>
+      <InlineMath math={"\\color{blue}"+ equation} />
     </div>
   );
 }

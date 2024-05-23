@@ -2,7 +2,7 @@
 .LatexDiv{
   
     color: var(--primary-color);
-
+    padding: 5px;
   }
 .title{
     padding-bottom: 10px;

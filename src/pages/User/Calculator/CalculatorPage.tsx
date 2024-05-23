@@ -3,8 +3,11 @@ import ContentPageCSS from "../ContentPage.module.css";
 import { CalculatorCard } from "../../../components/CalculatorCard/CalculatorCard";
 import CMC from "./CMC";
 import EOQ from "./EOQ";
+import LUCLTC from "./LUCLTC/LUCLTC";
 import CS from "./CS/CS";
 import { IoCloseSharp } from "react-icons/io5";
+import CR from "./CR/CR";
+
 const CalculatorPage = () => {
   const [menu, changeMenu] = useState("/");
   return (
@@ -13,7 +16,7 @@ const CalculatorPage = () => {
         <h2 className={ContentPageCSS.titlePage}>Ecuaciones</h2>
 
         <section
-          style={{ gap: "20px", display: "flex", flexDirection: "column" }}
+          style={{ gap: "25px", display: "flex", flexDirection: "column" }}
         >
           <CalculatorCard
             click={() => changeMenu("CMC")}
@@ -21,7 +24,7 @@ const CalculatorPage = () => {
             description={
               "conjunto de tareas técnicas, destinadas a corregir las fallas del equipo que demuestren la necesidad de reparación o reemplazo."
             }
-            equation={"$\\ CMC =  NF \\cdot \\{{CTM + CF}\\} $"}
+            equation={"\\text{CMC = NF} \\cdot \\{CTM + CF\\} "}
           />
           <CalculatorCard
             click={() => changeMenu("EOQ")}
@@ -29,7 +32,7 @@ const CalculatorPage = () => {
               "El cálculo del EOQ ayuda a las empresas a equilibrar estos tres costes y a eliminar cualquier gasto innecesario importante."
             }
             link={"EOQ"}
-            equation={`$\\sqrt{\\frac{2\\cdot D \\cdot S}{H}} $`}
+            equation={'\\sqrt{\\frac{2 \\cdot D \\cdot S}{H}}'}
           />
           <CalculatorCard
             click={() => changeMenu("CS")}
@@ -37,7 +40,31 @@ const CalculatorPage = () => {
               "El control de inventario y la cadena de suministro son componentes esenciales para garantizar una operacin eficiente y efectiva en las empresas. "
             }
             link={"Control de inventario y cadena de suministros"}
-            equation={`$ RI = \\frac{\\text{costo de los bienes vendidos}}{\\text{valor promedio del inventario}}$`}
+            equation={'\\text{RI = } \\frac{\\text{Costo de los bienes vendidos}}{\\text{Valor promedio del inventario}}'}
+          />
+          <CalculatorCard
+            click={() => changeMenu("LUCLTC")}
+            link={
+              "LUC Y LTC"
+            }
+            description={"Métodos para encontrar la cantidad óptima de pedidos"}
+            equation={`\\text{Primera iteracion = S+K} `}
+          />
+           <CalculatorCard
+            click={() => changeMenu("CR")}
+            link={
+              "Cantidad de recipientes y inventario acumulado"
+            }
+            description={"Cálculos para determinar recipientes y inventario acumulado que necesita una empresa"}
+            equation={`\\text{N = } \\frac{D \\cdot T}{60 \\cdot C} \\text{ Y } \\text{IM = } N \\cdot C`}
+          />
+             <CalculatorCard
+            click={() => changeMenu("KANBAN")}
+            link={
+              "Administración de inventario KANBAN"
+            }
+            description={"Método para determinar la cantidadd de kanbanes a utilizar dentro de una empresa"}
+            equation={`\\text{K = } \\frac{D \\cdot T \\cdot (1+\\infty) }{C}`}
           />
         </section>
       </main>
@@ -56,6 +83,9 @@ const CalculatorPage = () => {
       >
         <div
           className={ContentPageCSS.contentForm}
+          style={{
+            width: menu==="LUCLTC" ? "94vw" : "400px"
+          }}
           onClick={(event) => {
             event.stopPropagation();
           }}
@@ -99,6 +129,12 @@ function Menu(menu) {
     return <CMC />;
   } else if (menu === "CS") {
     return <CS />;
+  }
+  else if(menu==="LUCLTC"){
+    return <LUCLTC/>
+  }
+  else if(menu==="CR"){
+    return <CR/>
   }
 }
 export default CalculatorPage;
