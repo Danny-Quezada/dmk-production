@@ -21,10 +21,10 @@ export default class CalculateLUCLTC {
     for (let i = 0; i < Values.length; i++) {
       
      
-      let cm: number =Number( (Values[i] * (period) * K).toFixed(3));
+      let cm: number = (Values[i] * (period) * K);
     
       
-      let ltc = new LTC(period+1, Values[i], period, cm,LTCs.length==0 ? 0:LTCs[i-1].Delete==true ? 0 : (LTCs[i - 1].CumulativeMaintenanceCost + cm));
+      let ltc = new LTC(period+1, Values[i], period, cm,LTCs.length==0 ? 0:LTCs[i-1].Delete==true ? 0 : Number((LTCs[i - 1].CumulativeMaintenanceCost + cm).toFixed(3)));
       LTCs.push(ltc)
       period++;
       if (LTCs[i].CumulativeMaintenanceCost > S) {

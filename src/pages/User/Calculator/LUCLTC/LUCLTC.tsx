@@ -29,7 +29,7 @@ const LUCLTC = () => {
     <div
       style={{
         overflowX: "hidden",
-        overflowY: "scroll",
+        overflowY: "auto",
         margin: "10px",
         display: "flex",
         gap: "30px",
@@ -113,7 +113,7 @@ const LUCLTC = () => {
             setCalculate(true);
           }}
         >
-          <div style={{ overflow: "auto" }}>
+          <div style={{ overflowX: "auto" }}>
             <table className={LUCTLCSTYLE.table}>
               <thead>
                 <tr>
@@ -176,7 +176,7 @@ const LUCLTC = () => {
       )}
       {calculateBool && (
         <div>
-          <div style={{ overflow: "auto"}}>
+          <div style={{ overflowX: "auto"}}>
             <table className={LUCTLCSTYLE.table}>
               <thead>
                 <tr>
@@ -197,7 +197,6 @@ const LUCLTC = () => {
                   <tr
                     style={{
                       backgroundColor: e.Delete ? "#ff000052" : "",
-
                       color: e.Delete ? "white" : "",
                       fontWeight: e.Delete ? "bold" : "",
                     }}

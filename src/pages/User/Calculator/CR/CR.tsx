@@ -9,16 +9,17 @@ const CR = () => {
     T: "",
     C: "",
   });
-  const [N, setN] = useState(0);
-  const [IM, setIM] = useState(0);
+  const [N, setN] = useState<null | number>(null);
+  const [IM, setIM] = useState<null | number>(null);
   const onChange = (e) => {
     setCR({ ...CR, [e.target.name]: e.target.value });
   };
   const submit = (event) => {
+    console.log("fasdf");
     event.preventDefault();
-    
-    setN(Number(Math.round((Number(CR.D) * Number(CR.T)) /(60 * Number(CR.C)))));
-    setIM(N * Number(CR.C));
+    const Nnumber: number=Number(Math.round((Number(CR.D) * Number(CR.T)) /(60 * Number(CR.C))));
+    setN(Nnumber);
+    setIM(Nnumber * Number(CR.C));
   };
   return (
     <form
@@ -62,8 +63,10 @@ const CR = () => {
         isRequired={true}
         readOnly={false}
       />
-      <Button title={"Calcular"} onSubmit={(e) => {}} />
-      {N != 0 && (
+      <Button title={"Calcular"} onSubmit={(e) => {
+        console.log("fad")
+      }} />
+      {N != null && (
         <LatexComponent
           title={"Cálculo de recipientes:"}
           equation=   {`\\text{N = } \\frac{${CR.D} \\cdot ${CR.T} }{60 \\cdot ${CR.C}  } = \\text{${N} recipientes } `}
@@ -71,7 +74,7 @@ const CR = () => {
           block={"10px"}
         />
       )}
-      {IM != 0 && (
+      {IM != null && (
         <LatexComponent
           title={"Cálculo de Inventario máximo:"}
           equation=   {`\\text{IM = } ${N} \\cdot ${CR.C} = \\text{${IM} unidades}`}

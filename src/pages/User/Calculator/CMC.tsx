@@ -113,15 +113,17 @@ const CMC = () => {
   };
 
   return (
-    <>
+    <div style={{
+      overflowAnchor: "auto",
+      overflowY: "auto",
+    }}>
       <form
         onClick={(event) => {
           event.stopPropagation();
         }}
         style={{
-          height: "80vh",
-          overflowAnchor: "auto",
-          overflowY: "auto",
+       
+         
           margin: "8px",
           display: "flex",
           gap: "12px",
@@ -289,7 +291,7 @@ const CMC = () => {
           block={"10px"}
         />
       )}
-    </>
+    </div>
   );
 };
 export default CMC;
