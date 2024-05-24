@@ -101,6 +101,12 @@ flex-direction: column;
   flex-direction: row-reverse;
 }
 
+.Vision > img {
+  height: 500px;
+  width: 100%;
+  border-radius: 6px;
+}
+
 .Vision h3 {
   font-size: 3em;
   font-weight: bolder;
