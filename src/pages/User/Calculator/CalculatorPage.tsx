@@ -10,7 +10,7 @@ import CR from "./CR/CR";
 import { Kanban } from "./Kanban";
 
 const CalculatorPage = () => {
-  const [menu, changeMenu] = useState("KANBAN");
+  const [menu, changeMenu] = useState("/");
   return (
     <>
       <main className={ContentPageCSS.main}>
