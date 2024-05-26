@@ -35,7 +35,7 @@ const LUCLTC = () => {
         gap: "30px",
         flexDirection: "column",
 
-        height: "90vh",
+        height: "85vh",
       }}
     >
       <form

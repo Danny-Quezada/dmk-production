@@ -83,6 +83,7 @@ const CMC = () => {
   });
   const onChange = (e) => {
     setCMC({ ...CMC, [e.target.name]: e.target.value });
+    changeResult(null);
   };
 
   const submit = async (event) => {
@@ -113,21 +114,23 @@ const CMC = () => {
   };
 
   return (
-    <div style={{
-      overflowAnchor: "auto",
-      overflowY: "auto",
-    }}>
+    <div
+      style={{
+        overflowAnchor: "auto",
+        overflowY: "auto",
+        height: "90vh"
+      }}
+    >
       <form
         onClick={(event) => {
           event.stopPropagation();
         }}
         style={{
-       
-         
           margin: "8px",
           display: "flex",
           gap: "12px",
           flexDirection: "column",
+          overflowY: "auto",
         }}
         onSubmit={submit}
       >
@@ -284,9 +287,9 @@ const CMC = () => {
       {result != null && (
         <LatexComponent
           title={"Cálculo:"}
-          equation={`$\\ CMC =  ${Math.round(
+          equation={`\\ CMC =  ${Math.round(
             NF
-          )} \\cdot \\{{${CT} + ${CF} }\\} = ${Math.round(result)} $`}
+          )} \\cdot \\{{${CT} + ${CF} }\\} = ${Math.round(result)} `}
           inline={"20px"}
           block={"10px"}
         />

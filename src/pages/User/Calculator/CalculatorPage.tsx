@@ -7,9 +7,10 @@ import LUCLTC from "./LUCLTC/LUCLTC";
 import CS from "./CS/CS";
 import { IoCloseSharp } from "react-icons/io5";
 import CR from "./CR/CR";
+import { Kanban } from "./Kanban";
 
 const CalculatorPage = () => {
-  const [menu, changeMenu] = useState("/");
+  const [menu, changeMenu] = useState("KANBAN");
   return (
     <>
       <main className={ContentPageCSS.main}>
@@ -84,7 +85,7 @@ const CalculatorPage = () => {
         <div
           className={ContentPageCSS.contentForm}
           style={{
-            width: menu==="LUCLTC" ? "94vw" : "400px"
+            width: (menu==="LUCLTC" || menu === "KANBAN") ? "94vw" : "400px"
           }}
           onClick={(event) => {
             event.stopPropagation();
@@ -135,6 +136,9 @@ function Menu(menu) {
   }
   else if(menu==="CR"){
     return <CR/>
+  }
+  else if(menu==="KANBAN"){
+    return <Kanban/>
   }
 }
 export default CalculatorPage;

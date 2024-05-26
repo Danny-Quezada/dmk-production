@@ -24,6 +24,12 @@ html {
   color: var(--title-page);
   font-weight: 500;
 }
+.Nav ul a.activeLink {
+  color: var(--primary-color);
+}
+.close{
+  display: none;
+}
 .Nav > ul > li > a:hover {
   color: var(--primary-color);
 }
@@ -32,21 +38,21 @@ html {
   padding-inline: 115px;
   width: 100vw;
   height: 100vh;
-} 
-.Productos{
+}
+.Productos {
   display: flex;
   align-items: center;
   justify-content: start;
 }
-.Productos .Title{
+.Productos .Title {
   display: flex;
   align-items: center;
   justify-content: start;
   gap: 20px;
 }
-.Productos label{
-display: flex;
-flex-direction: column;
+.Productos label {
+  display: flex;
+  flex-direction: column;
 }
 .Nosotros {
   display: flex;
@@ -89,9 +95,8 @@ flex-direction: column;
   width: 100%;
   border-radius: 6px;
 }
-.Mision div{
-   
-    width: fit-content;
+.Mision div {
+  width: fit-content;
 }
 .Vision {
   gap: 60px;
@@ -117,9 +122,8 @@ flex-direction: column;
   font-weight: 700;
   color: #b4b4b4;
 }
-.Vision div{
-   
-    width: fit-content;
+.Vision div {
+  width: fit-content;
 }
 .Contact {
   display: flex;
@@ -127,90 +131,105 @@ flex-direction: column;
   align-items: center;
 }
 
-.NameContainer h3 strong{
-    color: black;
-    font-size: 2em;
+.NameContainer h3 strong {
+  color: black;
+  font-size: 2em;
 }
-.NameContainer h3{
-    color: blue;
+.NameContainer h3 {
+  color: blue;
 }
-.ContactContainer{
-    width: 100%;
-    border-block: 2px black solid;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.ContactContainer {
+  width: 100%;
+  border-block: 2px black solid;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
-.InfoContainer{
-    padding: 40px;
-    display: flex;
-    gap: 30px;
-    flex-direction: column;
-    background-color: #f1f1f1;
+.InfoContainer {
+  padding: 40px;
+  display: flex;
+  gap: 30px;
+  flex-direction: column;
+  background-color: #f1f1f1;
 }
-.InfoContainer article{
-    display: flex;
-    align-items: center;
-    gap: 5px;
+.InfoContainer article {
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
-.ShoppingModal{
-    position: absolute;
-    right:100%;
-    background-color: red;
+.ShoppingModal {
+  position: absolute;
+  right: 100%;
+  background-color: red;
 }
-.Menu{
-    border: none;
-    display: none;
-    background: none;
+.Menu {
+  border: none;
+  display: none;
+  background: none;
 }
-.PhoneMenu{
-    position: absolute;
-    right: 100%;
-    width: 100%;
-    height: 100vh;
+.PhoneMenu {
+  position: absolute;
+  right: 100%;
+  width: 100%;
+  height: 100vh;
 }
 
 
 @media (width < 800px) {
-    .Nosotros h2{
-        font-size: 4em;
-        white-space: 0px;
-        -webkit-text-stroke: 1px var(--primary-color);
-    }
-    .Nosotros p{
-        font-size: 1em;
-    }
-    .Menu{
-        display: block;
-    }
-    .Nav{
-        padding: 0px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding-inline: 10px;
-    }
-    .Nav>ul{
-        display: none;
-    }
-    .Section{
-        padding-block: 10px;
-        padding-inline: 10px;
-    }
-    .Mision, .Vision {
-       
-        gap: 10px;
-        flex-direction: column-reverse;
-    }
-    .Contact .ContactContainer{
-        border: none;
-        height: 100%;
-        justify-content: space-evenly;
-        flex-direction: column;
-    }
-    .Mision img, .Vision img{
-        width: 100%;
-        height: 300px;
-    }
+  .close{
+    display: block;
+  }
+  .Nosotros h2 {
+    font-size: 4em;
+    white-space: 0px;
+    -webkit-text-stroke: 1px var(--primary-color);
+  }
+  .Nosotros p {
+    font-size: 1em;
+  }
+  .Menu {
+    display: block;
+  }
+  .Nav {
+    padding: 0px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-inline: 10px;
+  }
+  .Nav > ul {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    background-color: white;
+    right: 0;
+    top: 0;
+    align-items: start;
+    justify-content: center;
+    height: 100vh;
+    padding: 10px;
+    gap: 30px;
+  }
 
+  
+  .Section {
+    padding-block: 10px;
+    padding-inline: 10px;
+  }
+  .Mision,
+  .Vision {
+    gap: 10px;
+    flex-direction: column-reverse;
+  }
+  .Contact .ContactContainer {
+    border: none;
+    height: 100%;
+    justify-content: space-evenly;
+    flex-direction: column;
+  }
+  .Mision img,
+  .Vision img {
+    width: 100%;
+    height: 300px;
+  }
 }
