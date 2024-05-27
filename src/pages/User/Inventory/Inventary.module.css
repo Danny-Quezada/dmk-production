@@ -69,6 +69,7 @@ margin: 0px auto;
  
 }
 .ContentFormInventary{
+  top: 0px;
   position: relative;
   background-color: white;
   width: 700px;
@@ -77,12 +78,7 @@ margin: 0px auto;
   display: block !important;
   overflow-y: auto;
 }
-@media (prefers-color-scheme: dark) {
-  .ContentFormInventary {
-    background-color: #121212;
-  }
-  
-}
+
 @media (width < 520px) {
   
   .ContentFormInventary {

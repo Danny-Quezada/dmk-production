@@ -250,7 +250,7 @@ function ProductRow({ product: Product }: Props) {
                   gap: "10px",
                 }}
               >
-                Collection
+                Categoría
                 <select
                   key={"Collection"}
                   className={ProductStyle.SelectCollection}

@@ -28,6 +28,7 @@ export default class ProductServices {
   async Update(t: Product): Promise<boolean> {
     return await this.iProductModel.Update(t);
   }
+
   async Read(): Promise<Product[]> {
    
    return await this.iProductModel.Read();
@@ -38,7 +39,13 @@ export default class ProductServices {
   async ReadCollection():  Promise<Collection[]>{
     return await this.iCollectionModel.Read();
   }
-  async ReadGroups(): Promise<Group[]> {
+  async CreateCollection(t: Collection): Promise<string>{
+    return await this.iCollectionModel.Create(t);
+  }
+  async UpdateCollection(t: Collection) : Promise<boolean>{
+    return await this.iCollectionModel.Update(t);
+  }
+    async ReadGroups(): Promise<Group[]> {
     return await this.iGroupModel.Read();
   }
   async UploadImages(images: File[]): Promise<string[]>{
