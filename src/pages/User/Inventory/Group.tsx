@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { MouseEventHandler, useContext, useEffect, useState } from "react";
 import { InventoryContext } from "../../../providers/InventoryContext";
 import ContentPageCSS from "../ContentPage.module.css";
 import InventaryStyle from "./Inventary.module.css";
@@ -8,41 +8,85 @@ import { toast } from "sonner";
 import { IoAdd, IoCloseSharp } from "react-icons/io5";
 import TextField from "../../../components/Textfield/TextField";
 import Button from "../../../components/Button/Button";
+import { collection } from "firebase/firestore";
+import { updateCurrentUser } from "firebase/auth";
+import { FaArrowLeft } from "react-icons/fa";
 
-const GroupPage = () => {
+import Group from "../../../lib/domain/Models/Inventary/Group";
+
+
+interface Props{
+  onSubmit: undefined;
+}
+const GroupPage = ( {onSubmit}:Props) => {
   const InventoryContextAll = useContext(InventoryContext);
   const [showModal, useModal] = useState(false);
-
-  const [CreatedCollection, createCollection] = useState<Collection>(
-    new Collection("cero", "")
+  const [updateGroup, UpdateGroup] = useState<Group | null>(
+    null
+  );
+  const [CreatedGroup, createGroup] = useState<Group>(
+    new Group("cero", "")
   );
   const onChange = (e: React.FormEvent<HTMLInputElement>) => {
-    createCollection({
-      ...CreatedCollection,
-      CollectionName: e.currentTarget.value,
-    });
+    if (updateGroup !== null) {
+      UpdateGroup({
+        ...updateGroup,
+        GroupName: e.currentTarget.value,
+      });
+    } else {
+      createGroup({
+        ...CreatedGroup,
+        GroupName: e.currentTarget.value,
+      });
+    }
   };
 
-  const { Collections, productServices, useCollection } = InventoryContextAll!;
+  const { Groups, productServices, useGroup } = InventoryContextAll!;
   useEffect(() => {
-    if (Collections == null) {
-      productServices.ReadCollection().then((resp: Collection[]) => {
-        useCollection(resp);
+    if (Groups == null) {
+      productServices.ReadGroups().then((resp: Group[]) => {
+        useGroup(resp);
       });
     }
   }, []);
   const OnSubmit = async (e: any) => {
     e.preventDefault();
-  
-
-    try {
-      const id = await productServices.CreateCollection(CreatedCollection);
-      CreatedCollection.CollectionId = id;
-      useCollection([...Collections!, CreatedCollection]);
-      useModal(false);
-      return toast.success("Grupo creado exitosamente");
-    } catch (e) {
-      return toast.error("Error, intente más tarde");
+    if (updateGroup === null) {
+      try {
+        const id = await productServices.CreateGroup(CreatedGroup);
+        CreatedGroup.GroupId = id;
+        useGroup([...Groups!, CreatedGroup]);
+        useModal(false);
+        createGroup({
+          ...CreatedGroup,
+          GroupName: "",
+        });
+        return toast.success("Grupo creado exitosamente");
+      } catch (e) {
+        return toast.error("Error, intente más tarde");
+      }
+    } else {
+ 
+        const updated: boolean = await productServices.UpdateGroup(
+          updateGroup
+        );
+        if (updated) {
+          const newGroups: Group[] | null = Groups!.map(
+            (Group) => {
+              if (Group.GroupId !== updateGroup!.GroupId) return Group;
+             
+             
+              return { ...updateGroup };
+            }
+          );
+          useGroup(newGroups);
+          useModal(false);
+          UpdateGroup(null);
+          return toast.success("Grupo actualizado");
+        } else {
+          return toast.error("Hubo un error, intentalo más tarde.");
+        
+      }
     }
   };
   return (
@@ -51,10 +95,13 @@ const GroupPage = () => {
         className={`${ContentPageCSS.main} ${InventaryStyle.InventaryMain}`}
         style={{ overflow: "hidden" }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          <h2 className={ContentPageCSS.titlePage}>Categoría</h2>
+        <div style={{ display: "flex", alignItems: "center", gap: "8px",  }}>
+        <FaArrowLeft color="grey" style={{cursor: "pointer"}} onClick={(e)=>{
+          onSubmit("")
+        }}/>
+          <h2 className={ContentPageCSS.titlePage}>Grupo</h2>
           <div style={{ display: "flex", alignItems: "center" }}>
-            <h5 style={{ color: "grey" }}>Toca cualquier Categoría</h5>
+            <h5 style={{ color: "grey" }}>Toca cualquier Grupo</h5>
             <CgTapDouble size={20} />
           </div>
         </div>
@@ -68,15 +115,22 @@ const GroupPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {Collections!.map((Collection) => (
+                {Groups!.map((Group) => (
                   <tr
+                    onClick={(e) => {
+                      if (e.target.tagName !== "INPUT") {
+                        UpdateGroup(Group);
+                        useModal(true);
+                      }
+                    }}
+                    key={Group.GroupId}
                     style={{
-                      backgroundColor: Collection.Select
+                      backgroundColor: Group.Select
                         ? "rgba(82, 92, 235,0.2)"
                         : "",
 
-                      color: Collection.Select ? "white" : "",
-                      fontWeight: Collection.Select ? "bold" : "",
+                      color: Group.Select ? "white" : "",
+                      fontWeight: Group.Select ? "bold" : "",
                     }}
                   >
                     <td>
@@ -85,29 +139,29 @@ const GroupPage = () => {
                           if (e.target.checked) {
                           }
 
-                          const newCollection: Collection[] | null =
-                            Collections!.map((Collection) => {
+                          const newGroup: Group[] | null =
+                            Groups!.map((GroupChange) => {
                               if (
-                                Collection.CollectionId !==
-                                Collection.CollectionId
+                                Group.GroupId !==
+                                GroupChange.GroupId
                               )
-                                return Collection;
+                                return GroupChange;
 
                               return {
-                                ...Collection,
+                                ...Group,
                                 Select: e.target.checked,
                               };
                             });
-                          useCollection(newCollection);
+                          useGroup(newGroup);
                         }}
-                        checked={Collection.Select}
+                        checked={Group.Select}
                         type="checkbox"
-                        name={Collection.CollectionName}
-                        id={Collection.CollectionId + 1}
-                        aria-label="Mostrar detalles"
+                        name={Group.GroupName}
+                        id={Group.GroupId + 1}
+                        aria-label="Mostrar detalles de grupo"
                       />
                     </td>
-                    <td>{Collection.CollectionName}</td>
+                    <td>{Group.GroupName}</td>
                   </tr>
                 ))}
               </tbody>
@@ -118,7 +172,6 @@ const GroupPage = () => {
           onClick={(e) => {
             useModal(true);
           }}
-          
           style={{
             cursor: "pointer",
             position: "fixed",
@@ -130,8 +183,8 @@ const GroupPage = () => {
             borderRadius: "50%",
             borderColor: "green",
           }}
-          key={"buttonCollection"}
-          name="CollectionButton"
+          key={"buttonGroup"}
+          name="GroupButton"
         >
           <IoAdd color="green" size={20} />
         </button>
@@ -156,15 +209,25 @@ const GroupPage = () => {
       >
         <div
           className={InventaryStyle.ContentFormInventary}
-          style={{height: "250px"}}
+          style={{ height: "250px" }}
           onClick={(event) => {
-
             event.stopPropagation();
           }}
         >
-          <form className={InventaryStyle.Form} onSubmit={OnSubmit}>
+          <form
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              margin: "20px",
+              gap: "20px",
+            }}
+            onSubmit={OnSubmit}
+          >
             <button
               onClick={(e) => {
+                if(updateGroup!==null){
+                  UpdateGroup(null)
+                }
                 useModal(false);
               }}
               style={{
@@ -186,20 +249,23 @@ const GroupPage = () => {
             >
               <IoCloseSharp color="white" />
             </button>
-            <h2 className={InventaryStyle.Title}>Crear Categoría</h2>
+            <h2 className={InventaryStyle.Title}>Crear Grupo</h2>
             <TextField
               autoFocus={true}
               isRequired={true}
-              id="CollectionName"
+              id="GroupName"
               readOnly={false}
-              title="Nombre de la categoría"
+              title="Nombre del grupo"
               type="text"
-              value={CreatedCollection.CollectionName}
+              value={
+                updateGroup !== null
+                  ? updateGroup.GroupName
+                  : CreatedGroup.GroupName
+              }
               onChangeInputValue={onChange}
             />
-              <div className={InventaryStyle.ButtonContainer}>
-                    <Button title="Crear Categoría" onSubmit={() => {}} />
-                  </div>
+
+            <Button title={ updateGroup!==null ? "Actualizar" : "Crear"  + ` Grupo`} onSubmit={() => {}} />
           </form>
         </div>
       </div>

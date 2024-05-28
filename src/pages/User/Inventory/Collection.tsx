@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { MouseEventHandler, useContext, useEffect, useState } from "react";
 import { InventoryContext } from "../../../providers/InventoryContext";
 import ContentPageCSS from "../ContentPage.module.css";
 import InventaryStyle from "./Inventary.module.css";
@@ -10,8 +10,13 @@ import TextField from "../../../components/Textfield/TextField";
 import Button from "../../../components/Button/Button";
 import { collection } from "firebase/firestore";
 import { updateCurrentUser } from "firebase/auth";
+import { FaArrowLeft } from "react-icons/fa";
 
-const CollectionPage = () => {
+
+interface Props{
+  onSubmit: undefined;
+}
+const CollectionPage = ( {onSubmit}:Props) => {
   const InventoryContextAll = useContext(InventoryContext);
   const [showModal, useModal] = useState(false);
   const [updateCollection, UpdateCollection] = useState<Collection | null>(
@@ -88,7 +93,10 @@ const CollectionPage = () => {
         className={`${ContentPageCSS.main} ${InventaryStyle.InventaryMain}`}
         style={{ overflow: "hidden" }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "8px",  }}>
+        <FaArrowLeft color="grey" style={{cursor: "pointer"}} onClick={(e)=>{
+          onSubmit("")
+        }}/>
           <h2 className={ContentPageCSS.titlePage}>Categoría</h2>
           <div style={{ display: "flex", alignItems: "center" }}>
             <h5 style={{ color: "grey" }}>Toca cualquier Categoría</h5>
@@ -125,24 +133,24 @@ const CollectionPage = () => {
                   >
                     <td>
                       <input
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                          }
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                            }
 
-                          const newCollection: Collection[] | null =
-                            Collections!.map((CollectionChange) => {
-                              if (
-                                Collection.CollectionId !==
-                                CollectionChange.CollectionId
-                              )
-                                return CollectionChange;
+                            const newCollection: Collection[] | null =
+                              Collections!.map((CollectionChange) => {
+                                if (
+                                  Collection.CollectionId !==
+                                  CollectionChange.CollectionId
+                                )
+                                  return CollectionChange;
 
-                              return {
-                                ...Collection,
-                                Select: e.target.checked,
-                              };
-                            });
-                          useCollection(newCollection);
+                                return {
+                                  ...Collection,
+                                  Select: e.target.checked,
+                                };
+                              });
+                            useCollection(newCollection);
                         }}
                         checked={Collection.Select}
                         type="checkbox"

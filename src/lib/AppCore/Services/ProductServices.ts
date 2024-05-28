@@ -33,6 +33,9 @@ export default class ProductServices {
    
    return await this.iProductModel.Read();
   }
+
+
+
   async Delete(t: Product): Promise<boolean> {
     return await this.iProductModel.Delete(t);
   }
@@ -47,6 +50,12 @@ export default class ProductServices {
   }
     async ReadGroups(): Promise<Group[]> {
     return await this.iGroupModel.Read();
+  }
+  async CreateGroup(t: Group): Promise<string>{
+    return await this.iGroupModel.Create(t);
+  }
+  async UpdateGroup(t: Group) : Promise<boolean>{
+    return await this.iGroupModel.Update(t);
   }
   async UploadImages(images: File[]): Promise<string[]>{
     return await this.iProductModel.UploadImages(images);

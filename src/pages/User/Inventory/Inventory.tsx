@@ -23,6 +23,7 @@ import { InventoryContext } from "../../../providers/InventoryContext";
 import { toast } from "sonner";
 import { Link, useOutlet, useParams } from "react-router-dom";
 import CollectionPage from "./Collection";
+import GroupPage from "./Group";
 const divStyle = {
   display: "flex",
   alignItems: "center",
@@ -134,7 +135,7 @@ const Inventory = () => {
   return (
     <>
       {showOutlet != "" ? (
-        Menu(showOutlet)
+        Menu(showOutlet, setOutlet)
       ) : (
         <div>
           <main
@@ -191,13 +192,18 @@ const Inventory = () => {
                         background: "none",
                         border: "none",
                       }}
+                      onClick={(e) => {
+                        setOutlet("Groups");
+                      }}
                     >
+                      
                       <IoIosAdd size={10} />
                       Agregar Grupos
                     </button>
                   </li>
                   <li>
                     <button
+                    
                       style={{
                         outline: "none",
                         background: "none",
@@ -662,10 +668,13 @@ const Inventory = () => {
   );
 };
 
-function Menu(menu) {
+function Menu(menu, onSubmit) {
  
     if (menu === "Collections") {
-    return <CollectionPage />;
+    return <CollectionPage onSubmit={onSubmit} />;
+  }
+  else if(menu==="Groups"){
+    return <GroupPage onSubmit={onSubmit}/>
   }
 }
 export default Inventory;
