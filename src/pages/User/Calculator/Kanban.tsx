@@ -111,6 +111,8 @@ export const Kanban = () => {
                     <td>{"Componente " + (i + 1)}</td>
                     <td>
                       <input
+                        max="1000000"
+        min="0"
                         onInvalid={(e) => {
                           // e.preventDefault();
                           const event = e.target as HTMLInputElement;
@@ -122,6 +124,14 @@ export const Kanban = () => {
                           if (event.value === "--" || event.value === "e") {
                             event.setCustomValidity("Solamente números");
                           }
+                          if (event.value === "") {
+                            event.setCustomValidity("Campo requerido");
+                          }
+
+                            if (event.value === "--" || event.value === "e") {
+                              event.setCustomValidity("Solamente números");
+                            }
+                
                         }}
                         step={"any"}
                         style={{
@@ -142,6 +152,8 @@ export const Kanban = () => {
                     </td>
                     <td>
                       <input
+                        max="1000000"
+        min="0"
                         onInvalid={(e) => {
                           // e.preventDefault();
                           const event = e.target as HTMLInputElement;
@@ -168,6 +180,8 @@ export const Kanban = () => {
                     </td>
                     <td>
                       <input
+                        max="1000000"
+        min="0"
                         onInvalid={(e) => {
                           // e.preventDefault();
                           const event = e.target as HTMLInputElement;
@@ -198,8 +212,11 @@ export const Kanban = () => {
                     </td>
                     <td>
                       <input
+                        max="1"
+        min="0"
                         onInvalid={(e) => {
                           // e.preventDefault();
+              
                           const event = e.target as HTMLInputElement;
 
                           if (event.value === "") {
@@ -208,6 +225,9 @@ export const Kanban = () => {
 
                           if (event.value === "--" || event.value === "e") {
                             event.setCustomValidity("Solamente números");
+                          }
+                          if(Number(event.value)>1){
+                            event.setCustomValidity("Solamente porcentajes");
                           }
                         }}
                         step={"any"}
@@ -223,6 +243,9 @@ export const Kanban = () => {
                         onInput={(e) => {
                           const event = e.target as HTMLInputElement;
                           event.setCustomValidity("");
+                          if(Number(event.value)>1){
+                            event.setCustomValidity("Solamente porcentajes");
+                          }
                         }}
                       />
                     </td>

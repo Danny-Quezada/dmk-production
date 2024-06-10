@@ -13,8 +13,8 @@ import { MdDelete } from "react-icons/md";
 import RowComponent from '../../../components/RowComponent'
 import { IoCloseSharp } from "react-icons/io5";
 import { TreeComponentDetail } from "../../../lib/domain/Models/Inventary/TreeComponentDetail";
-import mermaid from 'mermaid';
-
+import MermaidGraph from '../../../components/MermaidGraph'
+import { CgMathMinus } from "react-icons/cg";
 
 
 const Component = () => {
@@ -29,6 +29,7 @@ const Component = () => {
   const [TreeProductComps, useTreeProductComps] = useState<TreeComponent[] | null>(null);
   const [selectedComponent, useSelectedComponent] = useState<string[]>([]);
   const [SelectedComponentToDelete, useSelectedComponentToDelete] = useState<string>('');
+  const mermaidRef = useRef(null);
   const InventoryContextAll = useContext(InventoryContext);
   const {
     productServices,
@@ -91,20 +92,6 @@ const Component = () => {
         }
       }
     );
-    
-    mermaid.initialize({ 
-      startOnLoad: true,
-      fontFamily: 'Arial, sans-serif', 
-      fontSize: 14, 
-      flowchart: {
-        diagramPadding: 8, 
-        htmlLabels: false, 
-        nodeSpacing: 100,  
-        curve: 'linear' 
-      }
-    });
-    
-    mermaid.init(undefined, ".mermaid");
   }, []);
 
   useEffect(() => {
@@ -114,32 +101,30 @@ const Component = () => {
     }
   }, [ComponentsProduct, TreeComps]);
 
-  const generateMermaidGraph = () => {
-    
+  const generateMermaidGraph = ({ treeProductComps, components, treeCompsDetail, product }) => {
     if(TreeProductComps && TreeProductComps?.length > 0){
-      let graph = `graph TD`;
+      let graph = `graph TD
+      `;
       TreeProductComps!.forEach(element => {
         const componentName = Components?.find(x => x.IdComponent === element.IdParent);
         const componentsChildren = TreeCompsDetail?.filter(x => x.IdTreeComponent === element.IdTreeComponent);
         let nameWithQuantity = componentName?.Name;
         if (element.Quantity > 1) {
-          nameWithQuantity += `${element.Quantity}`; 
+          nameWithQuantity += `(${element.Quantity})`; 
         }
         graph = graph + `
-        ${product?.ProductName} --> ${nameWithQuantity};
+        ${product?.ProductName.replace(/\s+/g,'')}[${product?.ProductName}] --> ${componentName?.Name.replace(/\s+/g, '')}["${nameWithQuantity}"]
         `;
-        console.log(graph);
         componentsChildren?.forEach(children => {
           const childrenData = Components?.find(cd => cd.IdComponent === children.IdComponent);
           let nameChildrenWithQuantity = childrenData?.Name;
           if(children.Quantity > 1)
-            nameChildrenWithQuantity += ` ${children.Quantity}`;
+            nameChildrenWithQuantity += `(${children.Quantity})`;
           graph = graph + `
-          ${nameWithQuantity} --> ${childrenData?.Name};
+          ${componentName?.Name.replace(/\s+/g, '')} --> ${childrenData?.Name.replace(/\s+/g, '')}["${nameChildrenWithQuantity}"]
           `;
         })
       });
-      
       return graph;
     } else {
       return '';
@@ -162,7 +147,17 @@ const Component = () => {
 
   const handleAddComponents = () => {
     const components = TreeComps?.filter(x => selectedComponent.includes(x.IdTreeComponent)) ?? [];
-    useTreeProductComps(preArray => [...preArray!, ...components]);
+    if (TreeProductComps && components.length > 0){
+      const filteredComponents = components.filter(newComp => 
+        !TreeProductComps.find(existingComp => existingComp.IdTreeComponent === newComp.IdTreeComponent));
+
+    if (filteredComponents.length > 0) {
+        useTreeProductComps(prevArray => [...prevArray!, ...filteredComponents]);
+    }
+    }
+    else{
+      useTreeProductComps(components);
+    }
     useSelectedComponent([]);
 };
 
@@ -176,6 +171,40 @@ const handleDeleteComponents = () => {
   useSelectedComponentToDelete("");
 };
 
+const calculateQuantity = () => {
+  if (TreeProductComps && TreeProductComps.length > 0){
+    let listQuantity: number[] = [];
+    return (
+      <>
+        <h3>Cálculo del MRP</h3>
+        <div>
+          {
+            TreeProductComps?.map((treeComp) => {
+              const componentsChildren = TreeCompsDetail?.filter(x => x.IdTreeComponent === treeComp.IdTreeComponent);
+              const componentName = Components?.find(x => x.IdComponent === treeComp.IdParent);
+              listQuantity.push(treeComp.Quantity);
+              return (
+                <div>
+                  <p>{`${componentName?.Name} = ${treeComp.Quantity} * ${product?.Quantity} = ${treeComp.Quantity * product!.Quantity}`}</p>
+                  {
+                    componentsChildren?.map((compChildren) => {
+                      const componentChildren = Components?.find(x => x.IdComponent === compChildren.IdComponent);
+                      return (
+                        <p>{`${componentChildren?.Name} = ${compChildren.Quantity} * ${listQuantity[0]} * ${product?.Quantity} = ${compChildren.Quantity * product!.Quantity * listQuantity[0]}`}</p>
+                      )
+                    })
+                  }
+                </div>
+                
+              )
+            })
+          }
+        </div>
+      </>
+    );
+  } 
+  return <div></div>;
+}
 
     
   return (
@@ -237,10 +266,11 @@ const handleDeleteComponents = () => {
                   {
                     TreeProductComps?.map(component => {
                       const componentName = Components?.find(x => x.IdComponent === component.IdParent);
-                      const componentsChildren = TreeCompsDetail?.filter(x => x.IdTreeComponent === component.IdTreeComponent);
+                      const componentsChildren = TreeCompsDetail?.filter(x => x.IdTreeComponent === component.IdTreeComponent) ?? [];
+                      const value = componentsChildren?.length > 0 ? false : true;
                         return(
                           <>
-                            <tr key={component.IdTreeComponent}>
+                            <tr key={component.IdTreeComponent} style={value ? {borderBottom: '2px solid black'} : {}}>
                             <td onClick={() => handleSelectedComponentToDelete(component.IdTreeComponent)}>
                              {SelectedComponentToDelete.includes(component.IdTreeComponent) ? <MdCheckBox/> : <MdOutlineCheckBoxOutlineBlank/>}
                             </td>
@@ -256,7 +286,7 @@ const handleDeleteComponents = () => {
                                 const isLastChild = childIndex === componentsChildren.length - 1;
                                 return(
                                   <tr key={`${component.IdTreeComponent}-${compChild.IdTreeComponentDetail}`} style={isLastChild ? {borderBottom: '2px solid black'} : {}}>
-                                    <td style={{paddingLeft: '30px'}}><MdOutlineCheckBoxOutlineBlank/></td>
+                                    <td style={{paddingLeft: '30px'}}><CgMathMinus /></td>
                                     <td style={{paddingLeft: '30px'}}>{childrenData?.Name}</td> 
                                     <td style={{paddingLeft: '60px'}}>{compChild.Quantity}</td> 
                                   </tr>
@@ -308,10 +338,11 @@ const handleDeleteComponents = () => {
                     {
                       TreeComps?.map(component => {
                         const componentName = Components?.find(comp => comp.IdComponent === component.IdParent);
-                        const componentsChildren = TreeCompsDetail?.filter(x => x.IdTreeComponent === component.IdTreeComponent);
+                        const componentsChildren = TreeCompsDetail?.filter(x => x.IdTreeComponent === component.IdTreeComponent) ?? [];
+                        const value = componentsChildren?.length > 0 ? false : true;
                         return(
                           <>
-                            <tr key={component.IdTreeComponent}>
+                            <tr key={component.IdTreeComponent} style={value ? {borderBottom: '2px solid black'} : {}}>
                             <td onClick={() => handleComponentSelect(component.IdTreeComponent)}>
                               {selectedComponent.includes(component.IdTreeComponent) ? <MdCheckBox/> : <MdOutlineCheckBoxOutlineBlank/>}
                             </td>
@@ -324,7 +355,7 @@ const handleDeleteComponents = () => {
                                 const isLastChild = childIndex === componentsChildren.length - 1;
                                 return(
                                   <tr key={`${component.IdTreeComponent}-${compChild.IdTreeComponentDetail}`} style={isLastChild ? {borderBottom: '2px solid black'} : {}}>
-                                    <td style={{paddingLeft: '30px'}}><MdOutlineCheckBoxOutlineBlank/></td>
+                                    <td style={{paddingLeft: '30px'}}><CgMathMinus /></td>
                                     <td style={{paddingLeft: '30px'}}>{childrenData?.Name}</td> 
                                     <td style={{textAlign: 'center'}}>{compChild.Quantity}</td> 
                                   </tr>
@@ -386,9 +417,8 @@ const handleDeleteComponents = () => {
               <>
               <div className={componentStyles.containerCenter}>
                 <h2 style={{textAlign: 'center'}}>Árbol de componentes</h2>
-                <div className="mermaid">
-                  {generateMermaidGraph()}
-                </div>
+                <MermaidGraph generateGraph={generateMermaidGraph} treeProductComps={TreeProductComps} components={Components} treeCompsDetail={TreeCompsDetail} product={product} />
+                {calculateQuantity()}
               </div>
               </>
              )
