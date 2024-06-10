@@ -125,9 +125,9 @@ const CS = () => {
       {result != null && (
         <LatexComponent
           title={"Cálculo:"}
-          equation={`$ RI = \\frac{${CS.DS} }{${
+          equation={`\\text{RI = } \\frac{${CS.DS} }{${
             CS.ValorPromedio
-          } }  = ${Math.round(result)} $`}
+          } }  = ${Math.round(result)} `}
           inline={"20px"}
           block={"10px"}
         />
