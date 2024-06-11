@@ -11,7 +11,7 @@ import { Kanban } from "./Kanban";
 import ZeroInventory from "./ZeroInventory";
 
 const CalculatorPage = () => {
-  const [menu, changeMenu] = useState("/");
+  const [menu, changeMenu] = useState("ZI");
   return (
     <>
       <main className={ContentPageCSS.main}>
@@ -94,7 +94,7 @@ const CalculatorPage = () => {
         <div
           className={ContentPageCSS.contentForm}
           style={{
-            width: (menu==="LUCLTC" || menu === "KANBAN") ? "94vw" : "400px"
+            width: (menu==="LUCLTC" || menu === "KANBAN" || menu==="ZI")? "94vw" : "400px"
           }}
           onClick={(event) => {
             event.stopPropagation();

@@ -5,6 +5,7 @@ import { GrLinkNext } from "react-icons/gr";
 import KANBAN from "../../../lib/domain/Models/Equations/KANBAN";
 import LatexComponent from "../../../components/LatexComponent/LatexComponent";
 export const Kanban = () => {
+  const [Kanbans, setKanbans] = useState<KANBAN[] | null>(null);
   const [VALUES, setValues] = useState({
     C: 3,
   });
@@ -12,8 +13,14 @@ export const Kanban = () => {
   const onChange = (e) => {
     setValues({ ...VALUES, [e.target.name]: e.target.value });
     setForm(false);
+    if(nextForm==true){
+      setForm(false)
+    }
+    if(Kanban!=null){
+      setKanbans(null)
+    }
   };
-  const [Kanbans, setKanbans] = useState<KANBAN[] | null>(null);
+
   return (
     <div
       style={{
@@ -180,7 +187,7 @@ export const Kanban = () => {
                     </td>
                     <td>
                       <input
-                        max="1000000"
+                        max="1"
         min="0"
                         onInvalid={(e) => {
                           // e.preventDefault();

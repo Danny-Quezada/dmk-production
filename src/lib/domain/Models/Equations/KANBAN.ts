@@ -12,7 +12,15 @@ export default class KANBAN {
     this.TiempoEntrega = TiempoEntrega;
     this.StockSeguridad = StockSeguridad;
     this.AlmacenajePorcentual = AlmacenajePorcentual;
-    this.AlmacenajeUnidad=Number((AlmacenajePorcentual*Demanda).toPrecision(1));
+
+    let AU: number=Number((AlmacenajePorcentual*Demanda));
+ 
+  
+      AU=Math.round(AU);
+
+  
+    this.AlmacenajeUnidad=AU;
+
     this.UnidadKanban=Number(Math.round((Demanda*TiempoEntrega)*(1+StockSeguridad)/this.AlmacenajeUnidad))
   }
   Nombre: string;
