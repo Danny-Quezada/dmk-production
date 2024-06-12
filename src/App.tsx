@@ -23,7 +23,7 @@ function App() {
         {/* <Route path="/" element={<AboutUsLayout/> }> */}
         {/* <Route path="/" element={<CalculatorPage/>}> */}
         {/* <Route path="/" element={<AdminsLayout/>}> */}
-        <Route path="/" element={<InventoryLayout/>}>
+        <Route path="/" element={<AboutUsLayout/>}>
 
         </Route>
         <Route path="/production" element={<ProductionLayout />}>
