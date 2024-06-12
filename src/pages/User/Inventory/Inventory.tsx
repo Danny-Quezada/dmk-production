@@ -506,7 +506,7 @@ const Inventory = () => {
                           gap: "10px",
                         }}
                       >
-                        Collection
+                        Categoría
                         <select
                           key={"Collection"}
                           className={InventaryStyle.SelectCollection}

@@ -11,14 +11,14 @@ import { Kanban } from "./Kanban";
 import ZeroInventory from "./ZeroInventory";
 
 const CalculatorPage = () => {
-  const [menu, changeMenu] = useState("ZI");
+  const [menu, changeMenu] = useState("/");
   return (
     <>
       <main className={ContentPageCSS.main}>
         <h2 className={ContentPageCSS.titlePage}>Ecuaciones</h2>
 
         <section
-          style={{ gap: "25px", display: "flex", flexDirection: "column" }}
+          style={{ gap: "25px", display: "flex", flexDirection: "column", marginBottom: "25px" }}
         >
           <CalculatorCard
             click={() => changeMenu("CMC")}

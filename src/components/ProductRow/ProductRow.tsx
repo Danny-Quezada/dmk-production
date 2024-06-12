@@ -32,13 +32,13 @@ function ProductRow({ product: Product }: Props) {
     e.preventDefault();
 
     if (ChangedProduct === Product) {
-      console.log("hello");
+    
       return toast.error("Tienes que cambiar por lo menos un campo");
     } else {
       const updated: boolean = await productServices.Update(ChangedProduct);
       if (updated) {
         const newProducts: Product[] | null = Products!.map((Product) => {
-          if (Product.IdProduct !== Product.IdProduct) return Product;
+          if (ChangedProduct.IdProduct !== Product.IdProduct) return Product;
 
           return { ...ChangedProduct };
         });
@@ -135,7 +135,7 @@ function ProductRow({ product: Product }: Props) {
               }
               const newProducts: Product[] | undefined = Products?.filter(
                 (product) => {
-                  return product.IdProduct != product.IdProduct;
+                  return Product.IdProduct != product.IdProduct;
                 }
               );
               useProduct(newProducts!);

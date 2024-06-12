@@ -108,7 +108,7 @@ const ZeroInventory = () => {
           }}
         >
           <TextField
-            autoFocus={true}
+            autoFocus={false}
             value={ZI.CDT === 0 ? "" : ZI.CDT.toString()}
             onChangeInputValue={onChange}
             id={"CDT"}
