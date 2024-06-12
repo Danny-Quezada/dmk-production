@@ -62,7 +62,7 @@ function TextField({
             event.setCustomValidity("");
           }
         }}
-        max="1000000"
+        max= {type==="date" ?  new Date().toISOString().split('T')[0]:   "1000000"}
         min="0"
         step="any"
         title={title}

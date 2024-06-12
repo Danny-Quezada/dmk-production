@@ -51,7 +51,7 @@ const Inventory = () => {
   } = InventoryContextAll!;
   const [images, setImages] = useState([]);
   const maxNumber = 69;
-  console.log(Products?.length);
+ 
   const onChangeImage = (imageList: any, addUpdateIndex: any) => {
     // data for submit
     console.log(imageList["file"], addUpdateIndex);
