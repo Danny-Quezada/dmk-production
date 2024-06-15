@@ -54,7 +54,7 @@ const InventoryProvider = ({ children }: Props) => {
   const [Products, useProduct] = useState<Product[] | null>(null);
   const [Components, useComponent] = useState<Component[] | null>(null);
   const [TreesComponent, useTreesComponent] = useState<TreeComponent[] | null>(null);
-  const [ProductComponents, useProductComponents] = useState<ProductComponents[] | null>(null);
+  const [ProductsComponents, useProductsComponents] = useState<ProductComponents[] | null>(null);
   const [TreesComponentDetail, useTreesComponentDetail] = useState<TreeComponentDetail[] | null>(null);
 
   return (
@@ -73,8 +73,8 @@ const InventoryProvider = ({ children }: Props) => {
         TreesComponent,
         useTreesComponent,
         treeComponentServices,
-        ProductComponents, 
-        useProductComponents,
+        ProductsComponents, 
+        useProductsComponents,
         productComponentsServices,
         TreesComponentDetail,
         useTreesComponentDetail,

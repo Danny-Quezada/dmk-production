@@ -13,6 +13,7 @@ import { ProductComponents } from "../domain/Models/Inventary/ProductComponents"
 export default class ProductComponentsRepository implements IProductComponents{
     async Create(t: ProductComponents): Promise<string> {
         try{
+            console.log(ProductComponents);
             let dataWithoutExcludedKeys: Partial<ProductComponents> = { ...t };
             delete dataWithoutExcludedKeys["IdProductComponents"];
 
@@ -52,7 +53,6 @@ export default class ProductComponentsRepository implements IProductComponents{
                     )
                 );
         });
-        console.log(productsComponents);
         return productsComponents;
     }
 

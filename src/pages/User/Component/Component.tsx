@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useRef } from "react";
+import React, { useContext, useState, useEffect, useRef, Children } from "react";
 import { useAsyncError, useParams } from "react-router";
 import componentStyles from "./Component.module.css";
 import { Product } from "../../../lib/domain/Models/Inventary/Product";
@@ -15,6 +15,8 @@ import { IoCloseSharp } from "react-icons/io5";
 import { TreeComponentDetail } from "../../../lib/domain/Models/Inventary/TreeComponentDetail";
 import MermaidGraph from '../../../components/MermaidGraph'
 import { CgMathMinus } from "react-icons/cg";
+import { IoArrowBack } from 'react-icons/io5';
+
 
 
 const Component = () => {
@@ -39,8 +41,8 @@ const Component = () => {
     Components,
     useComponent,
     useTreesComponent: useComponentDetail,
-    ProductComponents,
-    useProductComponents,
+    useProductsComponents,
+    ProductsComponents,
     productComponentsServices,
     TreesComponentDetail,
     useTreesComponentDetail,
@@ -57,7 +59,7 @@ const Component = () => {
     const fetchComponents = Components===null
       ? componentServices.Read()
       : Promise.resolve(null);
-    const fetchProductComponents = ProductComponents===null 
+    const fetchProductComponents = ProductsComponents===null 
       ? productComponentsServices.Read()
       : Promise.resolve(null);
     const fetchTreeComponents = TreesComponent===null
@@ -80,11 +82,10 @@ const Component = () => {
           if (productComponents) {
             const resultProduct = productComponents.find(x => x.IdProduct === productId);
             useComponentsProduct(resultProduct ?? null);
-            // if(ComponentsProduct?.IdComponents && ComponentsProduct?.IdComponents.length > 0){
-            //   console.log('adentro');
-            //   const resultTree = treeComps?.filter(x => ComponentsProduct?.IdComponents.includes(x.IdParent));
-            //   useTreeProductComps(resultTree ?? null);
-            // }
+            if(ComponentsProduct && ComponentsProduct?.IdComponents.length > 0){
+              const resultTree = treeComps?.filter(x => ComponentsProduct?.IdComponents.includes(x.IdParent));
+              useTreeProductComps(resultTree ?? null);
+            }
           }
           if (components) {
             useComponent(components);
@@ -102,34 +103,53 @@ const Component = () => {
   }, [ComponentsProduct, TreeComps]);
 
   const generateMermaidGraph = ({ treeProductComps, components, treeCompsDetail, product }) => {
-    if(TreeProductComps && TreeProductComps?.length > 0){
-      let graph = `graph TD
-      `;
-      TreeProductComps!.forEach(element => {
-        const componentName = Components?.find(x => x.IdComponent === element.IdParent);
-        const componentsChildren = TreeCompsDetail?.filter(x => x.IdTreeComponent === element.IdTreeComponent);
-        let nameWithQuantity = componentName?.Name;
-        if (element.Quantity > 1) {
-          nameWithQuantity += `(${element.Quantity})`; 
-        }
-        graph = graph + `
-        ${product?.ProductName.replace(/\s+/g,'')}[${product?.ProductName}] --> ${componentName?.Name.replace(/\s+/g, '')}["${nameWithQuantity}"]
-        `;
-        componentsChildren?.forEach(children => {
-          const childrenData = Components?.find(cd => cd.IdComponent === children.IdComponent);
-          let nameChildrenWithQuantity = childrenData?.Name;
-          if(children.Quantity > 1)
-            nameChildrenWithQuantity += `(${children.Quantity})`;
-          graph = graph + `
-          ${componentName?.Name.replace(/\s+/g, '')} --> ${childrenData?.Name.replace(/\s+/g, '')}["${nameChildrenWithQuantity}"]
-          `;
-        })
-      });
-      return graph;
+    let Comps: string[] = [];
+    if (treeProductComps && treeProductComps?.length > 0) {
+        let graphObj = { graph: `graph TD\n` };
+        treeProductComps!.forEach(element => {
+            const componentName = components?.find(x => x.IdComponent === element.IdParent);
+            const componentsChildren = treeCompsDetail?.filter(x => x.IdTreeComponent === element.IdTreeComponent);
+            let nameWithQuantity = componentName?.Name;
+            if (element.Quantity > 1) {
+                nameWithQuantity += `(${element.Quantity})`;
+            }
+            graphObj.graph += `
+            ${product?.ProductName.replace(/\s+/g,'')}[${product?.ProductName}] --> ${componentName?.Name.replace(/\s+/g, '')}["${nameWithQuantity}"]
+            `;
+            Comps.push(element.IdParent);
+            iterationCompsDetail(graphObj, componentName, componentsChildren, Comps);
+        });
+        return graphObj.graph;
     } else {
-      return '';
+        return '';
     }
-  }
+};
+
+const iterationCompsDetail = (graphObj, componentName, componentsChildren, Comps) => {
+  componentsChildren?.forEach(children => {
+      const childrenData = Components?.find(cd => cd.IdComponent === children.IdComponent);
+      let nameChildrenWithQuantity = childrenData?.Name;
+      if (children.Quantity > 1)
+          nameChildrenWithQuantity += `(${children.Quantity})`;
+        graphObj.graph += `
+        ${componentName?.Name.replace(/\s+/g, '')} --> ${childrenData?.Name.replace(/\s+/g, '')}["${nameChildrenWithQuantity}"]
+        `;
+      });
+      componentsChildren?.forEach(children => {
+        if (Comps.includes(children.IdComponent)) {
+          return;
+        }
+      Comps.push(children.IdComponent);
+      const childrenData = Components?.find(cd => cd.IdComponent === children.IdComponent);
+      const childrens = TreeComps?.find(x => x.IdParent === children.IdComponent);
+      if (childrens) {
+        const compChildren = TreeCompsDetail?.filter(x => x.IdTreeComponent === childrens.IdTreeComponent) ?? [];
+        if (compChildren?.length > 0){
+          iterationCompsDetail(graphObj, childrenData, compChildren, Comps);
+        }
+      }
+    })
+};
 
   const handleComponentSelect = (componentId) => {
     useSelectedComponent(prevIds => {
@@ -171,8 +191,58 @@ const handleDeleteComponents = () => {
   useSelectedComponentToDelete("");
 };
 
-const calculateQuantity = () => {
-  if (TreeProductComps && TreeProductComps.length > 0){
+const iterableCalculateQuantity = (listQuantity, componentsChildren, products) => {
+  return (
+    <>
+      {
+        componentsChildren?.map((compChildren) => {
+          let productExpression = '';
+          const componentChildren = Components?.find(x => x.IdComponent === compChildren.IdComponent);
+          
+          listQuantity.forEach((element, index) => {
+            if (index === listQuantity.length - 1) {
+              productExpression += `${element} * ${compChildren.Quantity}`;
+            } else {
+              productExpression += `${element} * `;
+            }
+          });
+
+          const expressionPattern = /-?\d+(\.\d+)?([+\-*/]-?\d+(\.\d+)?)*\b/g;
+          const matches = productExpression.match(expressionPattern);
+          const results = matches ? matches.map(expr => eval(expr)) : [];
+          const operationProducts = results.length > 0 ? results.reduce((acc, curr) => acc * curr, 1) : 0;
+
+          const result = (
+            <p key={compChildren.IdComponent}>{`${componentChildren?.Name} = ${productExpression} = ${operationProducts}`}</p>
+          );
+
+          const childrens = TreeComps?.find(x => x.IdParent === compChildren.IdComponent);
+          let childComponents;
+          if (childrens) {
+            const childComponentsChildren = TreeCompsDetail?.filter(x => x.IdTreeComponent === childrens.IdTreeComponent) ?? [];
+            if (childComponentsChildren.length > 0) {
+              listQuantity.push(compChildren.Quantity);
+              childComponents = iterableCalculateQuantity(listQuantity, childComponentsChildren, products);
+              listQuantity.pop();
+            }
+          }
+
+          return (
+            <div key={compChildren.IdComponent}>
+              {result}
+              {childComponents}
+            </div>
+          );
+        })
+      }
+    </>
+  );
+};
+
+
+  const calculateQuantity = () => {
+    let products = '';
+    if (TreeProductComps && TreeProductComps.length > 0){
     let listQuantity: number[] = [];
     return (
       <>
@@ -182,21 +252,14 @@ const calculateQuantity = () => {
             TreeProductComps?.map((treeComp) => {
               const componentsChildren = TreeCompsDetail?.filter(x => x.IdTreeComponent === treeComp.IdTreeComponent);
               const componentName = Components?.find(x => x.IdComponent === treeComp.IdParent);
+              listQuantity.push(product!.Quantity);
               listQuantity.push(treeComp.Quantity);
               return (
-                <div>
+                <div key={treeComp.IdTreeComponent}>
                   <p>{`${componentName?.Name} = ${treeComp.Quantity} * ${product?.Quantity} = ${treeComp.Quantity * product!.Quantity}`}</p>
-                  {
-                    componentsChildren?.map((compChildren) => {
-                      const componentChildren = Components?.find(x => x.IdComponent === compChildren.IdComponent);
-                      return (
-                        <p>{`${componentChildren?.Name} = ${compChildren.Quantity} * ${listQuantity[0]} * ${product?.Quantity} = ${compChildren.Quantity * product!.Quantity * listQuantity[0]}`}</p>
-                      )
-                    })
-                  }
+                  {iterableCalculateQuantity(listQuantity, componentsChildren, products)}
                 </div>
-                
-              )
+              );
             })
           }
         </div>
@@ -300,30 +363,7 @@ const calculateQuantity = () => {
                   </tbody>
               </table>
             </div>
-            <div style={{ height: "300px", overflowY: "auto", display: "flex",justifyContent:"space-between"}}>
-              <div>
-                <h4 style={{ color: "#B4B4B4" }}>Componentes individuales</h4>
-                <table className={ComponentStyle.table}>
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>Nombre</th>
-                      <th>Cantidad disponible</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                  {
-                      // Components?.map(component=>
-                      //   <tr key={component.IdComponent}>
-                      //     <td><MdOutlineCheckBoxOutlineBlank/></td>
-                      //     <td>{component.Name}</td>
-                      //     <td>{component.Quantity}</td>
-                      //   </tr>
-                      // )
-                    }
-                  </tbody>
-                </table>
-              </div>
+            <div style={{ height: "300px", overflowY: "auto", display: "flex",justifyContent:"center"}}>
               <div>
                 <h4 style={{ color: "#B4B4B4" }}>Arbol de componentes</h4>
                 <table className={ComponentStyle.table}>
@@ -425,6 +465,28 @@ const calculateQuantity = () => {
           }
         </div>
       </div>
+      <button
+      onClick={() => {
+
+        const validTree: string[] = TreeProductComps?.map(comp => comp.IdParent) ?? [];
+        if(validTree.length > 0){
+          const productComps = new ProductComponents('', validTree, product!.IdProduct);
+          productComponentsServices.Create(productComps);
+        }
+        window.history.back();
+      }}  
+      style={{
+        cursor: "pointer",
+        position: "fixed",
+        top: "10px",
+        left: "10px",
+        zIndex: "1000",
+        background: "none",
+        border: "none"
+      }}
+    >
+      <IoArrowBack size={30} color="black" />
+    </button>
     </>
   );
 };

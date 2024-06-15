@@ -20,8 +20,8 @@ interface IInventoryContext{
     Products: Product[] | null;
     useProduct: Dispatch<SetStateAction<Product[] | null>>
     productServices:ProductServices;
-    ProductComponents: ProductComponents[] | null;
-    useProductComponents: Dispatch<SetStateAction<ProductComponents[] | null>>
+    ProductsComponents: ProductComponents[] | null;
+    useProductsComponents: Dispatch<SetStateAction<ProductComponents[] | null>>
     productComponentsServices: ProductComponentsServices;
     // User:string;
     Components: Component[] | null;
