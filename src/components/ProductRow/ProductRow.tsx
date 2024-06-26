@@ -3,7 +3,7 @@ import ProductStyle from "./ProductRow.module.css";
 import { RxEyeOpen } from "react-icons/rx";
 import TextField from "../Textfield/TextField";
 import { RiEyeCloseLine } from "react-icons/ri";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import "react-tagsinput/react-tagsinput.css";
 import QRCode from "react-qr-code";
 import { InventoryContext } from "../../providers/InventoryContext";
@@ -11,14 +11,40 @@ import { MdDelete } from "react-icons/md";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import { IoIosAddCircleOutline } from "react-icons/io";
+import { TreeComponent } from "../../lib/domain/Models/Inventary/TreeComponent";
+import { TreeComponentDetail } from "../../lib/domain/Models/Inventary/TreeComponentDetail";
+import { ProductComponents } from "../../lib/domain/Models/Inventary/ProductComponents";
+import { Component } from "../../lib/domain/Models/Inventary/Component";
 function ProductRow({ product: Product }: Props) {
   const UserContextAll = useContext(InventoryContext);
-  const { Collections, Groups, productServices, useProduct, Products } =
-    UserContextAll!;
+  const { 
+    Collections, 
+    Groups, 
+    productServices, 
+    useProduct, 
+    Products, 
+    Components, 
+    useComponent, 
+    componentServices,
+    TreesComponent, 
+    treeComponentServices, 
+    TreesComponentDetail, 
+    treeComponentDetailServices, 
+    ProductsComponents, 
+    productComponentsServices,
+   } = UserContextAll!;
 
+  
+  const isMounted = useRef(false);
   const [expand, changeExpand] = useState(false);
   const [ChangedProduct, useChangedProduct] = useState<Product>(Product);
-
+  const [ComponentsProduct, useComponentsProduct] = useState<ProductComponents | null
+  >(null);
+  const [TreeComps, useTreeComps] = useState<TreeComponent[] | null>(null);
+  const [TreeCompsDetail, useTreeCompsDetail] = useState<TreeComponentDetail[] | null>(null);
+  const [TreeProductComps, useTreeProductComps] = useState<TreeComponent[] | null>(null);
+  const [fetchDataTrigger, setFetchDataTrigger] = useState(false);
+  
   const onChange = (e: React.FormEvent<HTMLInputElement>) => {
     useChangedProduct({
       ...Product,
@@ -28,6 +54,50 @@ function ProductRow({ product: Product }: Props) {
           : e.currentTarget.value,
     });
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      isMounted.current = true;
+  
+      const fetchComponents = componentServices.Read();
+      const fetchTreeComponents = TreesComponent === null ? treeComponentServices.Read() : Promise.resolve(null);
+      const fetchTreeComponentsDetail = TreesComponentDetail === null ? treeComponentDetailServices.Read() : Promise.resolve(null);
+      const fetchProductComponents = ProductsComponents === null ? productComponentsServices.Read() : Promise.resolve(null);
+  
+      const [productComponents, components, treeComps, treeCompsDetail] = await Promise.all([
+        fetchProductComponents,
+        fetchComponents,
+        fetchTreeComponents,
+        fetchTreeComponentsDetail,
+      ]);
+  
+      if (isMounted.current) {
+        if (treeComps && treeCompsDetail) {
+          useTreeComps(treeComps);
+          useTreeCompsDetail(treeCompsDetail);
+        }
+        if (productComponents) {
+          const resultProduct = productComponents.find(x => x.IdProduct === Product.IdProduct);
+          useComponentsProduct(resultProduct ?? null);
+          if (resultProduct && resultProduct.IdComponents.length > 0) {
+            const resultTree = treeComps?.filter(x => resultProduct.IdComponents.includes(x.IdParent));
+            useTreeProductComps(resultTree ?? null);
+          }
+        }
+        if (components) {
+          useComponent(components);
+        }
+      }
+    };
+  
+    fetchData();
+  
+    return () => {
+      isMounted.current = false;
+    };
+  }, [Components, TreesComponent, TreesComponentDetail, ProductsComponents, componentServices, treeComponentServices, treeComponentDetailServices, productComponentsServices, Product.IdProduct, fetchDataTrigger]);
+  
+
   const onSubmite = async (e: any) => {
     e.preventDefault();
 
@@ -35,23 +105,103 @@ function ProductRow({ product: Product }: Props) {
     
       return toast.error("Tienes que cambiar por lo menos un campo");
     } else {
-      const updated: boolean = await productServices.Update(ChangedProduct);
-      if (updated) {
-        const newProducts: Product[] | null = Products!.map((Product) => {
-          if (ChangedProduct.IdProduct !== Product.IdProduct) return Product;
-
-          return { ...ChangedProduct };
-        });
-        useProduct(newProducts);
-        changeExpand(false);
-        return toast.success("Producto actualizado");
-      } else {
-        return toast.error("Hubo un error, intentalo más tarde.");
+      const result = calculateQuantity(ChangedProduct.Quantity);
+      if (result){
+        const updated: boolean = await productServices.Update(ChangedProduct);
+        if (updated) {
+          const newProducts: Product[] | null = Products!.map((Product) => {
+            if (ChangedProduct.IdProduct !== Product.IdProduct) return Product;
+  
+            return { ...ChangedProduct };
+          });
+          useProduct(newProducts);
+          changeExpand(false);
+          setFetchDataTrigger(prev => !prev);
+          return toast.success("Producto actualizado");
+      } 
+      return toast.error("Hubo un error, intentalo más tarde.");
       }
     }
   };
+
+  const iterableCalculateQuantity = (listQuantity, componentsChildren, products, components, flagObj) => {
+    componentsChildren?.map((compChildren) => {
+      if (flagObj.flag){
+        let productExpression = '';
+        const componentChildren = Components?.find(x => x.IdComponent === compChildren.IdComponent);
+        
+        listQuantity.forEach((element, index) => {
+          if (index === listQuantity.length - 1) {
+            productExpression += `${element} * ${compChildren.Quantity}`;
+          } else {
+            productExpression += `${element} * `;
+          }
+        });
+  
+        const expressionPattern = /-?\d+(\.\d+)?([+\-*/]-?\d+(\.\d+)?)*\b/g;
+        const matches = productExpression.match(expressionPattern);
+        const results = matches ? matches.map(expr => eval(expr)) : [];
+        const operationProducts = results.length > 0 ? results.reduce((acc, curr) => acc * curr, 1) : 0;
+        const result = componentChildren!.Quantity - operationProducts;
+
+        if (result < 0){
+          flagObj.flag = false;
+          return toast.error(`Piezas incompletas del componente: ${componentChildren?.Name}, se requieren: ${Math.abs(result  )}`);
+        }
+
+        components.push(new Component(compChildren.IdComponent, componentChildren!.Name, Math.abs(result)));
+
+        const childrens = TreeComps?.find(x => x.IdParent === compChildren.IdComponent);
+        let childComponents;
+        if (childrens) {
+          const childComponentsChildren = TreeCompsDetail?.filter(x => x.IdTreeComponent === childrens.IdTreeComponent) ?? [];
+          if (childComponentsChildren.length > 0) {
+            listQuantity.push(compChildren.Quantity);
+            childComponents = iterableCalculateQuantity(listQuantity, childComponentsChildren, products, components, flagObj);
+            listQuantity.pop();
+          }
+        }
+      }
+      else {
+        return;
+      }
+    })
+  };
+  
+  
+    const calculateQuantity = (quantity) => {
+      let products = '';
+      let operation = 0;
+      const flagObj = {flag: true};
+      if (TreeProductComps && TreeProductComps.length > 0){
+      let listQuantity: number[] = [];
+      let components: Component[] = [];
+      TreeProductComps?.map((treeComp) => {
+        if (flagObj.flag){
+          const componentsChildren = TreeCompsDetail?.filter(x => x.IdTreeComponent === treeComp.IdTreeComponent);
+          const componentName = Components?.find(x => x.IdComponent === treeComp.IdParent);
+          listQuantity.push(quantity);
+          listQuantity.push(treeComp.Quantity);
+          operation = treeComp.Quantity - quantity;
+          if (operation < 0){
+            flagObj.flag = false;
+            return toast.error(`Piezas incompletas del componente: ${componentName?.Name}, se requieren: ${Math.abs(operation)}`);
+          }
+          components.push(new Component(treeComp.IdParent, componentName!.Name, Math.abs(operation)));
+          iterableCalculateQuantity(listQuantity, componentsChildren, products, components, flagObj);
+          components.map(comp => {
+            componentServices.Update(comp);
+          });
+        } else {
+          return;
+        }
+      })
+    } 
+    return flagObj.flag;
+  }
+
+
   const ChangeExpand = () => {
-    console.log(Product.Select);
     if (!Product.Select) {
       changeExpand(!expand);
     }

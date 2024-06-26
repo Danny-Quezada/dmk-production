@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import InventoryLayout from "./Layouts/User/InventoryLayout.js";
-import Component from "./pages/User/Component/Component";
+import Component from "./pages/User/Component/ComponentProduct";
 import ErrorPage from "./pages/error-page.jsx";
 import Inventory from "./pages/User/Inventory/Inventory.jsx";
 import CalculatorPage from "./pages/User/Calculator/CalculatorPage.jsx";

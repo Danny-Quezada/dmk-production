@@ -31,7 +31,6 @@ const Component = () => {
   const [TreeProductComps, useTreeProductComps] = useState<TreeComponent[] | null>(null);
   const [selectedComponent, useSelectedComponent] = useState<string[]>([]);
   const [SelectedComponentToDelete, useSelectedComponentToDelete] = useState<string>('');
-  const mermaidRef = useRef(null);
   const InventoryContextAll = useContext(InventoryContext);
   const {
     productServices,
@@ -69,7 +68,7 @@ const Component = () => {
       ? treeComponentDetailServices.Read()
       : Promise.resolve(null);
 
-    Promise.all([fetchProduct, fetchProductComponents, fetchComponents, fetchTreeComponents, fetchTreeComponentsDetail]).then(
+    Promise.all([fetchProduct, fetchProductComponents, fetchComponents, fetchTreeComponents, fetchTreeComponentsDetail]).then(  
       ([product, productComponents, components, treeComps, treeCompsDetail]) => {
         if (isMounted.current) {
           if (product) {
@@ -469,10 +468,11 @@ const iterableCalculateQuantity = (listQuantity, componentsChildren, products) =
       onClick={() => {
 
         const validTree: string[] = TreeProductComps?.map(comp => comp.IdParent) ?? [];
+        productComponentsServices.Delete(ComponentsProduct!);
         if(validTree.length > 0){
           const productComps = new ProductComponents('', validTree, product!.IdProduct);
           productComponentsServices.Create(productComps);
-        }
+        } 
         window.history.back();
       }}  
       style={{

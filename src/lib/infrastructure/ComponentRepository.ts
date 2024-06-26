@@ -29,6 +29,7 @@ export default class ComponentRepository implements IComponentModel{
 
     async Update(t: Component): Promise<boolean> {
         const docRef = doc(db, "Component", t.IdComponent);
+        console.log(docRef);
 
         try{
             const componentData = {

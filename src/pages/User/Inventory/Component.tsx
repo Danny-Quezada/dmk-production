@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, useContext, useEffect, useState } from "react";
+import React, { MouseEventHandler, useContext, useEffect, useRef, useState } from "react";
 import { InventoryContext } from "../../../providers/InventoryContext";
 import ContentPageCSS from "../ContentPage.module.css";
 import InventaryStyle from "./Inventary.module.css";
@@ -12,78 +12,92 @@ import { collection } from "firebase/firestore";
 import { updateCurrentUser } from "firebase/auth";
 import { FaArrowLeft } from "react-icons/fa";
 
-import Group from "../../../lib/domain/Models/Inventary/Group";
+import { Component } from "../../../lib/domain/Models/Inventary/Component";
 
 
 interface Props{
   onSubmit: undefined;
 }
-const GroupPage = ( {onSubmit}:Props) => {
+const ComponentPage = ( {onSubmit}:Props) => {
+  const isMounted = useRef(false);
   const InventoryContextAll = useContext(InventoryContext);
   const [showModal, useModal] = useState(false);
-  const [updateGroup, UpdateGroup] = useState<Group | null>(
+  const [updateComponent, UpdateComponent] = useState<Component | null>(
     null
   );
-  const [CreatedGroup, createGroup] = useState<Group>(
-    new Group("cero", "")
+  const [CreatedComponent, createComponent] = useState<Component>(
+    new Component("", "", 0)
   );
-  const onChange = (e: React.FormEvent<HTMLInputElement>) => {
-    if (updateGroup !== null) {
-      UpdateGroup({
-        ...updateGroup,
-        GroupName: e.currentTarget.value,
+
+  const onChange = (e) => {
+    const { name, value } = e.currentTarget;
+    if (updateComponent !== null) {
+      UpdateComponent({
+        ...updateComponent,
+        [name]: value
       });
     } else {
-      createGroup({
-        ...CreatedGroup,
-        GroupName: e.currentTarget.value,
+      createComponent({
+        ...CreatedComponent,
+        [name]: value
       });
     }
   };
 
-  const { Groups, productServices, useGroup } = InventoryContextAll!;
-  useEffect(() => {
-    if (Groups == null) {
-      productServices.ReadGroups().then((resp: Group[]) => {
-        useGroup(resp);
-      });
-    }
-  }, []);
+  const { Components, componentServices, useComponent } = InventoryContextAll!;
   
+  useEffect(() => {
+    isMounted.current = true;
+
+    const fetchComponents = Components===null
+    ? componentServices.Read() 
+    : Promise.resolve(null);
+
+    Promise.all([fetchComponents]).then(
+      ([components]) => {
+        if (isMounted.current) {
+          if (components){
+            useComponent(components);
+          }
+        }
+      }
+    );
+  }, []);
+
+
   const OnSubmit = async (e: any) => {
     e.preventDefault();
-    if (updateGroup === null) {
+    if (updateComponent === null) {
       try {
-        const id = await productServices.CreateGroup(CreatedGroup);
-        CreatedGroup.GroupId = id;
-        useGroup([...Groups!, CreatedGroup]);
+        const id = await componentServices.Create(CreatedComponent);
+        CreatedComponent.IdComponent = id;
+        useComponent([...Components!, CreatedComponent]);
         useModal(false);
-        createGroup({
-          ...CreatedGroup,
-          GroupName: "",
+        createComponent({
+          ...CreatedComponent,
+          Name: "",
+          Quantity: 0
         });
-        return toast.success("Grupo creado exitosamente");
+        return toast.success("Componente creado exitosamente");
       } catch (e) {
         return toast.error("Error, intente más tarde");
       }
     } else {
  
-        const updated: boolean = await productServices.UpdateGroup(
-          updateGroup
+        const updated: boolean = await componentServices.Update(
+          updateComponent
         );
         if (updated) {
-          const newGroups: Group[] | null = Groups!.map(
-            (Group) => {
-              if (Group.GroupId !== updateGroup!.GroupId) return Group;
-             
-             
-              return { ...updateGroup };
+          const newComponents: Component[] | null = Components!.map(
+            (Component) => {
+              if (Component.IdComponent !== updateComponent!.IdComponent) return Component;
+              return { ...updateComponent };
             }
           );
-          useGroup(newGroups);
+          useComponent(newComponents);
           useModal(false);
-          UpdateGroup(null);
-          return toast.success("Grupo actualizado");
+          UpdateComponent(null);
+          return toast.success("Componente actualizado");
         } else {
           return toast.error("Hubo un error, intentalo más tarde.");
         
@@ -100,11 +114,25 @@ const GroupPage = ( {onSubmit}:Props) => {
         <FaArrowLeft color="grey" style={{cursor: "pointer"}} onClick={(e)=>{
           onSubmit("")
         }}/>
-          <h2 className={ContentPageCSS.titlePage}>Grupo</h2>
+          <h2 className={ContentPageCSS.titlePage}>Componente</h2>
           <div style={{ display: "flex", alignItems: "center" }}>
-            <h5 style={{ color: "grey" }}>Toca cualquier Grupo</h5>
+            <h5 style={{ color: "grey" }}>Toca cualquier Componente</h5>
             <CgTapDouble size={20} />
           </div>
+            <button
+                  onClick={() => {}}
+                  style={{
+                    backgroundColor: "transparent",
+                    padding: "10px",
+                    marginRight: "10px",
+                    color: "#B4B4B8",
+                    border: "1px solid #B4B4B8",
+                    borderRadius: "10px",
+                    marginLeft: "auto",
+                  }}
+                >
+                  Crear árbol de componente
+                </button> 
         </div>
         <section style={{ overflowX: "auto", width: "100%", display: "block" }}>
           <div>
@@ -113,25 +141,26 @@ const GroupPage = ( {onSubmit}:Props) => {
                 <tr>
                   <th>#</th>
                   <th>Nombre</th>
+                  <th>Cantidad</th>
                 </tr>
               </thead>
               <tbody>
-                {Groups!.map((Group) => (
+                {Components?.map((Component) => (
                   <tr
                     onClick={(e) => {
                       if (e.target.tagName !== "INPUT") {
-                        UpdateGroup(Group);
+                        UpdateComponent(Component);
                         useModal(true);
                       }
                     }}
-                    key={Group.GroupId}
+                    key={Component.IdComponent}
                     style={{
-                      backgroundColor: Group.Select
+                      backgroundColor: Component.Select
                         ? "rgba(82, 92, 235,0.2)"
                         : "",
 
-                      color: Group.Select ? "white" : "",
-                      fontWeight: Group.Select ? "bold" : "",
+                      color: Component.Select ? "white" : "",
+                      fontWeight: Component.Select ? "bold" : "",
                     }}
                   >
                     <td>
@@ -140,29 +169,30 @@ const GroupPage = ( {onSubmit}:Props) => {
                           if (e.target.checked) {
                           }
 
-                          const newGroup: Group[] | null =
-                            Groups!.map((GroupChange) => {
+                          const newComponent: Component[] | null =
+                            Components!.map((ComponentChange) => {
                               if (
-                                Group.GroupId !==
-                                GroupChange.GroupId
+                                Component.IdComponent !==
+                                ComponentChange.IdComponent
                               )
-                                return GroupChange;
+                                return ComponentChange;
 
                               return {
-                                ...Group,
+                                ...Component,
                                 Select: e.target.checked,
                               };
                             });
-                          useGroup(newGroup);
+                          useComponent(newComponent);
                         }}
-                        checked={Group.Select}
+                        checked={Component.Select}
                         type="checkbox"
-                        name={Group.GroupName}
-                        id={Group.GroupId + 1}
-                        aria-label="Mostrar detalles de grupo"
+                        name={Component.Name}
+                        id={Component.IdComponent + 1}
+                        aria-label="Mostrar detalles de Componente"
                       />
                     </td>
-                    <td>{Group.GroupName}</td>
+                    <td>{Component.Name}</td>
+                    <td>{Component.Quantity}</td>
                   </tr>
                 ))}
               </tbody>
@@ -184,8 +214,8 @@ const GroupPage = ( {onSubmit}:Props) => {
             borderRadius: "50%",
             borderColor: "green",
           }}
-          key={"buttonGroup"}
-          name="GroupButton"
+          key={"buttonComponent"}
+          name="ComponentButton"
         >
           <IoAdd color="green" size={20} />
         </button>
@@ -210,7 +240,7 @@ const GroupPage = ( {onSubmit}:Props) => {
       >
         <div
           className={InventaryStyle.ContentFormInventary}
-          style={{ height: "250px" }}
+          style={{ height: "300px" }}
           onClick={(event) => {
             event.stopPropagation();
           }}
@@ -226,8 +256,8 @@ const GroupPage = ( {onSubmit}:Props) => {
           >
             <button
               onClick={(e) => {
-                if(updateGroup!==null){
-                  UpdateGroup(null)
+                if(updateComponent!==null){
+                  UpdateComponent(null)
                 }
                 useModal(false);
               }}
@@ -248,25 +278,39 @@ const GroupPage = ( {onSubmit}:Props) => {
                 zIndex: "300",
               }}
             >
-              <IoCloseSharp color="white" />
+              <IoCloseSharp color="white"/>
             </button>
-            <h2 className={InventaryStyle.Title}>Crear Grupo</h2>
+            <h2 className={InventaryStyle.Title}>Crear Componente</h2>
             <TextField
               autoFocus={true}
               isRequired={true}
-              id="GroupName"
+              id="Name"
               readOnly={false}
-              title="Nombre del grupo"
+              title="Nombre del componente"
               type="text"
               value={
-                updateGroup !== null
-                  ? updateGroup.GroupName
-                  : CreatedGroup.GroupName
+                updateComponent
+                  ? updateComponent.Name
+                  : CreatedComponent.Name
+              }
+              onChangeInputValue={onChange}
+            />
+            <TextField
+              autoFocus={false}
+              isRequired={true}
+              id="Quantity"
+              readOnly={false}
+              title="Cantidad del componente"
+              type="number"
+              value={
+                updateComponent
+                  ? updateComponent.Quantity
+                  : CreatedComponent.Quantity
               }
               onChangeInputValue={onChange}
             />
 
-            <Button title={ updateGroup!==null ? "Actualizar" : "Crear"  + ` Grupo`} onSubmit={() => {}} />
+            <Button title={ updateComponent!==null ? "Actualizar" : "Crear"  + ` Componente`} onSubmit={() => {}} />
           </form>
         </div>
       </div>
@@ -274,4 +318,4 @@ const GroupPage = ( {onSubmit}:Props) => {
   );
 };
 
-export default GroupPage;
+export default ComponentPage;

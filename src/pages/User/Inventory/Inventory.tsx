@@ -24,6 +24,7 @@ import { toast } from "sonner";
 import { Link, useOutlet, useParams } from "react-router-dom";
 import CollectionPage from "./Collection";
 import GroupPage from "./Group";
+import ComponentPage from "./Component";
 const divStyle = {
   display: "flex",
   alignItems: "center",
@@ -647,7 +648,6 @@ const Inventory = () => {
       {showOutlet ==='' && <button
         onClick={(e) => {
           decision = "Product";
-          console.log(decision);
           useModal(true);
         }}
         style={{
@@ -675,6 +675,8 @@ function Menu(menu, onSubmit) {
   }
   else if(menu==="Groups"){
     return <GroupPage onSubmit={onSubmit}/>
+  } else if(menu === "Components"){
+    return <ComponentPage onSubmit={onSubmit} />
   }
 }
 export default Inventory;
