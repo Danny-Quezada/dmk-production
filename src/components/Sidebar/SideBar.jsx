@@ -28,31 +28,15 @@ export const SideBar = ({ active }) => {
       }}
     >
       <nav style={{ display: "flex", flexDirection: "column" }}>
-        <MenuItemBar
-          click={() => setPath("/production/clients")}
-          icon={<IoPeopleSharp />}
-          active={path === "/production/clients" ? true : false}
-          link="/production/clients"
-        />
+      
         <MenuItemBar
           click={() => setPath("/production/inventory")}
           icon={<MdOutlineInventory2 />}
           active={path === "/production/inventory" ? true : false}
           link="/production/inventory"
         />
-        <MenuItemBar
-          click={() => setPath("/production/admins")}
-          icon={<FaPeopleCarryBox />}
-          active={path === "/production/admins" ? true : false}
-          link="/production/admins"
-        />
-        <MenuItemBar
-          click={() => setPath("/production/dashboard")}
-          icon={<FaChartBar />}
-          active={path === "/production/dashboard" ? true : false}
-          link="/production/dashboard"
-        />
-
+        
+       
         <MenuItemBar
           click={() => setPath("/production/equation")}
           icon={<CgCalculator />}
