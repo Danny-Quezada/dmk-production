@@ -5,6 +5,7 @@ import CalculateLUCLTC from "../../../../lib/infrastructure/CalculateLUCLTC";
 import { GrLinkNext } from "react-icons/gr";
 import { random } from "mermaid/dist/utils";
 import LTC from "../../../../lib/domain/Models/Equations/LTC";
+import LUC from "../../../../lib/domain/Models/Equations/LUC";
 const LUCLTC = () => {
   const [VALUES, setValues] = useState({
     S: 2.25,
@@ -20,6 +21,7 @@ const LUCLTC = () => {
   const [next, setNext] = useState(false);
   const [calculateBool, setCalculate] = useState(false);
   const [LTCS, setLTCs] = useState<LTC[]>([]);
+  const [LUCS, setLUCs]=useState<LUC[]>([]);
   const submit = async (event) => {
     event.preventDefault();
   };
@@ -110,6 +112,7 @@ const LUCLTC = () => {
               }
             }
             setLTCs(calculate.CalculateLTC(VALUES.S, VALUES.K, numbers));
+            setLUCs(calculate.CalculateLUC(VALUES.S,VALUES.K, VALUES.LT,numbers));
             setCalculate(true);
           }}
         >
@@ -166,6 +169,33 @@ const LUCLTC = () => {
                     </td>
                   ))}
                 </tr>
+                {
+                  calculateBool && (
+                    <tr>
+                      <td>LTC</td>
+                      {LTCS.map((e)=>{
+                        if(e.Delete){
+                          return <td style={{ textAlign: "start",}}>{e.Units}</td>
+                        }
+                        return <td></td>
+                      })}
+                    </tr>
+                  )
+                  
+                }
+                {
+                  calculateBool && (
+                    <tr>
+                      <td>LUC</td>
+                      {LUCS.map((e)=>{
+                        if(e.Delete){
+                          return <td style={{ textAlign: "start",}}>{e.Units}</td>
+                        }
+                        return <td></td>
+                      })}
+                    </tr>
+                  )
+                }
               </tbody>
             </table>
           </div>
@@ -213,6 +243,48 @@ const LUCLTC = () => {
           </div>
         </div>
       )}
+      {calculateBool && (
+        <div>
+          <div style={{ overflowX: "auto"}}>
+            <table className={LUCTLCSTYLE.table}>
+              <thead>
+                <tr>
+                  <th colSpan={6}>LUC</th>
+                </tr>
+              </thead>
+              <thead>
+                <tr>
+                  <th>Período</th>
+                  <th>Unidades</th>
+                  <th>S</th>
+                  <th>K</th>
+                  <th>Costo total</th>
+                  <th>Costo total de unidades</th>
+                </tr>
+              </thead>
+              <tbody>
+                {LUCS.map((e) => (
+                  <tr
+                    style={{
+                      backgroundColor: e.Delete ? "#ff000052" : "",
+                      color: e.Delete ? "white" : "",
+                      fontWeight: e.Delete ? "bold" : "",
+                    }}
+                  >
+                    <td>{e.PeriodString}</td>
+                    <td>{e.UnitString}</td>
+                    <td>{e.S}</td>
+                    <td>{e.K}</td>
+                    <td>{e.UnitCost.toPrecision(4)}</td>
+                    <td>{e.TotalCost.toPrecision(4)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
