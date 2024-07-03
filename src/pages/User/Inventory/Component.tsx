@@ -104,6 +104,7 @@ const ComponentPage = ( {onSubmit}:Props) => {
       }
     }
   };
+  
   return (
     <>
       <main
@@ -119,8 +120,8 @@ const ComponentPage = ( {onSubmit}:Props) => {
             <h5 style={{ color: "grey" }}>Toca cualquier Componente</h5>
             <CgTapDouble size={20} />
           </div>
-            <button
-                  onClick={() => {}}
+            {/* <button
+                  onClick={() => { <TreeComponentPage onSubmit={onSubmit} />}}
                   style={{
                     backgroundColor: "transparent",
                     padding: "10px",
@@ -132,7 +133,7 @@ const ComponentPage = ( {onSubmit}:Props) => {
                   }}
                 >
                   Crear árbol de componente
-                </button> 
+                </button>  */}
         </div>
         <section style={{ overflowX: "auto", width: "100%", display: "block" }}>
           <div>

@@ -190,14 +190,14 @@ const handleDeleteComponents = () => {
   useSelectedComponentToDelete("");
 };
 
-const iterableCalculateQuantity = (listQuantity, componentsChildren, products) => {
+const iterableCalculateQuantity = (listQuantity, componentsChildren, products, operationExpressions) => {
   return (
     <>
       {
         componentsChildren?.map((compChildren) => {
           let productExpression = '';
           const componentChildren = Components?.find(x => x.IdComponent === compChildren.IdComponent);
-          
+
           listQuantity.forEach((element, index) => {
             if (index === listQuantity.length - 1) {
               productExpression += `${element} * ${compChildren.Quantity}`;
@@ -215,13 +215,15 @@ const iterableCalculateQuantity = (listQuantity, componentsChildren, products) =
             <p key={compChildren.IdComponent}>{`${componentChildren?.Name} = ${productExpression} = ${operationProducts}`}</p>
           );
 
+          operationExpressions.push(operationProducts);
+
           const childrens = TreeComps?.find(x => x.IdParent === compChildren.IdComponent);
           let childComponents;
           if (childrens) {
             const childComponentsChildren = TreeCompsDetail?.filter(x => x.IdTreeComponent === childrens.IdTreeComponent) ?? [];
             if (childComponentsChildren.length > 0) {
               listQuantity.push(compChildren.Quantity);
-              childComponents = iterableCalculateQuantity(listQuantity, childComponentsChildren, products);
+              childComponents = iterableCalculateQuantity(listQuantity, childComponentsChildren, products, operationExpressions);
               listQuantity.pop();
             }
           }
@@ -238,35 +240,53 @@ const iterableCalculateQuantity = (listQuantity, componentsChildren, products) =
   );
 };
 
+const calculateAverage = (operationExpressions) => {
+  const total = operationExpressions.reduce((acc, curr) => acc + curr, 0);
+  const average = operationExpressions.length > 0 ? total / operationExpressions.length : 0;
+  const sum = operationExpressions.join(' + ');
 
-  const calculateQuantity = () => {
-    let products = '';
-    if (TreeProductComps && TreeProductComps.length > 0){
+  return (
+    <p>{`Demanda Promedio = ${sum} / ${operationExpressions.length} = ${average}`}</p>
+  );
+}
+
+const calculateQuantity = () => {
+  let products = '';
+  if (TreeProductComps && TreeProductComps.length > 0){
     let listQuantity: number[] = [];
+    let operationExpressions: number[] = [];
     return (
       <>
         <h3>Cálculo del MRP</h3>
         <div>
           {
             TreeProductComps?.map((treeComp) => {
+              listQuantity = [];
               const componentsChildren = TreeCompsDetail?.filter(x => x.IdTreeComponent === treeComp.IdTreeComponent);
               const componentName = Components?.find(x => x.IdComponent === treeComp.IdParent);
               listQuantity.push(product!.Quantity);
               listQuantity.push(treeComp.Quantity);
+              const initialResult = treeComp.Quantity * product!.Quantity;
+              operationExpressions.push(initialResult);
               return (
                 <div key={treeComp.IdTreeComponent}>
                   <p>{`${componentName?.Name} = ${treeComp.Quantity} * ${product?.Quantity} = ${treeComp.Quantity * product!.Quantity}`}</p>
-                  {iterableCalculateQuantity(listQuantity, componentsChildren, products)}
+                  {iterableCalculateQuantity(listQuantity, componentsChildren, products, operationExpressions)}
                 </div>
               );
             })
           }
         </div>
+        {calculateAverage(operationExpressions)}
       </>
     );
   } 
   return <div></div>;
 }
+
+
+
+
 
     
   return (

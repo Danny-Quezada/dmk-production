@@ -25,6 +25,7 @@ import { Link, useOutlet, useParams } from "react-router-dom";
 import CollectionPage from "./Collection";
 import GroupPage from "./Group";
 import ComponentPage from "./Component";
+import TreesComponentPage from './TreesComponent'
 const divStyle = {
   display: "flex",
   alignItems: "center",
@@ -216,6 +217,22 @@ const Inventory = () => {
                     >
                       <IoIosAdd size={10} />
                       Agregar Categoría
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                    
+                      style={{
+                        outline: "none",
+                        background: "none",
+                        border: "none",
+                      }}
+                      onClick={(e)=>{
+                        setOutlet('TreeComponent');
+                      }}
+                    >
+                      <IoIosAdd size={10} />
+                      Agregar Árbol de componente
                     </button>
                   </li>
                 </ul>
@@ -677,6 +694,8 @@ function Menu(menu, onSubmit) {
     return <GroupPage onSubmit={onSubmit}/>
   } else if(menu === "Components"){
     return <ComponentPage onSubmit={onSubmit} />
+  } else if(menu === "TreeComponent"){
+    return <TreesComponentPage onSubmit={onSubmit} />
   }
 }
 export default Inventory;
