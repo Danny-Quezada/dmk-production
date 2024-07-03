@@ -44,7 +44,7 @@ export const Kanban = () => {
         <div style={{ display: "flex", gap: "15px", alignItems: "end" }}>
           <TextField
             autoFocus={true}
-            title={"Costo de ordenar (S)"}
+            title={"Cantidad de productos"}
             onChangeInputValue={onChange}
             id={"C"}
             isRequired={true}

@@ -189,7 +189,7 @@ const ZeroInventory = () => {
                     <td key={`input: ${i}`}>
                       <input
                         min={1}
-                        max={503}
+                        max={31}
                         onInvalid={(e) => {
                           // e.preventDefault();
                           const event = e.target as HTMLInputElement;
